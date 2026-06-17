@@ -55,4 +55,12 @@ test('AutomationExercise Page Login', async ({ page }) => {
         loginPage.fillSignInCredentials(loginEmail, constances.password);
     });
 
+    await test.step('Click Login Button', async() => {
+        await loginPage.clikLoginButton();
+    });
+
+    await test.step('Verify Logged User Name', async() => {
+        await loginPage.verifiedLoggedUserName();
+    });
+
 });

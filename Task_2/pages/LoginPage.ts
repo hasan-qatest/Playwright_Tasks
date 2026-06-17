@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { constances } from '../utils/testData';
 
 export class LoginPage {
@@ -8,7 +8,7 @@ export class LoginPage {
     readonly signUpButton: Locator;
     readonly password: Locator;
     readonly loginEmail: Locator;
-    readonly LoginButton: Locator;
+    readonly loginButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -17,15 +17,17 @@ export class LoginPage {
         this.signUpButton = page.locator(`//button[@data-qa="signup-button"]`);
         this.loginEmail = page.locator(`//input[@data-qa="login-email"]`);
         this.password = page.locator('//input[@data-qa="login-password"]');
-        this.LoginButton = page.locator(`//button[@data-qa="login-button"]`);
+        this.loginButton = page.locator(`//button[@data-qa="login-button"]`);
     }
-
 
     async fillSignInCredentials(loginEmail: string, password: string) {
         await this.loginEmail.fill(loginEmail);
         await this.password.fill(password);
-        await this.page.pause();
-        //await this.LoginButton.click();
+    }
+
+    async clikLoginButton() {
+        await this.loginButton.click();
+        //console.log("Clicked Login Button");
     }
 
     async generateRandomEmail(loginEmail: string) {
@@ -44,5 +46,9 @@ export class LoginPage {
 
     async clikSignUpButton() {
         await this.signUpButton.click();
+    }
+
+    async verifiedLoggedUserName() {
+        await expect(this.page.locator(`//b[contains(text(),'${constances.firstName}')]`)).toBeVisible();
     }
 }

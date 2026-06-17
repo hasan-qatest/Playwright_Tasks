@@ -12,6 +12,5 @@ export class Logout {
 
     async logoutClick() {
          await this.logout.click();
-         //await this.page.pause(); // Browser stays open here
     }
 }

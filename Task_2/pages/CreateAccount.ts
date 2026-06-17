@@ -77,8 +77,6 @@ export class CreateAcccount {
         await this.mobileNumber.fill(constances.mobileNumber);
 
         await this.createAccountButton.click();
-
-        //await this.page.pause(); // Browser stays open here
     }
 
     async verifyAccountCreated() {
