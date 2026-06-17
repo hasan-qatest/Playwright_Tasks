@@ -1,0 +1,20 @@
+export const constances = {
+    homePageURL: 'https://automationexercise.com/',
+    signUpName: "Hasan",
+    loginEmail: "test@gmail.com",
+    password: "Test@1234",
+    gender: "mrs",
+    dateOfBirthDate: "5",
+    dateOfBirthMonth: "2",
+    dateOfBirthYear: "1990",
+    firstName: "Test First Name",
+    lastName: "Test Last Name",
+    company: "Test Company Name",
+    address: "Test Address 1",
+    address2: "Test Address 2",
+    country: "Canada",
+    State: "Alberta",
+    City: "Alberta City",
+    ZipCode: "111111",
+    mobileNumber: "1234567890"
+}
