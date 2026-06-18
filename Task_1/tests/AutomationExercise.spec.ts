@@ -16,7 +16,6 @@ test('Automation Exercise Login', async ({ page }) => {
 
     await test.step('Validate Sign-up Page is Visible', async () => {
      	await expect(page).toHaveTitle("Automation Exercise - Signup / Login");
-        console.log("Title Verified");
     });
 
     await test.step('Enter Sign-Up Values', async () => {

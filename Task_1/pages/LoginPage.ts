@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test"
-import { constances } from '../utils/testData';
+import { constants } from '../utils/testData';
 
 export class LoginPage{
     readonly name: Locator;
@@ -13,8 +13,8 @@ export class LoginPage{
     }
 
     async enterSignUpCredentials() {
-        await this.name.fill(constances.signUpName);
-        const [username, domain] = constances.loginEmail.split('@');
+        await this.name.fill(constants.signUpName);
+        const [username, domain] = constants.loginEmail.split('@');
         const randomNumber = Math.floor(Math.random() * 1000000);
         const uniqueEmail = `${username}+${randomNumber}@${domain}`;
         await this.email.fill(uniqueEmail);

@@ -1,5 +1,5 @@
 import {Page, Locator } from '@playwright/test';
-import { constances } from '../utils/testData';
+import { constants } from '../utils/testData';
 
 export class HomePage{
     readonly page: Page;
@@ -11,7 +11,7 @@ export class HomePage{
     }
 
     async gotoURL() {
-        await this.page.goto(constances.homePageURL);
+        await this.page.goto(constants.homePageURL);
     }
     async clickLoginLink () {
         await this.loginLink.click();

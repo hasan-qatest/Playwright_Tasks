@@ -1,7 +1,8 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { constances } from '../utils/testData';
+import { constants } from '../utils/testData';
+import { Logger } from '../utils/logger';
 
-export class CreateAcccount {
+export class CreateAccount {
     readonly page: Page;
     readonly password: Locator;
     readonly dateOfBirthDate: Locator;
@@ -41,47 +42,53 @@ export class CreateAcccount {
         this.createAccountButton = page.locator('//button[@data-qa="create-account"]')
         this.continue = page.locator('//a[@data-qa="continue-button"]')
     }
+
+    async verifySignUpPage() {
+        await expect(this.page.getByText('Enter Account Information', { exact: true })).toBeVisible();
+        Logger.info('Redirected into the Sign Up Page');
+    }
+
     async fillAccountInformation() {
-        if (constances.gender === "mr")
+        if (constants.gender === "mr")
             await this.page.locator('[id="uniform-id_gender1"]').click();
-        else if (constances.gender == "mrs")
+        else if (constants.gender == "mrs")
             await this.page.locator('[id="uniform-id_gender2"]').click();
-        else console.log("Give Proper Gender")
+        else Logger.error("Give Proper Gender")
 
-        await this.password.fill(constances.password);
+        await this.password.fill(constants.password);
 
-        await this.dateOfBirthDate.selectOption(constances.dateOfBirthDate);
+        await this.dateOfBirthDate.selectOption(constants.dateOfBirthDate);
 
-        await this.dateOfBirthMonth.selectOption(constances.dateOfBirthMonth);
+        await this.dateOfBirthMonth.selectOption(constants.dateOfBirthMonth);
     
-        await this.dateOfBirthYear.selectOption(constances.dateOfBirthYear);
+        await this.dateOfBirthYear.selectOption(constants.dateOfBirthYear);
 
-        await this.firstName.fill(constances.firstName);
+        await this.firstName.fill(constants.firstName);
 
-        await this.lastName.fill(constances.lastName);
+        await this.lastName.fill(constants.lastName);
 
-        await this.company.fill(constances.company);
+        await this.company.fill(constants.company);
 
-        await this.address.fill(constances.address);
+        await this.address.fill(constants.address);
 
-        await this.address2.fill(constances.address2);
+        await this.address2.fill(constants.address2);
 
-        await this.country.selectOption(constances.country);
+        await this.country.selectOption(constants.country);
 
-        await this.state.fill(constances.State);
+        await this.state.fill(constants.State);
 
-        await this.city.fill(constances.City);
+        await this.city.fill(constants.City);
 
-        await this.zipCode.fill(constances.ZipCode);
+        await this.zipCode.fill(constants.ZipCode);
 
-        await this.mobileNumber.fill(constances.mobileNumber);
+        await this.mobileNumber.fill(constants.mobileNumber);
 
         await this.createAccountButton.click();
     }
 
     async verifyAccountCreated() {
-        await expect(this.page).toHaveTitle("Automation Exercise - Account Created");
-        console.log("Account Created Successfully");
+        await expect(this.page.getByText('Account Created!', { exact: true })).toBeVisible();
+        Logger.info('Account Created Successfully')
         await this.continue.click();   
     }
 

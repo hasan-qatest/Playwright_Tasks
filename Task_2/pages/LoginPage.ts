@@ -1,5 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { constances } from '../utils/testData';
+import { constants } from '../utils/testData';
 
 export class LoginPage {
     readonly page: Page;
@@ -27,16 +27,13 @@ export class LoginPage {
 
     async clikLoginButton() {
         await this.loginButton.click();
-        //console.log("Clicked Login Button");
     }
 
-    async generateRandomEmail(loginEmail: string) {
+    async generateRandomEmail(loginEmail: string): Promise<string> {
         const [username, domain] = loginEmail.split('@');
         const randomNumber = Math.floor(Math.random() * 1000000);
-        const uniqueEmail = `${username}+${randomNumber}@${domain}`;
-        await this.signUpEmail.fill(uniqueEmail);
-        //await this.email.fill("a3@a3.com");
-        return uniqueEmail;
+        const randomEmail = `${username}+${randomNumber}@${domain}`;
+        return randomEmail;
     }
 
     async fillSignUpCredentials(signUpName: string, loginEmail: string) {
@@ -49,6 +46,6 @@ export class LoginPage {
     }
 
     async verifiedLoggedUserName() {
-        await expect(this.page.locator(`//b[contains(text(),'${constances.firstName}')]`)).toBeVisible();
+        await expect(this.page.locator(`//b[contains(text(),'${constants.firstName}')]`)).toBeVisible();
     }
 }

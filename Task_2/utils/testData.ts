@@ -1,4 +1,4 @@
-export const constances = {
+export const constants = {
     homePageURL: 'https://automationexercise.com/',
     signUpName: "Hasan",
     loginEmail: "test@gmail.com",

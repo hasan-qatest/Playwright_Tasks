@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
-import { CreateAcccount } from '../pages/CreateAccount';
+import { CreateAccount } from '../pages/CreateAccount';
 import { Logout } from '../pages/Logout';
-import { constances } from '../utils/testData';
+import { constants } from '../utils/testData';
+import { Logger } from '../utils/logger';
 
 test('AutomationExercise Page Login', async ({ page }) => {
-
     const homPage = new HomePage(page);
     const loginPage = new LoginPage(page);
-    const createAcccount = new CreateAcccount(page);
+    const createAccount = new CreateAccount(page);
     const logout = new Logout(page);
-    let loginEmail: any;
+    let loginEmail: string;
 
     await test.step('Nativate to URL', async () => {
         await homPage.gotoURL();
@@ -22,28 +22,31 @@ test('AutomationExercise Page Login', async ({ page }) => {
     });
 
     await test.step('Generate Random Email for Create New User', async() => {
-        loginEmail = await loginPage.generateRandomEmail(constances.loginEmail);
-        console.log(`Generate Random Email: + ${loginEmail}`);
+       loginEmail = await loginPage.generateRandomEmail(constants.loginEmail);
     });
 
     await test.step('Enter SignUp Credentials', async() => {
-        loginPage.fillSignUpCredentials(constances.firstName, loginEmail);
+        await loginPage.fillSignUpCredentials(constants.firstName, loginEmail);
     });
 
     await test.step('Click SignUp Button', async() => {
         await loginPage.clikSignUpButton();
     });
 
+    await test.step('Verify SignUp Page', async() => {
+        await createAccount.verifySignUpPage();
+    });
+
     await test.step('Filling Account Information', async() => {
-        await createAcccount.fillAccountInformation();
+        await createAccount.fillAccountInformation();
     });
 
     await test.step('Validate Sign-up Page is Visible', async () => {
-     	await createAcccount.verifyAccountCreated();
+     	await createAccount.verifyAccountCreated();
     });
 
     await test.step('Logout', async () => {
-        logout.logoutClick();
+        await logout.logoutClick();
     });
 
     await test.step('Click Login Page to Sign-in Using Latest Created User Email', async () => {
@@ -51,8 +54,8 @@ test('AutomationExercise Page Login', async ({ page }) => {
     });
 
     await test.step('Enter Latest Created User Login Credentials', async() => {
-        console.log(`Login Email: + ${loginEmail}`);
-        loginPage.fillSignInCredentials(loginEmail, constances.password);
+        Logger.info(`Login Email: + ${loginEmail}`);
+        await loginPage.fillSignInCredentials(loginEmail, constants.password);
     });
 
     await test.step('Click Login Button', async() => {
@@ -62,5 +65,4 @@ test('AutomationExercise Page Login', async ({ page }) => {
     await test.step('Verify Logged User Name', async() => {
         await loginPage.verifiedLoggedUserName();
     });
-
 });
