@@ -1,9 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
-<<<<<<< HEAD
 import { constants } from '../utils/testData';
-=======
-import { constances } from '../utils/testData';
->>>>>>> e4450f54cb60e7b6620e62cb81578d660a4f370c
 
 export class LoginPage {
     readonly page: Page;
@@ -27,14 +23,6 @@ export class LoginPage {
     async fillSignInCredentials(loginEmail: string, password: string) {
         await this.loginEmail.fill(loginEmail);
         await this.password.fill(password);
-<<<<<<< HEAD
-=======
-    }
-
-    async clikLoginButton() {
-        await this.loginButton.click();
-        //console.log("Clicked Login Button");
->>>>>>> e4450f54cb60e7b6620e62cb81578d660a4f370c
     }
 
     async clikLoginButton() {
@@ -58,10 +46,6 @@ export class LoginPage {
     }
 
     async verifiedLoggedUserName() {
-<<<<<<< HEAD
         await expect(this.page.locator(`//b[contains(text(),'${constants.firstName}')]`)).toBeVisible();
-=======
-        await expect(this.page.locator(`//b[contains(text(),'${constances.firstName}')]`)).toBeVisible();
->>>>>>> e4450f54cb60e7b6620e62cb81578d660a4f370c
     }
 }

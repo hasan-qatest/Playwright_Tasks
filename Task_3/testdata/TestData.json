@@ -1,0 +1,45 @@
+{
+    "invalidSignUpEmails": [
+        {
+            "description": "Missing @ symbol",
+            "email": "user123mail.com",
+            "errorMessage": "Please include an '@' in the email address. 'user123mail.com' is missing an '@'."
+        },
+        {
+            "description": "Missing domain name",
+            "email": "user123@",
+            "errorMessage": "Please enter a part following '@'. 'user123@' is incomplete."
+        },
+        {
+            "description": "Missing username",
+            "email": "@mail.com",
+            "errorMessage": "Please enter a part followed by '@'. '@mail.com' is incomplete."
+
+        },
+        {
+            "description": "at Instand of @ symbol",
+            "email": "user123-at-mail.com",
+            "errorMessage": "Please include an '@' in the email address. 'user123-at-mail.com' is missing an '@'."
+        },
+        {
+            "description": "Space in the email address",
+            "email": "user 123@mail.com",
+            "errorMessage": "A part followed by '@' should not contain the symbol ' '."
+        },
+        {
+            "description": "',com' instand of '.com'",
+            "email": "user123@mail,com",
+            "errorMessage": "A part following '@' should not contain the symbol ','."
+        },
+        {
+            "description": "Missing Email Domain",
+            "email": "user123@,com",
+            "errorMessage": "A part following '@' should not contain the symbol ','."
+        },
+        {
+            "description": "Having double . in the email",
+            "email": "user123@mail..com",
+            "errorMessage": "'.' is used at a wrong position in 'mail..com'."
+        }
+    ]
+}

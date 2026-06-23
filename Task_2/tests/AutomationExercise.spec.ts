@@ -65,8 +65,4 @@ test('AutomationExercise Page Login', async ({ page }) => {
     await test.step('Verify Logged User Name', async() => {
         await loginPage.verifiedLoggedUserName();
     });
-<<<<<<< HEAD
-=======
-
->>>>>>> e4450f54cb60e7b6620e62cb81578d660a4f370c
 });
