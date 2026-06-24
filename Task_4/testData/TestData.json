@@ -1,0 +1,19 @@
+{
+    "loginCredentials": [
+        {
+            "description": "A3 Login Credentials",
+            "email": "a3@a3.com",
+            "password": "Test@1234"
+        },
+        {
+            "description": "A1 Login Credentials",
+            "email": "a1@a1.com",
+            "password": "Test"
+        },
+        {
+            "description": "A5 Login Credentials",
+            "email": "a5@a5.com",
+            "password": "Test@1234"
+        }
+    ]
+}
