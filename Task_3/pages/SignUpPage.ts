@@ -24,11 +24,11 @@ export class SignUpPage {
 
         if (!signUpName) {
             await this.validateRequiredField(this.signUpNameInput,constants.fieldValidationMessage);
-            Logger.info("Verified Signup rejects either Empty Name or Empty Email");
+            Logger.info("Verified Signup rejects because of Empty Email");
         }
         if (!signUpEmail) { 
             await this.validateRequiredField(this.signUpEmailInput,constants.fieldValidationMessage);
-            Logger.info("Verified Signup rejects either Empty Name or Empty Email");
+            Logger.info("Verified Signup rejects because of Empty Email");
         }
     }
 
@@ -37,7 +37,7 @@ export class SignUpPage {
         expect(message).toBe(expectedMessage);
     }
 
-    async verifiedCreateAccountPage() {
+    async verifyCreateAccountPage() {
         await expect(this.createAccountButton).toBeVisible();
     }
 }

@@ -13,11 +13,11 @@ type InvalidEmailData = {
 
 const testData = TestData.invalidSignUpEmails as InvalidEmailData[];
 
-test('AutomationExercise Sign-UP Validations', async ({ page }) => {
+test('AutomationExercise Sign-Up Validations', async ({ page }) => {
     const homePage = new HomePage(page);
     const signUpPage = new SignUpPage(page);
 
-    await test.step('Naviagte to Automation Exercise Home Page', async () => {
+    await test.step('Navigate to Automation Exercise Home Page', async () => {
         await homePage.gotoURL();
     });
 
@@ -47,7 +47,7 @@ test('AutomationExercise Sign-UP Validations', async ({ page }) => {
         await test.step(`Verify signup rejects email - ${invalidSignUpEmails.description}`, async () => {
             await signUpPage.fillSignUpCredentials(constants.signupName, invalidSignUpEmails.email);
             await signUpPage.validateRequiredField(signUpPage.signUpEmailInput, invalidSignUpEmails.errorMessage);
-            Logger.info(`Verified signup rejects because of email - ${invalidSignUpEmails.description}`);
+            Logger.success(`Verified signup rejects because of email - ${invalidSignUpEmails.description}`);
         });
     }
 
@@ -57,7 +57,7 @@ test('AutomationExercise Sign-UP Validations', async ({ page }) => {
     });
 
     await test.step('Verify Created Account Page Redirection', async () => {
-        await signUpPage.verifiedCreateAccountPage();
+        await signUpPage.verifyCreateAccountPage();
         Logger.success("Verified Created Account page Redirected Successfully");
     });
 });
