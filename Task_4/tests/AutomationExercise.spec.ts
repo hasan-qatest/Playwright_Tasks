@@ -18,8 +18,8 @@ test(`Automation Exercise Data-Driven Login Testing`, async ({ page }) => {
     const homePage = new HomePage(page);
     const loginPage = new LoginPage(page);
     const logout = new Logout(page);
-    
-    await test.step(`Navigate to Automation Exercise Home Page`, async() => {
+
+    await test.step(`Navigate to Automation Exercise Home Page`, async () => {
         await homePage.gotoURL(constants.homePageURL);
     });
 
@@ -36,14 +36,15 @@ test(`Automation Exercise Data-Driven Login Testing`, async ({ page }) => {
     for (const loginCredentials of testData) {
         await test.step(`Verify Login with Email - ${loginCredentials.description}`, async () => {
             const loginSuccess = await loginPage.fillLoginCredentials(loginCredentials.email, loginCredentials.password);
-             if (loginSuccess) {
+            if (loginSuccess) {
                 Logger.success(`Verified Login with Email - ${loginCredentials.description}`);
                 await loginPage.verifyLoggedUserName();
                 await logout.logoutClick();
             } else {
-                Logger.info(`Login correctly rejected for ${loginCredentials.email}`);
+                await expect(loginPage.loginCredentialsErrorMessage).toBeVisible();
+                await expect(loginPage.loggedUserName).not.toBeVisible();
+                Logger.success(`Verified login correctly rejected for ${loginCredentials.email}`);
             }
-
         });
     }
 });
