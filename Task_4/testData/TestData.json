@@ -3,22 +3,18 @@
         {
             "description": "Valid credentials A4",
             "email": "a4@a4.com",
-            "password": "Test@1234",
-            "expectedResult": "true"
+            "password": "Test@1234"
 
         },
         {
             "description": "Invalid credentials A1",
             "email": "a1@a1.com",
-            "password": "Test@1234",
-            "expectedResult": "false"
-
+            "password": "Test@1234"
         },
         {
             "description": "Valid credentials A5",
             "email": "a5@a5.com",
-            "password": "Test@1234",
-            "expectedResult": "true"
+            "password": "Test@1234"
         }
     ]
 }

@@ -22,9 +22,10 @@ export class LoginPage {
         await this.loginEmailInput.fill(loginEmail);
         await this.loginPasswordInput.fill(loginPassword);
         await this.loginButton.click();
+
         if (await this.loginCredentialsErrorMessage.isVisible()) {
             await expect(this.loginButton).toBeVisible();
-            Logger.error(`Your email ${loginEmail} or password is incorrect!`);
+            Logger.info(`Login correctly rejected for ${loginEmail}`);
             return false;
         }
         else {

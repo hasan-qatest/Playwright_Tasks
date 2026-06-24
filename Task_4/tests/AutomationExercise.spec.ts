@@ -14,7 +14,7 @@ type LoginCredentials = {
 
 const testData = TestData.LoginCredentials as LoginCredentials[];
 
-test(`Automation Exercise Data-Driver Login Testing`, async ({ page }) => {
+test(`Automation Exercise Data-Driven Login Testing`, async ({ page }) => {
     const homePage = new HomePage(page);
     const loginPage = new LoginPage(page);
     const logout = new Logout(page);
