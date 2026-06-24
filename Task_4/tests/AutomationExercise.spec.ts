@@ -38,8 +38,12 @@ test(`Automation Exercise Data-Driven Login Testing`, async ({ page }) => {
             const loginSuccess = await loginPage.fillLoginCredentials(loginCredentials.email, loginCredentials.password);
              if (loginSuccess) {
                 Logger.success(`Verified Login with Email - ${loginCredentials.description}`);
+                await loginPage.verifyLoggedUserName();
                 await logout.logoutClick();
+            } else {
+                Logger.info(`Login correctly rejected for ${loginCredentials.email}`);
             }
+
         });
     }
 });
