@@ -7,7 +7,7 @@ export class LoginPage {
     readonly loginPasswordInput: Locator;
     readonly loginButton: Locator;
     readonly loggedUserName: Locator;
-    readonly loginCredialsErrorMessage: Locator;
+    readonly loginCredentialsErrorMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,24 +15,25 @@ export class LoginPage {
         this.loginPasswordInput = page.locator(`//input[@data-qa="login-password"]`);
         this.loginButton = page.locator(`//button[@data-qa="login-button"]`);
         this.loggedUserName = page.locator("//a[contains(text(),' Logged in as ')]");
-        this.loginCredialsErrorMessage = page.locator("//p[contains(text(),'Your email or password is incorrect!')]");
+        this.loginCredentialsErrorMessage = page.locator("//p[contains(text(),'Your email or password is incorrect!')]");
     }
 
-    async fillSignUpCredentials(loginEmail: string, loginPassword: string) {
+    async fillLoginCredentials(loginEmail: string, loginPassword: string) {
         await this.loginEmailInput.fill(loginEmail);
         await this.loginPasswordInput.fill(loginPassword);
         await this.loginButton.click();
-        if (await this.loginCredialsErrorMessage.isVisible()) {
-            Logger.info(`Your email ${loginEmail} or password is incorrect!`);
+        if (await this.loginCredentialsErrorMessage.isVisible()) {
+            await expect(this.loginButton).toBeVisible();
+            Logger.error(`Your email ${loginEmail} or password is incorrect!`);
             return false;
         }
         else {
-            await this.verifiedLoggedUserName();
+            await this.verifyLoggedUserName();
             return true;
         }
     }
 
-    async verifiedLoggedUserName() {
+    async verifyLoggedUserName() {
         await expect(this.loggedUserName).toBeVisible();
     }
 }

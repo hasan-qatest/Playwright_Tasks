@@ -1,4 +1,4 @@
-import { Page, Locator} from '@playwright/test';
+import { Page, Locator, expect} from '@playwright/test';
 
 export class Logout {
     readonly page: Page;
@@ -11,5 +11,7 @@ export class Logout {
 
     async logoutClick() {
          await this.logout.click();
+         await expect(this.page.locator(`//button[@data-qa="login-button"]`)).toBeVisible();
+
     }
 }
