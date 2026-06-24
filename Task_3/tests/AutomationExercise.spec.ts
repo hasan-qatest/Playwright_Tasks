@@ -13,11 +13,11 @@ type InvalidEmailData = {
 
 const testData = TestData.invalidSignUpEmails as InvalidEmailData[];
 
-test('AutomationExercise Login Validations', async ({ page }) => {
+test('AutomationExercise Sign-UP Validations', async ({ page }) => {
     const homePage = new HomePage(page);
     const signUpPage = new SignUpPage(page);
 
-    await test.step('Naviagte to URL', async () => {
+    await test.step('Naviagte to Automation Exercise Home Page', async () => {
         await homePage.gotoURL();
     });
 
@@ -27,7 +27,7 @@ test('AutomationExercise Login Validations', async ({ page }) => {
     });
 
     await test.step('Click SignUp Page', async () => {
-        await homePage.clickSignUpLink();
+        await homePage.clickSignUpPage();
         Logger.success("Verified Signup Page loaded Successfully");
     });
 
@@ -47,7 +47,7 @@ test('AutomationExercise Login Validations', async ({ page }) => {
         await test.step(`Verify signup rejects email - ${invalidSignUpEmails.description}`, async () => {
             await signUpPage.fillSignUpCredentials(constants.signupName, invalidSignUpEmails.email);
             await signUpPage.validateRequiredField(signUpPage.signUpEmailInput, invalidSignUpEmails.errorMessage);
-            Logger.success(`Verified signup rejects because of email - ${invalidSignUpEmails.description}`);
+            Logger.info(`Verified signup rejects because of email - ${invalidSignUpEmails.description}`);
         });
     }
 

@@ -4,12 +4,12 @@ import { constants } from "../utils/Constants";
 
 export class HomePage {
     readonly page: Page;
-    readonly signUp: Locator;
+    readonly signUpPageLink: Locator;
     readonly signUpButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.signUp = page.locator(`//a[@href='/login']`);
+        this.signUpPageLink = page.locator(`//a[@href='/login']`);
         this.signUpButton = page.locator(`//button[@data-qa="signup-button"]`);
     }
 
@@ -21,8 +21,8 @@ export class HomePage {
         await expect(this.page).toHaveTitle('Automation Exercise');
     }
 
-    async clickSignUpLink() {
-        await this.signUp.click();
+    async clickSignUpPage() {
+        await this.signUpPageLink.click();
         await expect(this.signUpButton).toBeVisible();
     }
 }

@@ -17,7 +17,7 @@
 
         },
         {
-            "description": "at Instand of @ symbol",
+            "description": "at instead of @ symbol",
             "email": "user123-at-mail.com",
             "errorMessage": "Please include an '@' in the email address. 'user123-at-mail.com' is missing an '@'."
         },
@@ -27,7 +27,7 @@
             "errorMessage": "A part followed by '@' should not contain the symbol ' '."
         },
         {
-            "description": "',com' instand of '.com'",
+            "description": "',com' instead of '.com'",
             "email": "user123@mail,com",
             "errorMessage": "A part following '@' should not contain the symbol ','."
         },

@@ -18,21 +18,17 @@ export class SignUpPage {
     }
 
     async fillSignUpCredentials(signUpName: string, signUpEmail: string) {
-        if (!signUpName && !signUpEmail) {
-            await this.validateRequiredField(this.signUpNameInput, constants.fieldValidationMessage);
-            await this.validateRequiredField(this.signUpEmailInput, constants.fieldValidationMessage);
-            Logger.info("Verified Signup rejects with Empty Name and Empty Email");
-        } else if (!signUpName) {
-            await this.validateRequiredField(this.signUpNameInput, constants.fieldValidationMessage);
-            Logger.info("Verified Signup rejects with Empty Name and Valid Email");
-        } else if (!signUpEmail) {
-            await this.validateRequiredField(this.signUpEmailInput, constants.fieldValidationMessage);
-            Logger.info("Verified Signup rejects with Valid Name and Empty Email");
-        } else {
-            await this.signUpNameInput.fill(signUpName);
-            await this.signUpEmailInput.fill(signUpEmail);
-            await this.signUpButton.click();
-            Logger.info("Signup credentials submitted successfully");
+        await this.signUpNameInput.fill(signUpName);
+        await this.signUpEmailInput.fill(signUpEmail);
+        await this.signUpButton.click();
+
+        if (!signUpName) {
+            await this.validateRequiredField(this.signUpNameInput,constants.fieldValidationMessage);
+            Logger.info("Verified Signup rejects either Empty Name or Empty Email");
+        }
+        if (!signUpEmail) { 
+            await this.validateRequiredField(this.signUpEmailInput,constants.fieldValidationMessage);
+            Logger.info("Verified Signup rejects either Empty Name or Empty Email");
         }
     }
 
