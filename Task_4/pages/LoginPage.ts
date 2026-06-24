@@ -23,7 +23,8 @@ export class LoginPage {
         await this.loginPasswordInput.fill(loginPassword);
         await this.loginButton.click();
 
-        if (await this.loginCredentialsErrorMessage.isVisible()) {
+        const isErrorVisible = await this.loginCredentialsErrorMessage.isVisible();
+        if (isErrorVisible) {
             await expect(this.loginButton).toBeVisible();
             Logger.info(`Login correctly rejected for ${loginEmail}`);
             return false;
