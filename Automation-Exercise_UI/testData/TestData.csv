@@ -1,0 +1,10 @@
+description,email,password
+Valid credentials A4,a4@a4.com,Test@1234
+
+#InValid credentials because email or password wrong
+Invalid credentials A1,a1@a1.com,Test@1234
+
+Valid credentials A5,a5@a5.com,Test@1234
+
+#Valid credentials with space in the email and password
+valid credentials A4 , a4@a4.com , Test@1234
