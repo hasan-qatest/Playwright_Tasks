@@ -1,11 +1,13 @@
 import { test as base } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { HomePage } from "../pages/HomePage";
+import { ShoppingCartPage } from '../pages/shoppingCartPage';
 
 export const test = base.extend<{
   saveLogs: void;
   loginPage: LoginPage;
   homePage: HomePage;
+  shoppingCartPage: ShoppingCartPage;
 }>({
   saveLogs: [
     async ({}, use) => {
@@ -20,6 +22,10 @@ export const test = base.extend<{
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);
     await use(homePage);
+  },
+  shoppingCartPage: async ({ page }, use) => {
+    const shoppingCartPage = new ShoppingCartPage(page);
+    await use(shoppingCartPage);
   },
 });
 

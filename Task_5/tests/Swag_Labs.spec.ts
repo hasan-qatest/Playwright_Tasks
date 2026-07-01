@@ -3,7 +3,10 @@ import { expect } from "@playwright/test";
 import { constants } from "../utils/constants";
 import { Logger } from "../utils/logger";
 
-test("Swag Labs Flow", async ({ loginPage, homePage }) => {
+test("Swag Labs Sorting Flow Verification ", async ({
+  loginPage,
+  homePage,
+}) => {
   //Redirect to Swag Labs Login/Home Page
   await loginPage.gotoURL();
 
@@ -81,6 +84,44 @@ test("Swag Labs Flow", async ({ loginPage, homePage }) => {
   Logger.success(
     "Verified that 'Price (Low to High)' is not sorted as 'Price (High to Low)'",
   );
+});
 
-  
+test("Swag Labs Add Product and Verify Flow", async ({
+  loginPage,
+  homePage,
+  shoppingCartPage,
+}) => {
+  //Redirect to Swag Labs Login/Home Page
+  await loginPage.gotoURL();
+
+  //Verify Landing page redirected successfully
+  await loginPage.validateLandingWebsite();
+
+  //Fill Standard User credentials in the login page
+  await loginPage.loginAsAStandardUser(
+    constants.standardUser_userName,
+    constants.password,
+  );
+
+  //Click Login Button in the Login Page
+  await loginPage.clickLoginButton();
+
+  //Verified that the Products section is displayed on the Home Page
+  await homePage.isProductsSectionVisibleOnHomePage();
+
+  //Add Product to Cart
+  await homePage.addProductToCart(constants.addProductsToCartByName);
+
+  //Verified that the cart count matched with the number of product added
+  await homePage.verifyShoppingCartCount();
+
+  //Verify that the shopping Cart Link is Visible
+  await shoppingCartPage.isShoppingCartLinkVisible();
+
+  //Click on the Shopping Cart link
+  await shoppingCartPage.shoppingCartLinkClick();
+
+  //Verify that the Shopping Cart page is display
+  await shoppingCartPage.isShoppingCartPageVisible();
+
 });

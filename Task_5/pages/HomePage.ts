@@ -9,6 +9,8 @@ export class HomePage {
   readonly productSortDropdown: Locator;
   readonly productNames: Locator;
   readonly productPrices: Locator;
+  readonly selectProduct: Locator;
+  readonly cartCount: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -16,6 +18,8 @@ export class HomePage {
     this.productSortDropdown = page.getByTestId("product-sort-container");
     this.productNames = page.getByTestId("inventory-item-name");
     this.productPrices = page.locator('[data-test="inventory-item-price"]');
+    this.selectProduct = page.locator("");
+    this.cartCount = page.getByTestId("shopping-cart-badge");
   }
 
   async isProductsSectionVisibleOnHomePage() {
@@ -113,6 +117,28 @@ export class HomePage {
         `Verified that the products are sorted in Price '${sort}' order`,
       );
       return;
+    });
+  }
+
+  async addProductToCart(productName: string[]) {
+    for (const name of productName) {
+      const product = name.toLowerCase().replace(/\s+/g, "-");
+      await test.step(`Add '${product}' product to the Cart`, async () => {
+        await this.page.getByTestId(`add-to-cart-${product}`).click();
+        Logger.success(
+          `Verified that the product '${product}' added to the Cart`,
+        );
+      });
+    }
+  }
+
+  async verifyShoppingCartCount() {
+    await test.step(`Verify that the cart count matches the number of added products`, async () => {
+      const count = Number(await this.cartCount.innerText());
+      await expect(constants.addProductsToCartByName.length).toEqual(count);
+      Logger.success(
+        `Verified that the cart count matched with the number of product added`,
+      );
     });
   }
 }
