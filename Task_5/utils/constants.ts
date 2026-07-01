@@ -6,5 +6,9 @@ export const constants = {
   homepageProductSortDescending: "Descending",
   homepageProductSortPriceLowToHigh: "Low_to_High",
   homepageProductSortPriceHighToLow: "High_to_Low",
-  addProductsToCartByName: ['Sauce Labs Backpack', 'Sauce Labs Bike Light', 'Sauce Labs Bolt T Shirt']
+  addProductsToCartByName: [
+    "Sauce Labs Backpack",
+    "Sauce Labs Bike Light",
+    "Sauce Labs Bolt T-Shirt",
+  ],
 };

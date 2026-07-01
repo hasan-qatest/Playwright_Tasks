@@ -9,7 +9,6 @@ export class HomePage {
   readonly productSortDropdown: Locator;
   readonly productNames: Locator;
   readonly productPrices: Locator;
-  readonly selectProduct: Locator;
   readonly cartCount: Locator;
 
   constructor(page: Page) {
@@ -18,7 +17,6 @@ export class HomePage {
     this.productSortDropdown = page.getByTestId("product-sort-container");
     this.productNames = page.getByTestId("inventory-item-name");
     this.productPrices = page.locator('[data-test="inventory-item-price"]');
-    this.selectProduct = page.locator("");
     this.cartCount = page.getByTestId("shopping-cart-badge");
   }
 

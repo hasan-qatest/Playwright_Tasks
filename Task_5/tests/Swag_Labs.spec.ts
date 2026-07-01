@@ -124,4 +124,6 @@ test("Swag Labs Add Product and Verify Flow", async ({
   //Verify that the Shopping Cart page is display
   await shoppingCartPage.isShoppingCartPageVisible();
 
+  //Verify that added products are available in the Shopping Cart
+  await shoppingCartPage.verifyShoppingCartItems();
 });
