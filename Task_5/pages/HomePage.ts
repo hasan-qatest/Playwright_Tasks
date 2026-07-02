@@ -7,22 +7,22 @@ export class HomePage {
   readonly page: Page;
   readonly productsHeader: Locator;
   readonly productSortDropdown: Locator;
-  readonly productNames: Locator;
-  readonly productPrices: Locator;
+  readonly productName: Locator;
+  readonly productPrice: Locator;
   readonly cartCount: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.productsHeader = page.getByText("Products");
     this.productSortDropdown = page.getByTestId("product-sort-container");
-    this.productNames = page.getByTestId("inventory-item-name");
-    this.productPrices = page.locator('[data-test="inventory-item-price"]');
+    this.productName = page.getByTestId("inventory-item-name");
+    this.productPrice = page.locator('[data-test="inventory-item-price"]');
     this.cartCount = page.getByTestId("shopping-cart-badge");
   }
 
   async isProductsSectionVisibleOnHomePage() {
     await test.step("Verify that the Products section is displayed on the Home Page", async () => {
-      await this.productsHeader.isVisible();
+      await expect(this.productsHeader).toBeVisible();
       Logger.success(
         "Successfully verified that the Products section is displayed on the Home Page",
       );
@@ -31,7 +31,7 @@ export class HomePage {
 
   async isProductSortingSectionVisible() {
     await test.step("Verify that the Products Sort section is displayed on the Home Page", async () => {
-      await this.productSortDropdown.isVisible();
+      await expect(this.productSortDropdown).toBeVisible();
       Logger.success(
         "Successfully verified that the Products Sort section is displayed on the Home Page",
       );
@@ -63,16 +63,19 @@ export class HomePage {
 
   async selectProductSortOptionByPrice(sort: "Low_to_High" | "High_to_Low") {
     const option = sort === "Low_to_High" ? "lohi" : "hilo";
-    const sortPrice = sort === "Low_to_High" ? "Price (Low to High)" : "Price (High to Low)";
+    const sortPrice =
+      sort === "Low_to_High" ? "Price (Low to High)" : "Price (High to Low)";
     await test.step(`Select the '${sortPrice}' sort option on the Home Page`, async () => {
       await this.productSortDropdown.selectOption(option);
-      Logger.success(`Selected the '${sortPrice}' sort option on the Home Page`);
+      Logger.success(
+        `Selected the '${sortPrice}' sort option on the Home Page`,
+      );
     });
   }
 
   async validateProductSortingByName(sort: string) {
     await test.step(`Verify that the products sorted as expected '${sort}'`, async () => {
-      const actualProductNames = await this.productNames.allTextContents();
+      const actualProductNames = await this.productName.allTextContents();
       const expectedProductNames = [...actualProductNames].sort((a, b) =>
         sort === constants.homepageProductSortAscending
           ? a.localeCompare(b)
@@ -89,7 +92,7 @@ export class HomePage {
   async validateProductSortingByPrice(sort: string) {
     await test.step(`Verify that the products sorted as expected '${sort}'`, async () => {
       let actualPrices: number[] = [];
-      const priceTexts = await this.productPrices.allTextContents();
+      const priceTexts = await this.productPrice.allTextContents();
       actualPrices = priceTexts.map((price) =>
         parseFloat(price.replace("$", "")),
       );
@@ -119,7 +122,7 @@ export class HomePage {
   async verifyShoppingCartCount() {
     await test.step(`Verify that the cart count matches the number of added products`, async () => {
       const count = Number(await this.cartCount.innerText());
-      await expect(constants.addProductsToCartByName.length).toEqual(count);
+      await expect(constants.ProductsByName.length).toEqual(count);
       Logger.success(
         `Verified that the cart count matched with the number of product added`,
       );

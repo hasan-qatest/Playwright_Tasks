@@ -9,28 +9,18 @@ export class ShoppingCartPage {
   readonly shoppingCartHeader: Locator;
   readonly shoppingCartItemsName: Locator;
   readonly checkoutButton: Locator;
-  readonly checkoutInformationPage: Locator;
-  readonly checkoutFirstName: Locator;
-  readonly checkoutLastName: Locator;
-  readonly checkoutPostalCOde: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.shoppingCartLink = page.getByTestId("shopping-cart-link");
-    this.shoppingCartHeader = page.getByText("Your Cart");
+    this.shoppingCartHeader = page.locator("//span[text()='Your Cart']");
     this.shoppingCartItemsName = page.getByTestId("inventory-item-name");
-    this.checkoutButton = page.getByAltText("checkout");
-    this.checkoutInformationPage = page.locator(
-      "//span[text()='Checkout: Your Information']",
-    );
-    this.checkoutFirstName = page.getByTestId("firstName");
-    this.checkoutLastName = page.getByTestId("lastName");
-    this.checkoutPostalCOde = page.getByTestId("postalCode");
+    this.checkoutButton = page.getByTestId("checkout");
   }
 
   async isShoppingCartLinkVisible() {
     await test.step("Verify that the shopping Cart Link is Visible", async () => {
-      await this.shoppingCartLink.isVisible();
+      await expect(this.shoppingCartLink).toBeVisible();
       Logger.success("Verified that the Shopping Cart link is visible");
     });
   }
@@ -46,8 +36,8 @@ export class ShoppingCartPage {
 
   async isShoppingCartPageVisible() {
     await test.step("Verify that the Shopping Cart Header and Checkout Button is display", async () => {
-      await this.shoppingCartHeader.isVisible();
-      await this.checkoutButton.isVisible();
+      await expect(this.shoppingCartHeader).toBeVisible();
+      await expect(this.checkoutButton).toBeVisible();
       Logger.success(
         "Verified that the Shopping Cart Header and Checkout button is displayed",
       );
@@ -59,9 +49,7 @@ export class ShoppingCartPage {
       await this.shoppingCartItemsName.allTextContents();
     for (let i = 0; i < actualShoppingNames.length; i++) {
       await test.step(`Verify that '${actualShoppingNames[i]}' is displayed in the Shopping Cart`, async () => {
-        await expect(actualShoppingNames[i]).toBe(
-          constants.addProductsToCartByName[i],
-        );
+        await expect(actualShoppingNames[i]).toBe(constants.ProductsByName[i]);
         Logger.success(
           `Verified that '${actualShoppingNames[i]}' is displayed in the Shopping Cart.`,
         );
@@ -74,18 +62,6 @@ export class ShoppingCartPage {
       await this.checkoutButton.click();
       Logger.success(
         "Verified that the Checkout button was clicked successfully",
-      );
-    });
-  }
-
-  async isCheckoutInformationPageVisible() {
-    await test.step("Verify Checkout information (First Name, Last Name, Postal Code) is displayed", async () => {
-      await this.checkoutInformationPage.isVisible();
-      await this.checkoutFirstName.isVisible();
-      await this.checkoutLastName.isVisible();
-      await this.checkoutPostalCOde.isVisible();
-      Logger.success(
-        "Verified that the Checkout Information (First Name, Last Name, Postal Code) is displayed",
       );
     });
   }

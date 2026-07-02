@@ -54,7 +54,9 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Price (Low to High)' sort option on the Home Page
-  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceLowToHigh);
+  await homePage.selectProductSortOptionByPrice(
+    constants.homepageProductSortPriceLowToHigh,
+  );
 
   //Verify that the products sorted as expected 'Price (Low to High)'
   await homePage.validateProductSortingByPrice(
@@ -62,7 +64,9 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Price (High to Low)' sort option on the Home Page
-  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceHighToLow);
+  await homePage.selectProductSortOptionByPrice(
+    constants.homepageProductSortPriceHighToLow,
+  );
 
   //Verify that the products sorted as expected 'Price (Low to High)'
   await homePage.validateProductSortingByPrice(
@@ -83,7 +87,9 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the sort option 'Price (Low to High)' and Verify 'Price (High to Low)' for negative case
-  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceLowToHigh);
+  await homePage.selectProductSortOptionByPrice(
+    constants.homepageProductSortPriceLowToHigh,
+  );
   await expect(async () => {
     await homePage.validateProductSortingByPrice(
       constants.homepageProductSortPriceHighToLow,
@@ -98,6 +104,10 @@ test("Swag Labs Add Product and Verify Flow", async ({
   loginPage,
   homePage,
   shoppingCartPage,
+  checkoutInformationPage,
+  checkoutOverviewPage,
+  checkoutCompletePage,
+  logout,
 }) => {
   //Redirect to Swag Labs Login/Home Page
   await loginPage.gotoURL();
@@ -118,7 +128,7 @@ test("Swag Labs Add Product and Verify Flow", async ({
   await homePage.isProductsSectionVisibleOnHomePage();
 
   //Add Product to Cart
-  await homePage.addProductToCart([...constants.addProductsToCartByName]);
+  await homePage.addProductToCart([...constants.ProductsByName]);
 
   //Verified that the cart count matched with the number of product added
   await homePage.verifyShoppingCartCount();
@@ -137,5 +147,40 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Click the Checkout button on the Shopping Cart page
   await shoppingCartPage.clickCheckoutButton();
+
+  //Verify Checkout information (First Name, Last Name, Postal Code) is displayed
+  await checkoutInformationPage.isCheckoutInformationPageVisible();
+
+  //Fill Checkout Information (First Name, Last Name, Postal Code) on the checkout page
+  await checkoutInformationPage.fillCheckoutInformation();
+
+  //Click the Checkout Continue Button
+  await checkoutInformationPage.clickCheckoutContinueButton();
+
+  //Verify that the Checkout Overview Page is Displayed
+  await checkoutOverviewPage.isCheckoutOverviewPageVisible();
+
+  //Verify Checkout Products
+  await checkoutOverviewPage.verifyCheckoutProducts();
+
+  //Click the Finish button to complete the checkout
+  await checkoutOverviewPage.finishCheckout();
+
+  //Verify that the Checkout Complete page is display
+  await checkoutCompletePage.isCheckoutCompletePageVisible();
+
+  //Click the Back to Products button on the Checkout Complete page
+  await checkoutCompletePage.clickBackToProductButton();
+
+  //Verified that the Products section is displayed on the Home Page
+  await homePage.isProductsSectionVisibleOnHomePage();
+
+  //Verify that the Menu is Visible
+  await logout.isLogoutMenuVisible();
   
+  //Click Logout
+  await logout.logoutClick();
+
+  //Verify Login page redirected successfully
+  await loginPage.validateLandingWebsite();
 });

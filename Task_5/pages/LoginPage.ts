@@ -25,7 +25,7 @@ export class LoginPage {
 
   async validateLandingWebsite() {
     await test.step("Verify the Swag_Labs Login Page redirected the page successfully", async () => {
-      await this.loginButton.isVisible();
+      await expect(this.loginButton).toBeVisible();
       Logger.success(
         "Verified the Swag labs Login Page redirected successfully",
       );
