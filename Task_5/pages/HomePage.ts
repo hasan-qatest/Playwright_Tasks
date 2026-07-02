@@ -52,35 +52,21 @@ export class HomePage {
     });
   }
 
-  async selectProductSortOptionAtoZ() {
-    await test.step("Select the 'Name (A to Z)' sort option on the Home Page", async () => {
-      await this.productSortDropdown.selectOption("az");
-      Logger.success("Selected the Name (A to Z) sort option on the Home Page");
+  async selectProductSortOptionByName(sort: "Ascending" | "Descending") {
+    const option = sort === "Ascending" ? "az" : "za";
+    const sortName = sort === "Ascending" ? "Name (A to Z)" : "Name (Z to A)";
+    await test.step(`Select the '${sortName}' sort option on the Home Page`, async () => {
+      await this.productSortDropdown.selectOption(option);
+      Logger.success(`Selected the '${sortName}' sort option on the Home Page`);
     });
   }
 
-  async selectProductSortOptionZtoA() {
-    await test.step("Select the 'Name (Z to A)' sort option on the Home Page", async () => {
-      await this.productSortDropdown.selectOption("za");
-      Logger.success("Selected the Name (Z to A) sort option on the Home Page");
-    });
-  }
-
-  async selectProductSortOptionByPriceLowToHigh() {
-    await test.step("Select the 'Price (Low to High)' sort option on the Home Page", async () => {
-      await this.productSortDropdown.selectOption("lohi");
-      Logger.success(
-        "Selected the 'Price (Low to High)' sort option on the Home Page",
-      );
-    });
-  }
-
-  async selectProductSortOptionByPriceHighToLow() {
-    await test.step("Select the 'Price (High to Low)' sort option on the Home Page", async () => {
-      await this.productSortDropdown.selectOption("hilo");
-      Logger.success(
-        "Selected the 'Price (High to Low)' sort option on the Home Page",
-      );
+  async selectProductSortOptionByPrice(sort: "Low_to_High" | "High_to_Low") {
+    const option = sort === "Low_to_High" ? "lohi" : "hilo";
+    const sortPrice = sort === "Low_to_High" ? "Price (Low to High)" : "Price (High to Low)";
+    await test.step(`Select the '${sortPrice}' sort option on the Home Page`, async () => {
+      await this.productSortDropdown.selectOption(option);
+      Logger.success(`Selected the '${sortPrice}' sort option on the Home Page`);
     });
   }
 

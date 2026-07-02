@@ -32,7 +32,10 @@ test("Swag Labs Sorting Flow Verification ", async ({
   await homePage.validateAllSortOptions();
 
   //Select the 'Name (A to Z)' sort option on the Home Page
-  await homePage.selectProductSortOptionAtoZ();
+  //await homePage.selectProductSortOptionAtoZ();
+  await homePage.selectProductSortOptionByName(
+    constants.homepageProductSortAscending,
+  );
 
   //Verify that the Name (A to Z) sort option sorts the products in ascending order
   await homePage.validateProductSortingByName(
@@ -40,7 +43,10 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Name (Z to A)' sort option on the Home Page
-  await homePage.selectProductSortOptionZtoA();
+  //await homePage.selectProductSortOptionZtoA();
+  await homePage.selectProductSortOptionByName(
+    constants.homepageProductSortDescending,
+  );
 
   //Verify that the Name (Z to A) sort option sorts the products in descending order
   await homePage.validateProductSortingByName(
@@ -48,7 +54,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Price (Low to High)' sort option on the Home Page
-  await homePage.selectProductSortOptionByPriceLowToHigh();
+  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceLowToHigh);
 
   //Verify that the products sorted as expected 'Price (Low to High)'
   await homePage.validateProductSortingByPrice(
@@ -56,7 +62,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Price (High to Low)' sort option on the Home Page
-  await homePage.selectProductSortOptionByPriceHighToLow();
+  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceHighToLow);
 
   //Verify that the products sorted as expected 'Price (Low to High)'
   await homePage.validateProductSortingByPrice(
@@ -64,7 +70,9 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the sort option 'Name (A to Z)' and Verify 'Name (Z to A)' for negative case
-  await homePage.selectProductSortOptionAtoZ();
+  await homePage.selectProductSortOptionByName(
+    constants.homepageProductSortAscending,
+  );
   await expect(async () => {
     await homePage.validateProductSortingByName(
       constants.homepageProductSortDescending,
@@ -75,7 +83,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the sort option 'Price (Low to High)' and Verify 'Price (High to Low)' for negative case
-  await homePage.selectProductSortOptionByPriceLowToHigh();
+  await homePage.selectProductSortOptionByPrice(constants.homepageProductSortPriceLowToHigh);
   await expect(async () => {
     await homePage.validateProductSortingByPrice(
       constants.homepageProductSortPriceHighToLow,
@@ -110,7 +118,7 @@ test("Swag Labs Add Product and Verify Flow", async ({
   await homePage.isProductsSectionVisibleOnHomePage();
 
   //Add Product to Cart
-  await homePage.addProductToCart(constants.addProductsToCartByName);
+  await homePage.addProductToCart([...constants.addProductsToCartByName]);
 
   //Verified that the cart count matched with the number of product added
   await homePage.verifyShoppingCartCount();
@@ -126,4 +134,8 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Verify that added products are available in the Shopping Cart
   await shoppingCartPage.verifyShoppingCartItems();
+
+  //Click the Checkout button on the Shopping Cart page
+  await shoppingCartPage.clickCheckoutButton();
+  
 });
