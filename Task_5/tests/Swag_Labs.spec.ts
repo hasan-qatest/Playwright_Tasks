@@ -7,19 +7,19 @@ test("Swag Labs Sorting Flow Verification ", async ({
   loginPage,
   homePage,
 }) => {
-  //Redirect to Swag Labs Login/Home Page
+  //Navigate to the Swag Labs Login Page
   await loginPage.gotoURL();
 
-  //Verify Landing page redirected successfully
+  //Verify successful redirection to the Swag Labs Login page
   await loginPage.validateLandingWebsite();
 
-  //Fill Standard User credentials in the login page
+  //Enter Standard User credentials in the login fields
   await loginPage.loginAsAStandardUser(
     constants.standardUser_userName,
     constants.password,
   );
 
-  //Click Login Button in the Login Page
+  //Click the Login Button
   await loginPage.clickLoginButton();
 
   //Verified that the Products section is displayed on the Home Page
@@ -32,7 +32,6 @@ test("Swag Labs Sorting Flow Verification ", async ({
   await homePage.validateAllSortOptions();
 
   //Select the 'Name (A to Z)' sort option on the Home Page
-  //await homePage.selectProductSortOptionAtoZ();
   await homePage.selectProductSortOptionByName(
     constants.homepageProductSortAscending,
   );
@@ -43,7 +42,6 @@ test("Swag Labs Sorting Flow Verification ", async ({
   );
 
   //Select the 'Name (Z to A)' sort option on the Home Page
-  //await homePage.selectProductSortOptionZtoA();
   await homePage.selectProductSortOptionByName(
     constants.homepageProductSortDescending,
   );
@@ -109,37 +107,37 @@ test("Swag Labs Add Product and Verify Flow", async ({
   checkoutCompletePage,
   logout,
 }) => {
-  //Redirect to Swag Labs Login/Home Page
+  //Navigate to the Swag Labs Login Page
   await loginPage.gotoURL();
 
-  //Verify Landing page redirected successfully
+  //Verify successful redirection to the Swag Labs Login page
   await loginPage.validateLandingWebsite();
 
-  //Fill Standard User credentials in the login page
+  //Enter Standard User credentials in the login fields
   await loginPage.loginAsAStandardUser(
     constants.standardUser_userName,
     constants.password,
   );
 
-  //Click Login Button in the Login Page
+  //Click the Login Button
   await loginPage.clickLoginButton();
 
   //Verified that the Products section is displayed on the Home Page
   await homePage.isProductsSectionVisibleOnHomePage();
 
-  //Add Product to Cart
+  //Add Product to the Cart
   await homePage.addProductToCart([...constants.ProductsByName]);
 
-  //Verified that the cart count matched with the number of product added
+  //Verified that the cart count matched with the number of added products
   await homePage.verifyShoppingCartCount();
 
-  //Verify that the shopping Cart Link is Visible
+  //Verify that the Shopping cart link is visible
   await shoppingCartPage.isShoppingCartLinkVisible();
 
   //Click on the Shopping Cart link
   await shoppingCartPage.shoppingCartLinkClick();
 
-  //Verify that the Shopping Cart page is display
+  //Verify that the Shopping cart header and checkout button are displayed
   await shoppingCartPage.isShoppingCartPageVisible();
 
   //Verify that added products are available in the Shopping Cart
@@ -148,39 +146,39 @@ test("Swag Labs Add Product and Verify Flow", async ({
   //Click the Checkout button on the Shopping Cart page
   await shoppingCartPage.clickCheckoutButton();
 
-  //Verify Checkout information (First Name, Last Name, Postal Code) is displayed
+  //Verify that the Checkout Information page is displayed with all required fields
   await checkoutInformationPage.isCheckoutInformationPageVisible();
 
-  //Fill Checkout Information (First Name, Last Name, Postal Code) on the checkout page
+  //Entered the Checkout Information (First Name, Last Name, Postal Code) on the checkout page
   await checkoutInformationPage.fillCheckoutInformation();
 
-  //Click the Checkout Continue Button
+  //Click the Continue button on the Checkout Information page
   await checkoutInformationPage.clickCheckoutContinueButton();
 
-  //Verify that the Checkout Overview Page is Displayed
+  //Verify that the Checkout Overview Page is displayed
   await checkoutOverviewPage.isCheckoutOverviewPageVisible();
 
-  //Verify Checkout Products
+  //Verify that all products displayed in the Checkout Cart
   await checkoutOverviewPage.verifyCheckoutProducts();
 
-  //Click the Finish button to complete the checkout
+  //Click the Finish button to complete the checkout process
   await checkoutOverviewPage.finishCheckout();
 
-  //Verify that the Checkout Complete page is display
+  //Verify that the Checkout Complete Page is displayed
   await checkoutCompletePage.isCheckoutCompletePageVisible();
 
   //Click the Back to Products button on the Checkout Complete page
   await checkoutCompletePage.clickBackToProductButton();
 
-  //Verified that the Products section is displayed on the Home Page
+  //Verify that the Products section is displayed on the Home Page
   await homePage.isProductsSectionVisibleOnHomePage();
 
-  //Verify that the Menu is Visible
+  //Verify that the menu is visible
   await logout.isLogoutMenuVisible();
-  
-  //Click Logout
-  await logout.logoutClick();
 
-  //Verify Login page redirected successfully
+  //Click the Logout button from the menu
+  await logout.logoutLinkClick();
+
+  //Verify successful redirection to the Swag Labs Login page
   await loginPage.validateLandingWebsite();
 });

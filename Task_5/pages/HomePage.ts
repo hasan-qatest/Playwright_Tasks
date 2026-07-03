@@ -39,7 +39,7 @@ export class HomePage {
   }
 
   async validateAllSortOptions() {
-    await test.step("Verify that all product sort options are available in the sorting section", async () => {
+    await test.step("Verify that all product sort options are available in the sort dropdown", async () => {
       await expect(this.productSortDropdown.locator("option")).toHaveText([
         "Name (A to Z)",
         "Name (Z to A)",
@@ -47,7 +47,7 @@ export class HomePage {
         "Price (high to low)",
       ]);
       Logger.success(
-        "Verified that all expected sort options are available in the sort dropdown",
+        "Successfully verified that all product sort options are available in the sort dropdown",
       );
     });
   }
@@ -55,9 +55,9 @@ export class HomePage {
   async selectProductSortOptionByName(sort: "Ascending" | "Descending") {
     const option = sort === "Ascending" ? "az" : "za";
     const sortName = sort === "Ascending" ? "Name (A to Z)" : "Name (Z to A)";
-    await test.step(`Select the '${sortName}' sort option on the Home Page`, async () => {
+    await test.step(`Select the '${sortName}' sort option on the Home page`, async () => {
       await this.productSortDropdown.selectOption(option);
-      Logger.success(`Selected the '${sortName}' sort option on the Home Page`);
+      Logger.success(`Successfully selected the '${sortName}' sort option on the Home page`);
     });
   }
 
@@ -65,16 +65,16 @@ export class HomePage {
     const option = sort === "Low_to_High" ? "lohi" : "hilo";
     const sortPrice =
       sort === "Low_to_High" ? "Price (Low to High)" : "Price (High to Low)";
-    await test.step(`Select the '${sortPrice}' sort option on the Home Page`, async () => {
+    await test.step(`Select the '${sortPrice}' sort option on the Home page`, async () => {
       await this.productSortDropdown.selectOption(option);
       Logger.success(
-        `Selected the '${sortPrice}' sort option on the Home Page`,
+        `Successfully selected the '${sortPrice}' sort option on the Home page`,
       );
     });
   }
 
   async validateProductSortingByName(sort: string) {
-    await test.step(`Verify that the products sorted as expected '${sort}'`, async () => {
+    await test.step(`Verify that the products sorted in '${sort}' order`, async () => {
       const actualProductNames = await this.productName.allTextContents();
       const expectedProductNames = [...actualProductNames].sort((a, b) =>
         sort === constants.homepageProductSortAscending
@@ -83,14 +83,14 @@ export class HomePage {
       );
       await expect(actualProductNames).toEqual(expectedProductNames);
       Logger.success(
-        `Verified that the products are sorted in '${sort}' order`,
+        `Successfully verified that the products are sorted in '${sort}' order`,
       );
       return;
     });
   }
 
   async validateProductSortingByPrice(sort: string) {
-    await test.step(`Verify that the products sorted as expected '${sort}'`, async () => {
+    await test.step(`Verify that the products are sorted in '${sort}' order`, async () => {
       let actualPrices: number[] = [];
       const priceTexts = await this.productPrice.allTextContents();
       actualPrices = priceTexts.map((price) =>
@@ -101,7 +101,7 @@ export class HomePage {
       );
       await expect(actualPrices).toEqual(expectedPrices);
       Logger.success(
-        `Verified that the products are sorted in Price '${sort}' order`,
+        `Successfully verified that the products are sorted in '${sort}' order`,
       );
       return;
     });
@@ -110,10 +110,10 @@ export class HomePage {
   async addProductToCart(productName: string[]) {
     for (const name of productName) {
       const product = name.toLowerCase().replace(/\s+/g, "-");
-      await test.step(`Add '${product}' product to the Cart`, async () => {
+      await test.step(`Add '${name}' product to the Cart`, async () => {
         await this.page.getByTestId(`add-to-cart-${product}`).click();
         Logger.success(
-          `Verified that the product '${product}' added to the Cart`,
+          `Successfully verified that the product '${name}' added to the Cart`,
         );
       });
     }
@@ -124,7 +124,7 @@ export class HomePage {
       const count = Number(await this.cartCount.innerText());
       await expect(constants.ProductsByName.length).toEqual(count);
       Logger.success(
-        `Verified that the cart count matched with the number of product added`,
+        `Successfully verified that the cart count matches the number of added products`,
       );
     });
   }

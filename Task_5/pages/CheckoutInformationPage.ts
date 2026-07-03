@@ -23,32 +23,32 @@ export class CheckoutInformationPage {
   }
 
   async isCheckoutInformationPageVisible() {
-    await test.step("Verify Checkout information (First Name, Last Name, Postal Code) is displayed", async () => {
+    await test.step("Verify that the Checkout Information page is displayed with all required fields", async () => {
       await expect(this.checkoutInformationPage).toBeVisible();
       await expect(this.checkoutFirstName).toBeVisible();
       await expect(this.checkoutLastName).toBeVisible();
       await expect(this.checkoutPostalCOde).toBeVisible();
       Logger.success(
-        "Verified that the Checkout Information (First Name, Last Name, Postal Code) is displayed",
+        "Successfully verified that the Checkout Information page is displayed with all required fields",
       );
     });
   }
 
   async fillCheckoutInformation() {
-    await test.step("Fill in the checkout information (First Name, Last Name, and Postal Code)", async () => {
+    await test.step("Enter the checkout information (First Name, Last Name, and Postal Code) on the checkout page", async () => {
       await this.checkoutFirstName.fill(constants.checkoutFirstNameValue);
       await this.checkoutLastName.fill(constants.checkoutLastNameValue);
       await this.checkoutPostalCOde.fill(constants.checkoutPostalCodeValue);
       Logger.success(
-        "Verified that the checkout information was entered successfully",
+        "successfully entered checkout information",
       );
     });
   }
 
   async clickCheckoutContinueButton() {
-    await test.step("Click the Checkout Continue Button", async () => {
+    await test.step("Click the Continue button on the Checkout Information page", async () => {
       await this.checkoutContinueButton.click();
-      Logger.success("Clicked the checkout continue button successfully");
+      Logger.success("Successfully clicked the Continue button on the Checkout Information page");
     });
   }
 }

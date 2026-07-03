@@ -20,22 +20,21 @@ export class CheckoutCompletePage {
   }
 
   async isCheckoutCompletePageVisible() {
-    await test.step("Verify that the Checkout Complete Page is Displayed", async () => {
+    await test.step("Verify that the Checkout Complete Page is displayed", async () => {
       await expect(this.checkoutCompletePage).toBeVisible();
       await expect(this.checkoutCompleteMessage).toBeVisible();
       Logger.success(
-        "Verified that the Checkout Complete Page is Displayed Successfully",
+        "Successfully verified that the Checkout Complete page is displayed",
       );
     });
   }
 
   async clickBackToProductButton() {
-    await test.step("Click the Back to Products button on the Checkout Complete page", async () => {
-        await this.backToProductsButton.click();
+    await test.step("Click the 'Back to Products' button on the Checkout Complete page", async () => {
+      await this.backToProductsButton.click();
       Logger.success(
-        "Verified that the back to product button was clicked successfully",
+        "Successfully clicked 'Back to Products' button on the Checkout Complete page",
       );
     });
-
   }
 }

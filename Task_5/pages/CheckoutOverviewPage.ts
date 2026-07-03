@@ -20,10 +20,10 @@ export class CheckoutOverviewPage {
   }
 
   async isCheckoutOverviewPageVisible() {
-    await test.step("Verify that the Checkout Overview Page is Displayed", async () => {
+    await test.step("Verify that the Checkout Overview Page is displayed", async () => {
       await expect(this.checkoutOverviewPage).toBeVisible();
       Logger.success(
-        "Verified that the Checkout Overview Page is Displayed Successfully",
+        "Successfully verified that the Checkout Overview page is displayed",
       );
     });
   }
@@ -34,14 +34,14 @@ export class CheckoutOverviewPage {
       await test.step(`Verify that '${checkoutProducts[i]}' is displayed in the Checkout Cart`, async () => {
         await expect(checkoutProducts[i]).toBe(constants.ProductsByName[i]);
         Logger.success(
-          `Verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart.`,
+          `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
         );
       });
     }
   }
 
   async finishCheckout() {
-    await test.step("Click the 'Finish' button to complete the checkout process", async () => {
+    await test.step("Click the Finish button to complete the checkout process", async () => {
       await this.finishCheckoutButton.click();
     });
     Logger.success("Successfully completed the checkout process");
