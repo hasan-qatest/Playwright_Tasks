@@ -74,12 +74,11 @@ test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
   await homePage.selectProductSortOptionByName(
     constants.homepageProductSortAscending,
   );
-
-  await expect(async () => {
-    await homePage.validateProductSortingByName(
+  await expect(
+    homePage.validateProductSortingByName(
       constants.homepageProductSortDescending,
-    );
-  }).rejects.toThrow();
+    ),
+  ).rejects.toThrow("Products are not sorted in 'Name (Z to A)' order.");
   Logger.success(
     "Verified that 'Name (A to Z)' is not sorted as 'Name (Z to A)'",
   );
@@ -92,7 +91,7 @@ test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
     await homePage.validateProductSortingByPrice(
       constants.homepageProductSortPriceHighToLow,
     );
-  }).rejects.toThrow();
+  }).rejects.toThrow("Products are not sorted in 'Price (High to Low)' order");
   Logger.success(
     "Verified that 'Price (Low to High)' is not sorted as 'Price (High to Low)'",
   );

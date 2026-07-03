@@ -83,7 +83,12 @@ export class HomePage {
           ? a.localeCompare(b)
           : b.localeCompare(a),
       );
-      await expect(actualProductNames).toEqual(expectedProductNames);
+      if (
+        JSON.stringify(actualProductNames) !==
+        JSON.stringify(expectedProductNames)
+      ) {
+        throw new Error(`Products are not sorted in 'Name (Z to A)' order.`);
+      }
       Logger.success(
         `Successfully verified that the products are sorted in '${sort}' order`,
       );
@@ -101,7 +106,9 @@ export class HomePage {
       const expectedPrices = [...actualPrices].sort((a, b) =>
         sort === constants.homepageProductSortPriceLowToHigh ? a - b : b - a,
       );
-      await expect(actualPrices).toEqual(expectedPrices);
+      if (JSON.stringify(actualPrices) !== JSON.stringify(expectedPrices)) {
+        throw new Error(`Products are not sorted in 'Price (High to Low)' order`);
+      }
       Logger.success(
         `Successfully verified that the products are sorted in '${sort}' order`,
       );
