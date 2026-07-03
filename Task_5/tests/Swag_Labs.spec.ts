@@ -6,6 +6,7 @@ import { Logger } from "../utils/logger";
 test("Swag Labs Sorting Flow Verification ", async ({
   loginPage,
   homePage,
+  logout,
 }) => {
   //Navigate to the Swag Labs Login Page
   await loginPage.gotoURL();
@@ -96,6 +97,12 @@ test("Swag Labs Sorting Flow Verification ", async ({
   Logger.success(
     "Verified that 'Price (Low to High)' is not sorted as 'Price (High to Low)'",
   );
+
+  //Verify that the menu is visible
+  await logout.isLogoutMenuVisible();
+
+  //Click the Logout button from the menu
+  await logout.logoutLinkClick();
 });
 
 test("Swag Labs Add Product and Verify Flow", async ({
