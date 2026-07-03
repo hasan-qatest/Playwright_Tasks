@@ -13,7 +13,7 @@ export class ShoppingCartPage {
   constructor(page: Page) {
     this.page = page;
     this.shoppingCartLink = page.getByTestId("shopping-cart-link");
-    this.shoppingCartHeader = page.locator("//span[text()='Your Cart']");
+    this.shoppingCartHeader = page.getByTestId("title");
     this.shoppingCartItemsName = page.getByTestId("inventory-item-name");
     this.checkoutButton = page.getByTestId("checkout");
   }
@@ -21,7 +21,9 @@ export class ShoppingCartPage {
   async isShoppingCartLinkVisible() {
     await test.step("Verify that the Shopping cart link is visible", async () => {
       await expect(this.shoppingCartLink).toBeVisible();
-      Logger.success("Successfully verified that the Shopping cart link is visible");
+      Logger.success(
+        "Successfully verified that the Shopping cart link is visible",
+      );
     });
   }
 
@@ -45,24 +47,22 @@ export class ShoppingCartPage {
   }
 
   async verifyShoppingCartItems() {
-    const actualShoppingNames =
-      await this.shoppingCartItemsName.allTextContents();
-    for (let i = 0; i < actualShoppingNames.length; i++) {
-      await test.step(`Verify that '${actualShoppingNames[i]}' is displayed in the Shopping cart`, async () => {
-        await expect(actualShoppingNames[i]).toBe(constants.ProductsByName[i]);
-        Logger.success(
-          `Successfully verified that '${actualShoppingNames[i]}' is displayed in the Shopping Cart`,
+    await test.step("Verify that all added products are displayed in the Shopping Cart", async () => {
+      for (let i = 0; i < constants.ProductsByName.length; i++) {
+        await expect(this.shoppingCartItemsName.nth(i)).toHaveText(
+          constants.ProductsByName[i],
         );
-      });
-    }
+        Logger.success(
+          `Successfully verified '${constants.ProductsByName[i]}' is in the Shopping Cart`,
+        );
+      }
+    });
   }
 
   async clickCheckoutButton() {
     await test.step("Click the Checkout button on the Shopping Cart page", async () => {
       await this.checkoutButton.click();
-      Logger.success(
-        "Successfully verified that the Checkout button clicked",
-      );
+      Logger.success("Successfully verified that the Checkout button clicked");
     });
   }
 }

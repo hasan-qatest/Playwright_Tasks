@@ -8,17 +8,15 @@ export class CheckoutInformationPage {
   readonly checkoutInformationPage: Locator;
   readonly checkoutFirstName: Locator;
   readonly checkoutLastName: Locator;
-  readonly checkoutPostalCOde: Locator;
+  readonly checkoutPostalCode: Locator;
   readonly checkoutContinueButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutInformationPage = page.locator(
-      "//span[text()='Checkout: Your Information']",
-    );
+    this.checkoutInformationPage = page.getByTestId("title");
     this.checkoutFirstName = page.getByTestId("firstName");
     this.checkoutLastName = page.getByTestId("lastName");
-    this.checkoutPostalCOde = page.getByTestId("postalCode");
+    this.checkoutPostalCode = page.getByTestId("postalCode");
     this.checkoutContinueButton = page.getByTestId("continue");
   }
 
@@ -27,7 +25,7 @@ export class CheckoutInformationPage {
       await expect(this.checkoutInformationPage).toBeVisible();
       await expect(this.checkoutFirstName).toBeVisible();
       await expect(this.checkoutLastName).toBeVisible();
-      await expect(this.checkoutPostalCOde).toBeVisible();
+      await expect(this.checkoutPostalCode).toBeVisible();
       Logger.success(
         "Successfully verified that the Checkout Information page is displayed with all required fields",
       );
@@ -38,7 +36,7 @@ export class CheckoutInformationPage {
     await test.step("Enter the checkout information (First Name, Last Name, and Postal Code) on the checkout page", async () => {
       await this.checkoutFirstName.fill(constants.checkoutFirstNameValue);
       await this.checkoutLastName.fill(constants.checkoutLastNameValue);
-      await this.checkoutPostalCOde.fill(constants.checkoutPostalCodeValue);
+      await this.checkoutPostalCode.fill(constants.checkoutPostalCodeValue);
       Logger.success(
         "successfully entered checkout information",
       );

@@ -10,12 +10,9 @@ export class CheckoutCompletePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutCompletePage = page.locator(
-      "//span[text()='Checkout: Complete!']",
-    );
-    this.checkoutCompleteMessage = page.locator(
-      "//h2[text()='Thank you for your order!']",
-    );
+    this.checkoutCompletePage  = page.getByTestId("title");
+    this.checkoutCompleteMessage = page.getByRole("heading", { name: "Thank you for your order!" });
+
     this.backToProductsButton = page.getByTestId("back-to-products");
   }
 

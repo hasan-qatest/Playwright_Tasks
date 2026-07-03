@@ -3,11 +3,7 @@ import { expect } from "@playwright/test";
 import { constants } from "../utils/constants";
 import { Logger } from "../utils/logger";
 
-test("Swag Labs Sorting Flow Verification ", async ({
-  loginPage,
-  homePage,
-  logout,
-}) => {
+test.beforeEach(async ({ loginPage, homePage }) => {
   //Navigate to the Swag Labs Login Page
   await loginPage.gotoURL();
 
@@ -16,7 +12,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
 
   //Enter Standard User credentials in the login fields
   await loginPage.loginAsAStandardUser(
-    constants.standardUser_userName,
+    constants.standardUserName,
     constants.password,
   );
 
@@ -25,7 +21,9 @@ test("Swag Labs Sorting Flow Verification ", async ({
 
   //Verified that the Products section is displayed on the Home Page
   await homePage.isProductsSectionVisibleOnHomePage();
+});
 
+test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
   //Verify that the Products Sort section is displayed on the Home Page
   await homePage.isProductSortingSectionVisible();
 
@@ -67,7 +65,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
     constants.homepageProductSortPriceHighToLow,
   );
 
-  //Verify that the products sorted as expected 'Price (Low to High)'
+  //Verify that the products sorted as expected 'Price ( High to Low)'
   await homePage.validateProductSortingByPrice(
     constants.homepageProductSortPriceHighToLow,
   );
@@ -76,6 +74,7 @@ test("Swag Labs Sorting Flow Verification ", async ({
   await homePage.selectProductSortOptionByName(
     constants.homepageProductSortAscending,
   );
+
   await expect(async () => {
     await homePage.validateProductSortingByName(
       constants.homepageProductSortDescending,
@@ -97,41 +96,15 @@ test("Swag Labs Sorting Flow Verification ", async ({
   Logger.success(
     "Verified that 'Price (Low to High)' is not sorted as 'Price (High to Low)'",
   );
-
-  //Verify that the menu is visible
-  await logout.isLogoutMenuVisible();
-
-  //Click the Logout button from the menu
-  await logout.logoutLinkClick();
 });
 
 test("Swag Labs Add Product and Verify Flow", async ({
-  loginPage,
   homePage,
   shoppingCartPage,
   checkoutInformationPage,
   checkoutOverviewPage,
   checkoutCompletePage,
-  logout,
 }) => {
-  //Navigate to the Swag Labs Login Page
-  await loginPage.gotoURL();
-
-  //Verify successful redirection to the Swag Labs Login page
-  await loginPage.validateLandingWebsite();
-
-  //Enter Standard User credentials in the login fields
-  await loginPage.loginAsAStandardUser(
-    constants.standardUser_userName,
-    constants.password,
-  );
-
-  //Click the Login Button
-  await loginPage.clickLoginButton();
-
-  //Verified that the Products section is displayed on the Home Page
-  await homePage.isProductsSectionVisibleOnHomePage();
-
   //Add Product to the Cart
   await homePage.addProductToCart([...constants.ProductsByName]);
 
@@ -179,7 +152,9 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Verify that the Products section is displayed on the Home Page
   await homePage.isProductsSectionVisibleOnHomePage();
+});
 
+test.afterEach(async ({ loginPage, logout }) => {
   //Verify that the menu is visible
   await logout.isLogoutMenuVisible();
 

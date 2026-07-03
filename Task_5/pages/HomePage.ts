@@ -57,7 +57,9 @@ export class HomePage {
     const sortName = sort === "Ascending" ? "Name (A to Z)" : "Name (Z to A)";
     await test.step(`Select the '${sortName}' sort option on the Home page`, async () => {
       await this.productSortDropdown.selectOption(option);
-      Logger.success(`Successfully selected the '${sortName}' sort option on the Home page`);
+      Logger.success(
+        `Successfully selected the '${sortName}' sort option on the Home page`,
+      );
     });
   }
 
@@ -112,9 +114,7 @@ export class HomePage {
       const product = name.toLowerCase().replace(/\s+/g, "-");
       await test.step(`Add '${name}' product to the Cart`, async () => {
         await this.page.getByTestId(`add-to-cart-${product}`).click();
-        Logger.success(
-          `Successfully verified that the product '${name}' added to the Cart`,
-        );
+        Logger.success(`Successfully added product '${name}' to the Cart`);
       });
     }
   }
@@ -122,7 +122,7 @@ export class HomePage {
   async verifyShoppingCartCount() {
     await test.step(`Verify that the cart count matches the number of added products`, async () => {
       const count = Number(await this.cartCount.innerText());
-      await expect(constants.ProductsByName.length).toEqual(count);
+      await expect(count).toEqual(constants.ProductsByName.length);
       Logger.success(
         `Successfully verified that the cart count matches the number of added products`,
       );

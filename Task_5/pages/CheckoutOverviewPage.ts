@@ -6,16 +6,13 @@ import { constants } from "../utils/constants";
 export class CheckoutOverviewPage {
   readonly page: Page;
   readonly checkoutOverviewPage: Locator;
-  readonly CheckoutProductsName: Locator;
+  readonly checkoutProductsName: Locator;
   readonly finishCheckoutButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutOverviewPage = page.locator(
-      "//span[text()='Checkout: Overview']",
-    );
-    //this.checkoutOverviewPage = page.getByText("Checkout: Overview");
-    this.CheckoutProductsName = page.getByTestId("inventory-item-name");
+    this.checkoutOverviewPage  = page.getByTestId("title");
+    this.checkoutProductsName = page.getByTestId("inventory-item-name");
     this.finishCheckoutButton = page.getByTestId("finish");
   }
 
@@ -29,9 +26,10 @@ export class CheckoutOverviewPage {
   }
 
   async verifyCheckoutProducts() {
-    const checkoutProducts = await this.CheckoutProductsName.allTextContents();
+    const checkoutProducts = await this.checkoutProductsName.allTextContents();
     for (let i = 0; i < checkoutProducts.length; i++) {
       await test.step(`Verify that '${checkoutProducts[i]}' is displayed in the Checkout Cart`, async () => {
+        //await expect(checkoutProducts[i]).toBe(constants.ProductsByName[i]);
         await expect(checkoutProducts[i]).toBe(constants.ProductsByName[i]);
         Logger.success(
           `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
@@ -43,7 +41,7 @@ export class CheckoutOverviewPage {
   async finishCheckout() {
     await test.step("Click the Finish button to complete the checkout process", async () => {
       await this.finishCheckoutButton.click();
+      Logger.success("Successfully completed the checkout process");
     });
-    Logger.success("Successfully completed the checkout process");
   }
 }
