@@ -107,7 +107,9 @@ export class HomePage {
         sort === constants.homepageProductSortPriceLowToHigh ? a - b : b - a,
       );
       if (JSON.stringify(actualPrices) !== JSON.stringify(expectedPrices)) {
-        throw new Error(`Products are not sorted in 'Price (High to Low)' order`);
+        throw new Error(
+          `Products are not sorted in 'Price (High to Low)' order`,
+        );
       }
       Logger.success(
         `Successfully verified that the products are sorted in '${sort}' order`,
@@ -128,8 +130,9 @@ export class HomePage {
 
   async verifyShoppingCartCount() {
     await test.step(`Verify that the cart count matches the number of added products`, async () => {
-      const count = Number(await this.cartCount.innerText());
-      await expect(count).toEqual(constants.ProductsByName.length);
+      await expect(this.cartCount).toHaveText(
+        String(constants.productsByName.length),
+      );
       Logger.success(
         `Successfully verified that the cart count matches the number of added products`,
       );

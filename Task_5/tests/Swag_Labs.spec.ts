@@ -105,7 +105,7 @@ test("Swag Labs Add Product and Verify Flow", async ({
   checkoutCompletePage,
 }) => {
   //Add Product to the Cart
-  await homePage.addProductToCart([...constants.ProductsByName]);
+  await homePage.addProductToCart([...constants.productsByName]);
 
   //Verified that the cart count matched with the number of added products
   await homePage.verifyShoppingCartCount();

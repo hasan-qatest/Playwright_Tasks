@@ -6,7 +6,7 @@ export const constants = {
   homepageProductSortDescending: "Descending",
   homepageProductSortPriceLowToHigh: "Low_to_High",
   homepageProductSortPriceHighToLow: "High_to_Low",
-  ProductsByName: [
+  productsByName: [
     "Sauce Labs Backpack",
     "Sauce Labs Bike Light",
     "Sauce Labs Bolt T-Shirt",

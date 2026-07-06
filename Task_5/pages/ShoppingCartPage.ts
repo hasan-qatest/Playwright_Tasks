@@ -30,9 +30,7 @@ export class ShoppingCartPage {
   async shoppingCartLinkClick() {
     await test.step("Click the Shopping cart link", async () => {
       await this.shoppingCartLink.click();
-      Logger.success(
-        "Verified that the Shopping Cart page is displayed successfully",
-      );
+      Logger.success("Successfully clicked the Shopping Cart link");
     });
   }
 
@@ -48,12 +46,12 @@ export class ShoppingCartPage {
 
   async verifyShoppingCartItems() {
     await test.step("Verify that all added products are displayed in the Shopping Cart", async () => {
-      for (let i = 0; i < constants.ProductsByName.length; i++) {
+      for (let i = 0; i < constants.productsByName.length; i++) {
         await expect(this.shoppingCartItemsName.nth(i)).toHaveText(
-          constants.ProductsByName[i],
+          constants.productsByName[i],
         );
         Logger.success(
-          `Successfully verified '${constants.ProductsByName[i]}' is in the Shopping Cart`,
+          `Successfully verified '${constants.productsByName[i]}' is in the Shopping Cart`,
         );
       }
     });
@@ -62,7 +60,7 @@ export class ShoppingCartPage {
   async clickCheckoutButton() {
     await test.step("Click the Checkout button on the Shopping Cart page", async () => {
       await this.checkoutButton.click();
-      Logger.success("Successfully verified that the Checkout button clicked");
+      Logger.success("Successfully clicked the Checkout button on the Shopping Cart page");
     });
   }
 }

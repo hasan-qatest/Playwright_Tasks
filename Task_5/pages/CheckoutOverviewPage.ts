@@ -29,8 +29,7 @@ export class CheckoutOverviewPage {
     const checkoutProducts = await this.checkoutProductsName.allTextContents();
     for (let i = 0; i < checkoutProducts.length; i++) {
       await test.step(`Verify that '${checkoutProducts[i]}' is displayed in the Checkout Cart`, async () => {
-        //await expect(checkoutProducts[i]).toBe(constants.ProductsByName[i]);
-        await expect(checkoutProducts[i]).toBe(constants.ProductsByName[i]);
+        await expect(checkoutProducts[i]).toBe(constants.productsByName[i]);
         Logger.success(
           `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
         );
