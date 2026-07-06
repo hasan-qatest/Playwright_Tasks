@@ -14,7 +14,8 @@ export class HomePage {
     this.page = page;
     this.productSortDropdown = page.getByTestId("product-sort-container");
     this.productName = page.getByTestId("inventory-item-name");
-    this.productPrice = page.locator('[data-test="inventory-item-price"]');
+    this.productPrice = page.getByTestId("inventory-item-price");
+    //this.productPrice = page.locator('[data-test="inventory-item-price"]');
     this.cartCount = page.getByTestId("shopping-cart-badge");
   }
 
