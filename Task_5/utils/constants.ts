@@ -2,10 +2,6 @@ export const constants = {
   homePageURL: "https://www.saucedemo.com/",
   standardUserName: "standard_user",
   password: "secret_sauce",
-  homepageProductSortAscending: "Ascending",
-  homepageProductSortDescending: "Descending",
-  homepageProductSortPriceLowToHigh: "Low_to_High",
-  homepageProductSortPriceHighToLow: "High_to_Low",
   productsByName: [
     "Sauce Labs Backpack",
     "Sauce Labs Bike Light",
@@ -15,3 +11,10 @@ export const constants = {
   checkoutLastNameValue: "Test Last Name",
   checkoutPostalCodeValue: "123456",
 } as const;
+
+export enum ProductSort {
+  NAME_ASC = "Name (A to Z)",
+  NAME_DESC = "Name (Z to A)",
+  PRICE_LOW_HIGH = "Price (low to high)",
+  PRICE_HIGH_LOW = "Price (high to low)",
+}

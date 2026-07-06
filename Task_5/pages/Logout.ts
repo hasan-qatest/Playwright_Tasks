@@ -1,4 +1,3 @@
-import { test } from "../fixture/TestFixture";
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
 
@@ -14,16 +13,12 @@ export class Logout {
   }
 
   async isLogoutMenuVisible() {
-    await test.step("Verify that the menu is visible", async () => {
-      await expect(this.openMenuButton).toBeVisible();
-      Logger.success("Successfully verified that the menu is visible");
-    });
+    await expect(this.openMenuButton).toBeVisible();
+    Logger.success("Successfully verified that the menu is visible");
   }
   async logoutLinkClick() {
-    await test.step("Click the Logout button from the menu", async () => {
-      await this.openMenuButton.click();
-      await this.logoutLink.click();
-      Logger.success("Successfully verified that the user is logged out");
-    });
+    await this.openMenuButton.click();
+    await this.logoutLink.click();
+    Logger.success("Successfully verified that the user is logged out");
   }
 }

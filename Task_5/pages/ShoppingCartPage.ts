@@ -19,48 +19,40 @@ export class ShoppingCartPage {
   }
 
   async isShoppingCartLinkVisible() {
-    await test.step("Verify that the Shopping cart link is visible", async () => {
-      await expect(this.shoppingCartLink).toBeVisible();
-      Logger.success(
-        "Successfully verified that the Shopping cart link is visible",
-      );
-    });
+    await expect(this.shoppingCartLink).toBeVisible();
+    Logger.success(
+      "Successfully verified that the Shopping cart link is visible",
+    );
   }
 
   async shoppingCartLinkClick() {
-    await test.step("Click the Shopping cart link", async () => {
-      await this.shoppingCartLink.click();
-      Logger.success("Successfully clicked the Shopping Cart link");
-    });
+    await this.shoppingCartLink.click();
+    Logger.success("Successfully clicked the Shopping Cart link");
   }
 
   async isShoppingCartPageVisible() {
-    await test.step("Verify that the Shopping cart header and checkout button are displayed", async () => {
-      await expect(this.shoppingCartHeader).toBeVisible();
-      await expect(this.checkoutButton).toBeVisible();
-      Logger.success(
-        "Successfully verified that the Shopping cart header and checkout button are displayed",
-      );
-    });
+    await expect(this.shoppingCartHeader).toBeVisible();
+    await expect(this.checkoutButton).toBeVisible();
+    Logger.success(
+      "Successfully verified that the Shopping cart header and checkout button are displayed",
+    );
   }
 
   async verifyShoppingCartItems() {
-    await test.step("Verify that all added products are displayed in the Shopping Cart", async () => {
-      for (let i = 0; i < constants.productsByName.length; i++) {
-        await expect(this.shoppingCartItemsName.nth(i)).toHaveText(
-          constants.productsByName[i],
-        );
-        Logger.success(
-          `Successfully verified '${constants.productsByName[i]}' is in the Shopping Cart`,
-        );
-      }
-    });
+    for (let i = 0; i < constants.productsByName.length; i++) {
+      await expect(this.shoppingCartItemsName.nth(i)).toHaveText(
+        constants.productsByName[i],
+      );
+      Logger.success(
+        `Successfully verified '${constants.productsByName[i]}' is in the Shopping Cart`,
+      );
+    }
   }
 
   async clickCheckoutButton() {
-    await test.step("Click the Checkout button on the Shopping Cart page", async () => {
-      await this.checkoutButton.click();
-      Logger.success("Successfully clicked the Checkout button on the Shopping Cart page");
-    });
+    await this.checkoutButton.click();
+    Logger.success(
+      "Successfully clicked the Checkout button on the Shopping Cart page",
+    );
   }
 }
