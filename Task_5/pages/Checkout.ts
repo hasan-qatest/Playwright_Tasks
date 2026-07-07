@@ -1,9 +1,9 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { test } from "../fixture/TestFixture";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
+import { constants, customerData } from "../utils/constants";
+import { BasePage } from "./BasePage";
 
-export class Checkout {
+export class Checkout extends BasePage {
   readonly page: Page;
   readonly checkoutOverviewPage: Locator;
   readonly checkoutProductsName: Locator;
@@ -18,6 +18,7 @@ export class Checkout {
   readonly backToProductsButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.checkoutOverviewPage = page.getByTestId("title");
     this.checkoutProductsName = page.getByTestId("inventory-item-name");
@@ -35,7 +36,7 @@ export class Checkout {
   }
 
   async isCheckoutOverviewPageVisible() {
-    await expect(this.checkoutOverviewPage).toBeVisible();
+    expect(await super.isVisible(this.checkoutOverviewPage)).toBe(true);
     Logger.success(
       "Successfully verified that the Checkout Overview page is displayed",
     );
@@ -44,53 +45,55 @@ export class Checkout {
   async verifyCheckoutProducts() {
     const checkoutProducts = await this.checkoutProductsName.allTextContents();
     for (let i = 0; i < checkoutProducts.length; i++) {
-      await test.step(`Verify that '${checkoutProducts[i]}' is displayed in the Checkout Cart`, async () => {
-        await expect(checkoutProducts[i]).toBe(constants.productsByName[i]);
-        Logger.success(
-          `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
-        );
-      });
+      await expect(checkoutProducts[i]).toBe(constants.productsByName[i]);
+      Logger.success(
+        `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
+      );
     }
   }
 
   async finishCheckout() {
-    await this.finishCheckoutButton.click();
+    await super.click(this.finishCheckoutButton);
     Logger.success("Successfully completed the checkout process");
   }
 
   async isCheckoutInformationPageVisible() {
-    await expect(this.checkoutInformationPage).toBeVisible();
-    await expect(this.checkoutFirstName).toBeVisible();
-    await expect(this.checkoutLastName).toBeVisible();
-    await expect(this.checkoutPostalCode).toBeVisible();
+    expect(await super.isVisible(this.checkoutInformationPage)).toBe(true);
+    expect(await super.isVisible(this.checkoutLastName)).toBe(true);
+    expect(await super.isVisible(this.checkoutPostalCode)).toBe(true);
     Logger.success(
       "Successfully verified that the Checkout Information page is displayed with all required fields",
     );
   }
 
-  async fillCheckoutInformation() {
-    await this.checkoutFirstName.fill(constants.checkoutFirstNameValue);
-    await this.checkoutLastName.fill(constants.checkoutLastNameValue);
-    await this.checkoutPostalCode.fill(constants.checkoutPostalCodeValue);
-    Logger.success("successfully entered checkout information");
+  async fillCheckoutInformation(customer: {
+    firstName: string;
+    lastName: string;
+    postalCode: string;
+  }) {
+    await super.fill(this.checkoutFirstName, customer.firstName);
+    await super.fill(this.checkoutLastName, customer.lastName);
+    await super.fill(this.checkoutPostalCode, customer.postalCode);
+    Logger.success("Successfully entered checkout information");
   }
 
   async clickCheckoutContinueButton() {
-    await this.checkoutContinueButton.click();
+    await super.click(this.checkoutContinueButton);
     Logger.success(
       "Successfully clicked the Continue button on the Checkout Information page",
     );
   }
+
   async isCheckoutCompletePageVisible() {
-    await expect(this.checkoutCompletePage).toBeVisible();
-    await expect(this.checkoutCompleteMessage).toBeVisible();
+    expect(await super.isVisible(this.checkoutCompletePage)).toBe(true);
+    expect(await super.isVisible(this.checkoutCompleteMessage)).toBe(true);
     Logger.success(
       "Successfully verified that the Checkout Complete page is displayed",
     );
   }
 
   async clickBackToProductButton() {
-    await this.backToProductsButton.click();
+    await super.click(this.backToProductsButton);
     Logger.success(
       "Successfully clicked 'Back to Products' button on the Checkout Complete page",
     );

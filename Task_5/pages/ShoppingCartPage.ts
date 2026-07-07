@@ -1,9 +1,9 @@
-import { test } from "../fixture/TestFixture";
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
 import { constants } from "../utils/constants";
+import { BasePage } from "./BasePage";
 
-export class ShoppingCartPage {
+export class ShoppingCartPage extends BasePage {
   readonly page: Page;
   readonly shoppingCartLink: Locator;
   readonly shoppingCartHeader: Locator;
@@ -11,6 +11,7 @@ export class ShoppingCartPage {
   readonly checkoutButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.shoppingCartLink = page.getByTestId("shopping-cart-link");
     this.shoppingCartHeader = page.getByTestId("title");
@@ -19,20 +20,20 @@ export class ShoppingCartPage {
   }
 
   async isShoppingCartLinkVisible() {
-    await expect(this.shoppingCartLink).toBeVisible();
+    expect(await super.isVisible(this.shoppingCartLink)).toBe(true);
     Logger.success(
       "Successfully verified that the Shopping cart link is visible",
     );
   }
 
   async shoppingCartLinkClick() {
-    await this.shoppingCartLink.click();
+    super.click(this.shoppingCartLink);
     Logger.success("Successfully clicked the Shopping Cart link");
   }
 
   async isShoppingCartPageVisible() {
-    await expect(this.shoppingCartHeader).toBeVisible();
-    await expect(this.checkoutButton).toBeVisible();
+    expect(await super.isVisible(this.shoppingCartHeader)).toBe(true);
+    expect(await super.isVisible(this.checkoutButton)).toBe(true);
     Logger.success(
       "Successfully verified that the Shopping cart header and checkout button are displayed",
     );
@@ -50,7 +51,7 @@ export class ShoppingCartPage {
   }
 
   async clickCheckoutButton() {
-    await this.checkoutButton.click();
+    await super.click(this.checkoutButton);
     Logger.success(
       "Successfully clicked the Checkout button on the Shopping Cart page",
     );

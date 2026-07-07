@@ -1,6 +1,6 @@
 import { test } from "../fixture/TestFixture";
 import { expect } from "@playwright/test";
-import { constants, ProductSort } from "../utils/constants";
+import { constants, customerData, ProductSort } from "../utils/constants";
 import { Logger } from "../utils/logger";
 
 test.beforeEach(async ({ loginPage }) => {
@@ -90,15 +90,17 @@ test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
   });
 
   //Select the sort option 'Price (Low to High)' and Verify 'Price (High to Low)' for negative case
-  await homePage.selectProductSortOptionByPrice(ProductSort.PRICE_LOW_HIGH);
-  await expect(async () => {
-    await homePage.validateProductSortingByPrice(ProductSort.PRICE_HIGH_LOW);
-  }).rejects.toThrow(
-    `Products are not sorted in '${ProductSort.PRICE_LOW_HIGH}' order`,
-  );
-  Logger.success(
-    `Verified that '${ProductSort.PRICE_LOW_HIGH}' is not sorted as '${ProductSort.PRICE_HIGH_LOW}'`,
-  );
+  await test.step(`Verify that the sort option '${ProductSort.PRICE_LOW_HIGH}' and Verify '${ProductSort.PRICE_HIGH_LOW}' for negative case`, async () => {
+    await homePage.selectProductSortOptionByPrice(ProductSort.PRICE_LOW_HIGH);
+    await expect(async () => {
+      await homePage.validateProductSortingByPrice(ProductSort.PRICE_HIGH_LOW);
+    }).rejects.toThrow(
+      `Products are not sorted in '${ProductSort.PRICE_LOW_HIGH}' order`,
+    );
+    Logger.success(
+      `Verified that '${ProductSort.PRICE_LOW_HIGH}' is not sorted as '${ProductSort.PRICE_HIGH_LOW}'`,
+    );
+  });
 });
 
 test("Swag Labs Add Product and Verify Flow", async ({
@@ -108,7 +110,9 @@ test("Swag Labs Add Product and Verify Flow", async ({
   checkout,
 }) => {
   //Add Product to the Cart
-  await homePage.addProductToCart([...constants.productsByName]);
+  await test.step(`Add '${constants.productsByName}' product to the Cart`, async () => {
+    await homePage.addProductToCart([...constants.productsByName]);
+  });
 
   //Verified that the cart count matched with the number of added products
   await test.step(`Verify that the cart count matches the number of added products`, async () => {
@@ -147,7 +151,8 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Entered the Checkout Information (First Name, Last Name, Postal Code) on the checkout page
   await test.step("Enter the checkout information (First Name, Last Name, and Postal Code) on the checkout page", async () => {
-    await checkout.fillCheckoutInformation();
+    const customer = customerData.standardUser;
+    await checkout.fillCheckoutInformation(customer);
   });
 
   //Click the Continue button on the Checkout Information page
@@ -161,7 +166,9 @@ test("Swag Labs Add Product and Verify Flow", async ({
   });
 
   //Verify that all products displayed in the Checkout Cart
-  await checkout.verifyCheckoutProducts();
+  await test.step(`Verify that the added products is displayed in the Checkout Cart`, async () => {
+    await checkout.verifyCheckoutProducts();
+  });
 
   //Click the Finish button to complete the checkout process
   await test.step("Click the Finish button to complete the checkout process", async () => {

@@ -7,9 +7,6 @@ export const constants = {
     "Sauce Labs Bike Light",
     "Sauce Labs Bolt T-Shirt",
   ],
-  checkoutFirstNameValue: "Test First Name",
-  checkoutLastNameValue: "Test Last Name",
-  checkoutPostalCodeValue: "123456",
 } as const;
 
 export enum ProductSort {
@@ -18,3 +15,11 @@ export enum ProductSort {
   PRICE_LOW_HIGH = "Price (low to high)",
   PRICE_HIGH_LOW = "Price (high to low)",
 }
+
+export const customerData = {
+  standardUser: {
+    firstName: "Test First Name",
+    lastName: "Test Last Name",
+    postalCode: "600001",
+  },
+};

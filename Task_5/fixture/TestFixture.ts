@@ -4,6 +4,7 @@ import { HomePage } from "../pages/HomePage";
 import { ShoppingCartPage } from "../pages/ShoppingCartPage";
 import { Checkout } from "../pages/Checkout";
 import { Logout } from "../pages/Logout";
+import { BasePage } from '../pages/BasePage';
 
 export const test = base.extend<{
   saveLogs: void;
@@ -12,6 +13,7 @@ export const test = base.extend<{
   shoppingCartPage: ShoppingCartPage;
   checkout: Checkout;
   logout: Logout;
+  basePage: BasePage;
 }>({
   saveLogs: [
     async ({}, use) => {
@@ -39,6 +41,11 @@ export const test = base.extend<{
     const logout = new Logout(page);
     await use(logout);
   },
+  basePage: async ({ page }, use) => {
+    const basePage = new BasePage(page);
+    await use(basePage);
+  },
+
 });
 
 export { expect } from "@playwright/test";

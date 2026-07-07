@@ -1,9 +1,9 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { test } from "../fixture/TestFixture";
 import { constants, ProductSort } from "../utils/constants";
+import { BasePage } from "./BasePage";
 
-export class HomePage {
+export class HomePage extends BasePage{
   readonly page: Page;
   readonly productSortDropdown: Locator;
   readonly productName: Locator;
@@ -11,23 +11,25 @@ export class HomePage {
   readonly cartCount: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.productSortDropdown = page.getByTestId("product-sort-container");
     this.productName = page.getByTestId("inventory-item-name");
     this.productPrice = page.getByTestId("inventory-item-price");
-    //this.productPrice = page.locator('[data-test="inventory-item-price"]');
     this.cartCount = page.getByTestId("shopping-cart-badge");
   }
 
   async isProductSortingSectionVisible() {
-    await expect(this.productSortDropdown).toBeVisible();
+    expect(await super.isVisible(this.productSortDropdown)).toBe(true);
     Logger.success(
       "Successfully verified that the Products Sort section is displayed on the Home Page",
     );
   }
 
   async validateAllSortOptions() {
-    await expect(this.productSortDropdown.locator("option")).toHaveText(Object.values(ProductSort));
+    await expect(this.productSortDropdown.locator("option")).toHaveText(
+      Object.values(ProductSort),
+    );
     Logger.success(
       "Successfully verified that all product sort options are available in the sort dropdown",
     );
@@ -103,10 +105,8 @@ export class HomePage {
   async addProductToCart(productName: string[]) {
     for (const name of productName) {
       const product = name.toLowerCase().replace(/\s+/g, "-");
-      await test.step(`Add '${name}' product to the Cart`, async () => {
-        await this.page.getByTestId(`add-to-cart-${product}`).click();
-        Logger.success(`Successfully added product '${name}' to the Cart`);
-      });
+      await this.page.getByTestId(`add-to-cart-${product}`).click();
+      Logger.success(`Successfully added product '${name}' to the Cart`);
     }
   }
 
