@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { constants, customerData } from "../utils/constants";
+import { constants } from "../utils/constants";
 import { BasePage } from "./BasePage";
 
 export class Checkout extends BasePage {
@@ -35,14 +35,7 @@ export class Checkout extends BasePage {
     this.backToProductsButton = page.getByTestId("back-to-products");
   }
 
-  async isCheckoutOverviewPageVisible() {
-    expect(await super.isVisible(this.checkoutOverviewPage)).toBe(true);
-    Logger.success(
-      "Successfully verified that the Checkout Overview page is displayed",
-    );
-  }
-
-  async verifyCheckoutProducts() {
+  async verifyProducts() {
     const checkoutProducts = await this.checkoutProductsName.allTextContents();
     for (let i = 0; i < checkoutProducts.length; i++) {
       await expect(checkoutProducts[i]).toBe(constants.productsByName[i]);
@@ -77,7 +70,7 @@ export class Checkout extends BasePage {
     Logger.success("Successfully entered checkout information");
   }
 
-  async clickCheckoutContinueButton() {
+  async clickContinueButton() {
     await super.click(this.checkoutContinueButton);
     Logger.success(
       "Successfully clicked the Continue button on the Checkout Information page",

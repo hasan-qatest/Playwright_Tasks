@@ -121,17 +121,17 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Verify that the Shopping cart link is visible
   await test.step("Verify that the Shopping cart link is visible", async () => {
-    await shoppingCartPage.isShoppingCartLinkVisible();
+    await homePage.isShoppingCartLinkVisible();
   });
 
   //Click on the Shopping Cart link
   await test.step("Click the Shopping cart link", async () => {
-    await shoppingCartPage.shoppingCartLinkClick();
+    await homePage.shoppingCartLinkClick();
   });
 
   //Verify that the Shopping cart header and checkout button are displayed
   await test.step("Verify that the Shopping cart header and checkout button are displayed", async () => {
-    await shoppingCartPage.isShoppingCartPageVisible();
+    await homePage.isShoppingCartPageVisible();
   });
 
   //Verify that added products are available in the Shopping Cart
@@ -157,17 +157,17 @@ test("Swag Labs Add Product and Verify Flow", async ({
 
   //Click the Continue button on the Checkout Information page
   await test.step("Click the Continue button on the Checkout Information page", async () => {
-    await checkout.clickCheckoutContinueButton();
+    await checkout.clickContinueButton();
   });
 
   //Verify that the Checkout Overview Page is displayed
   await test.step("Verify that the Checkout Overview Page is displayed", async () => {
-    await checkout.isCheckoutOverviewPageVisible();
+    await shoppingCartPage.isOverviewPageVisible();
   });
 
   //Verify that all products displayed in the Checkout Cart
   await test.step(`Verify that the added products is displayed in the Checkout Cart`, async () => {
-    await checkout.verifyCheckoutProducts();
+    await checkout.verifyProducts();
   });
 
   //Click the Finish button to complete the checkout process

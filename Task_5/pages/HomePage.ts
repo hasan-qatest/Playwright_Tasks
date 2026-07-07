@@ -9,6 +9,10 @@ export class HomePage extends BasePage{
   readonly productName: Locator;
   readonly productPrice: Locator;
   readonly cartCount: Locator;
+  readonly shoppingCartLink: Locator;
+  readonly shoppingCartHeader: Locator;
+  readonly shoppingCartItemsName: Locator;
+  readonly checkoutButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +21,10 @@ export class HomePage extends BasePage{
     this.productName = page.getByTestId("inventory-item-name");
     this.productPrice = page.getByTestId("inventory-item-price");
     this.cartCount = page.getByTestId("shopping-cart-badge");
+    this.shoppingCartLink = page.getByTestId("shopping-cart-link");
+    this.shoppingCartHeader = page.getByTestId("title");
+    this.shoppingCartItemsName = page.getByTestId("inventory-item-name");
+    this.checkoutButton = page.getByTestId("checkout");
   }
 
   async isProductSortingSectionVisible() {
@@ -116,6 +124,26 @@ export class HomePage extends BasePage{
     );
     Logger.success(
       `Successfully verified that the cart count matches the number of added products`,
+    );
+  }
+
+  async isShoppingCartLinkVisible() {
+    expect(await super.isVisible(this.shoppingCartLink)).toBe(true);
+    Logger.success(
+      "Successfully verified that the Shopping cart link is visible",
+    );
+  }
+
+  async shoppingCartLinkClick() {
+    super.click(this.shoppingCartLink);
+    Logger.success("Successfully clicked the Shopping Cart link");
+  }
+
+  async isShoppingCartPageVisible() {
+    expect(await super.isVisible(this.shoppingCartHeader)).toBe(true);
+    expect(await super.isVisible(this.checkoutButton)).toBe(true);
+    Logger.success(
+      "Successfully verified that the Shopping cart header and checkout button are displayed",
     );
   }
 }
