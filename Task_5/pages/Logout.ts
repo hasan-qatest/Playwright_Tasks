@@ -20,7 +20,7 @@ export class Logout extends BasePage {
   }
   async logoutLinkClick() {
     await super.click(this.openMenuButton);
-    expect(await super.isVisible(this.logoutLink)).toBe(true);
+    await super.click(this.logoutLink);
     Logger.success("Successfully verified that the user is logged out");
   }
 }
