@@ -1,6 +1,6 @@
 import { test } from "../fixture/TestFixture";
 import { expect } from "@playwright/test";
-import { constants, customerData, ProductSort } from "../utils/constants";
+import { constants, customerData, ProductSort, products } from "../utils/constants";
 import { Logger } from "../utils/logger";
 
 test.beforeEach(async ({ loginPage }) => {
@@ -25,7 +25,7 @@ test.beforeEach(async ({ loginPage }) => {
   });
 });
 
-test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
+test("Swag Labs Sorting Flow Verification", async ({ homePage }) => {
   //Verify that the Products Sort section is displayed on the Home Page
   await test.step("Verify that the Products Sort section is displayed on the Home Page", async () => {
     await homePage.isProductSortingSectionVisible();
@@ -57,7 +57,7 @@ test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
   });
 
   //Select the sort option 'Name (A to Z)' and Verify 'Name (Z to A)' for negative case
-  await test.step(`Verify that the products sorted in '${ProductSort.NAME_ASC}' order`, async () => {
+  await test.step(`Select the sort option '${ProductSort.NAME_ASC}' and Verify '${ProductSort.NAME_DESC}' for negative case`, async () => {
     await homePage.selectProductSortOptionByName(ProductSort.NAME_ASC);
     await expect(
       homePage.validateProductSortingByName(ProductSort.NAME_DESC),
@@ -110,8 +110,8 @@ test("Swag Labs Add Product and Verify Flow", async ({
   checkout,
 }) => {
   //Add Product to the Cart
-  await test.step(`Add '${constants.productsByName}' product to the Cart`, async () => {
-    await homePage.addProductToCart([...constants.productsByName]);
+  await test.step(`Add '${products}' product to the Cart`, async () => {
+    await homePage.addProductToCart([...products]);
   });
 
   //Verified that the cart count matched with the number of added products

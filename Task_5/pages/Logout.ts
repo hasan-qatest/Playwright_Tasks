@@ -21,6 +21,6 @@ export class Logout extends BasePage {
   async logoutLinkClick() {
     await super.click(this.openMenuButton);
     await super.click(this.logoutLink);
-    Logger.success("Successfully verified that the user is logged out");
+    Logger.success("Successfully clicked the Logout link");
   }
 }

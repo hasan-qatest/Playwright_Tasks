@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { constants, ProductSort } from "../utils/constants";
+import { ProductSort, products } from "../utils/constants";
 import { BasePage } from "./BasePage";
 
 export class HomePage extends BasePage {
@@ -81,7 +81,7 @@ export class HomePage extends BasePage {
       JSON.stringify(expectedProductNames)
     ) {
       throw new Error(
-        `Products are not sorted in '${ProductSort.NAME_DESC}' order.`,
+        `Products are not sorted in '${sort}' order.`,
       );
     }
     Logger.success(
@@ -118,7 +118,7 @@ export class HomePage extends BasePage {
 
   async verifyShoppingCartCount() {
     await expect(this.cartCount).toHaveText(
-      String(constants.productsByName.length),
+      String(products.length),
     );
     Logger.success(
       `Successfully verified that the cart count matches the number of added products`,

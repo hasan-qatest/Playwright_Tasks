@@ -14,7 +14,7 @@ export class LoginPage extends BasePage {
     super(page);
     this.page = page;
     this.loginButton = page.getByRole("button", { name: "Login" });
-    this.productsHeader = page.getByText("Products");
+    this.productsHeader = page.getByTestId("title");
     this.username = page.getByRole("textbox", { name: "Username" });
     this.password = page.getByRole("textbox", { name: "Password" });
   }
@@ -41,7 +41,7 @@ export class LoginPage extends BasePage {
   }
 
   async isProductsSectionVisibleOnHomePage() {
-    expect(await super.isVisible(this.productsHeader)).toBe(true);
+    await expect(this.productsHeader).toHaveText("Products");
     Logger.success(
       "Successfully verified that the Products section is displayed on the Home Page",
     );

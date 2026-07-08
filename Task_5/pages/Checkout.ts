@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
+import { constants, products } from "../utils/constants";
 import { BasePage } from "./BasePage";
 
 export class Checkout extends BasePage {
@@ -37,7 +37,7 @@ export class Checkout extends BasePage {
   async verifyProducts() {
     const checkoutProducts = await this.checkoutProductsName.allTextContents();
     for (let i = 0; i < checkoutProducts.length; i++) {
-      await expect(checkoutProducts[i]).toBe(constants.productsByName[i]);
+      await expect(checkoutProducts[i]).toBe(products[i]);
       Logger.success(
         `Successfully verified that '${checkoutProducts[i]}' is displayed in the Checkout Cart`,
       );

@@ -2,12 +2,18 @@ export const constants = {
   homePageURL: "https://www.saucedemo.com/",
   standardUserName: "standard_user",
   password: "secret_sauce",
-  productsByName: [
-    "Sauce Labs Backpack",
-    "Sauce Labs Bike Light",
-    "Sauce Labs Bolt T-Shirt",
-  ],
+  // productsByName: [
+  //   "Sauce Labs Backpack",
+  //   "Sauce Labs Bike Light",
+  //   "Sauce Labs Bolt T-Shirt",
+  // ],
 } as const;
+
+export const products = [
+  "Sauce Labs Backpack",
+  "Sauce Labs Bike Light",
+  "Sauce Labs Bolt T-Shirt",
+];
 
 export enum ProductSort {
   NAME_ASC = "Name (A to Z)",

@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
+import { products } from "../utils/constants";
 import { BasePage } from "./BasePage";
 
 export class ShoppingCartPage extends BasePage {
@@ -8,7 +8,6 @@ export class ShoppingCartPage extends BasePage {
   readonly pageTitle: Locator;
   readonly shoppingCartItemsName: Locator;
   readonly checkoutButton: Locator;
-  readonly checkoutOverviewPage: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,16 +15,15 @@ export class ShoppingCartPage extends BasePage {
     this.pageTitle = page.getByTestId("title");
     this.shoppingCartItemsName = page.getByTestId("inventory-item-name");
     this.checkoutButton = page.getByTestId("checkout");
-    this.checkoutOverviewPage = page.getByTestId("title");
   }
 
   async verifyShoppingCartItems() {
-    for (let i = 0; i < constants.productsByName.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       await expect(this.shoppingCartItemsName.nth(i)).toHaveText(
-        constants.productsByName[i],
+        products[i],
       );
       Logger.success(
-        `Successfully verified '${constants.productsByName[i]}' is in the Shopping Cart`,
+        `Successfully verified '${products[i]}' is in the Shopping Cart`,
       );
     }
   }
