@@ -5,8 +5,7 @@ import { BasePage } from "./BasePage";
 
 export class ShoppingCartPage extends BasePage {
   readonly page: Page;
-  readonly shoppingCartLink: Locator;
-  readonly shoppingCartHeader: Locator;
+  readonly pageTitle: Locator;
   readonly shoppingCartItemsName: Locator;
   readonly checkoutButton: Locator;
   readonly checkoutOverviewPage: Locator;
@@ -14,8 +13,7 @@ export class ShoppingCartPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.shoppingCartLink = page.getByTestId("shopping-cart-link");
-    this.shoppingCartHeader = page.getByTestId("title");
+    this.pageTitle = page.getByTestId("title");
     this.shoppingCartItemsName = page.getByTestId("inventory-item-name");
     this.checkoutButton = page.getByTestId("checkout");
     this.checkoutOverviewPage = page.getByTestId("title");
@@ -40,7 +38,7 @@ export class ShoppingCartPage extends BasePage {
   }
 
   async isOverviewPageVisible() {
-    expect(await super.isVisible(this.checkoutOverviewPage)).toBe(true);
+    await expect(this.pageTitle).toHaveText("Checkout: Overview");
     Logger.success(
       "Successfully verified that the Checkout Overview page is displayed",
     );

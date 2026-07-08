@@ -95,7 +95,7 @@ test("Swag Labs Sorting Flow Verification ", async ({ homePage }) => {
     await expect(async () => {
       await homePage.validateProductSortingByPrice(ProductSort.PRICE_HIGH_LOW);
     }).rejects.toThrow(
-      `Products are not sorted in '${ProductSort.PRICE_LOW_HIGH}' order`,
+      `Products are not sorted in '${ProductSort.PRICE_HIGH_LOW}' order`,
     );
     Logger.success(
       `Verified that '${ProductSort.PRICE_LOW_HIGH}' is not sorted as '${ProductSort.PRICE_HIGH_LOW}'`,
@@ -194,7 +194,7 @@ test("Swag Labs Add Product and Verify Flow", async ({
 test.afterEach(async ({ loginPage, logout }) => {
   //Verify that the menu is visible
   await test.step("Verify that the menu is visible", async () => {
-    await logout.isLogoutMenuVisible();
+    await logout.isMenuIconVisible();
   });
 
   //Click the Logout button from the menu

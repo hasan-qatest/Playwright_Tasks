@@ -3,7 +3,7 @@ import { Logger } from "../utils/logger";
 import { constants, ProductSort } from "../utils/constants";
 import { BasePage } from "./BasePage";
 
-export class HomePage extends BasePage{
+export class HomePage extends BasePage {
   readonly page: Page;
   readonly productSortDropdown: Locator;
   readonly productName: Locator;
@@ -100,9 +100,7 @@ export class HomePage extends BasePage{
       sort === ProductSort.PRICE_LOW_HIGH ? a - b : b - a,
     );
     if (JSON.stringify(actualPrices) !== JSON.stringify(expectedPrices)) {
-      throw new Error(
-        `Products are not sorted in '${ProductSort.PRICE_LOW_HIGH}' order`,
-      );
+      throw new Error(`Products are not sorted in '${sort}' order`);
     }
     Logger.success(
       `Successfully verified that the products are sorted in '${sort}' order`,
@@ -135,7 +133,7 @@ export class HomePage extends BasePage{
   }
 
   async shoppingCartLinkClick() {
-    super.click(this.shoppingCartLink);
+    await super.click(this.shoppingCartLink);
     Logger.success("Successfully clicked the Shopping Cart link");
   }
 

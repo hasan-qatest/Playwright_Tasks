@@ -5,30 +5,29 @@ import { BasePage } from "./BasePage";
 
 export class Checkout extends BasePage {
   readonly page: Page;
-  readonly checkoutOverviewPage: Locator;
   readonly checkoutProductsName: Locator;
   readonly finishCheckoutButton: Locator;
-  readonly checkoutInformationPage: Locator;
   readonly checkoutFirstName: Locator;
   readonly checkoutLastName: Locator;
   readonly checkoutPostalCode: Locator;
   readonly checkoutContinueButton: Locator;
-  readonly checkoutCompletePage: Locator;
   readonly checkoutCompleteMessage: Locator;
   readonly backToProductsButton: Locator;
+  readonly pageTitle: Locator;
 
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.checkoutOverviewPage = page.getByTestId("title");
+    this.pageTitle = page.getByTestId("title");
+
     this.checkoutProductsName = page.getByTestId("inventory-item-name");
     this.finishCheckoutButton = page.getByTestId("finish");
-    this.checkoutInformationPage = page.getByTestId("title");
+
     this.checkoutFirstName = page.getByTestId("firstName");
     this.checkoutLastName = page.getByTestId("lastName");
     this.checkoutPostalCode = page.getByTestId("postalCode");
     this.checkoutContinueButton = page.getByTestId("continue");
-    this.checkoutCompletePage = page.getByTestId("title");
+
     this.checkoutCompleteMessage = page.getByRole("heading", {
       name: "Thank you for your order!",
     });
@@ -51,7 +50,8 @@ export class Checkout extends BasePage {
   }
 
   async isCheckoutInformationPageVisible() {
-    expect(await super.isVisible(this.checkoutInformationPage)).toBe(true);
+    await expect(this.pageTitle).toHaveText("Checkout: Your Information");
+    expect(await super.isVisible(this.checkoutFirstName)).toBe(true);
     expect(await super.isVisible(this.checkoutLastName)).toBe(true);
     expect(await super.isVisible(this.checkoutPostalCode)).toBe(true);
     Logger.success(
@@ -78,7 +78,7 @@ export class Checkout extends BasePage {
   }
 
   async isCheckoutCompletePageVisible() {
-    expect(await super.isVisible(this.checkoutCompletePage)).toBe(true);
+    await expect(this.pageTitle).toHaveText("Checkout: Complete!");
     expect(await super.isVisible(this.checkoutCompleteMessage)).toBe(true);
     Logger.success(
       "Successfully verified that the Checkout Complete page is displayed",

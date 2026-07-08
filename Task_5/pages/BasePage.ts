@@ -21,10 +21,10 @@ export class BasePage {
 
   async isVisible(locator: Locator): Promise<boolean> {
     try {
-        await locator.waitFor({ state: "visible" });
-        return true;
+      await locator.waitFor({ state: "visible" });
+      return true;
     } catch {
-        return false;
+      return false;
     }
   }
 }
