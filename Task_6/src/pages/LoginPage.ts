@@ -1,8 +1,7 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { env } from "../utils/env";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
 
 export class LoginPage extends BasePage {
   readonly page: Page;
@@ -43,12 +42,13 @@ export class LoginPage extends BasePage {
     }
   }
   async login() {
-    await super.fill(this.loginUserNameInput, constants.adminUserName);
-    await super.fill(this.loginUserPasswordInput, env.password!);
+    await super.fill(this.loginUserNameInput, env.user);
+    await super.fill(this.loginUserPasswordInput, this.password!);
     await super.click(this.loginButton);
     Logger.success("Entered User Credentials and clicked Login Button ");
   }
   async verifyUserLogin() {
+    //await expect(this.page.locator(".oxd-userdropdown-tab")).toBeVisible();
     if (await super.isVisible(this.invalidCredentialsMessage)) {
       throw new Error("Invalid credentials. Stopping test execution.");
     }

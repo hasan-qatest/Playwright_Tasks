@@ -1,4 +1,5 @@
 import { test } from "../src/fixtures/TestFixture";
+import { PimPage } from '../src/pages/PimPage';
 
 test.beforeEach(async ({ loginPage }) => {
   //Navigate to Orange_HRM Login Screen
@@ -27,11 +28,36 @@ test.beforeEach(async ({ loginPage }) => {
   });
 });
 
-test("Orange_HRM User Creation Flow Test", async ({ dashboardPage }) => {
+test("Orange_HRM User Creation Flow Test", async ({ dashboardPage, pimPage }) => {
   //Verify Dashboard Page Visible
   await test.step("Verify Dashboard Page Visible", async () => {
     await dashboardPage.isDashboardHeaderVisible();
   });
+
+  await test.step("Verify PIM Menu Visible", async () => {
+    await dashboardPage.isPimMenuVisible();
+  });
+
+  await test.step("Verify PIM Menu Click", async () => {
+    await dashboardPage.clickPimMenu();
+  });
+
+  await test.step("Verify PIM Header Visible", async () => {
+    await dashboardPage.isPimHeaderVisible();
+  });
+
+  await pimPage.isEmployeeListTabVisible();
+
+  await pimPage.clickEmployeeListTab();
+
+  await pimPage.isEmployeeListHeaderVisible();
+
+  await pimPage.isAddEmployeeButtonVisible();
+
+  await pimPage.clickAddEmployeeButton();
+
+  await pimPage.isAddEmployeeHeaderVisible();
+
 });
 
 test.afterEach(async ({ dashboardPage }) => {

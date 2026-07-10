@@ -21,7 +21,7 @@ export class BasePage {
 
   async isVisible(locator: Locator): Promise<boolean> {
     try {
-      await locator.waitFor({ state: "visible" });
+      await locator.waitFor({ state: "visible", timeout: 5000 });
       return true;
     } catch {
       return false;
