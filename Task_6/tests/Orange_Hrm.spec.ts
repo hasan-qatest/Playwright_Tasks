@@ -1,6 +1,6 @@
 import { test } from "../src/fixtures/TestFixture";
 
-test.beforeEach("Login Flow", async ({ loginPage }) => {
+test.beforeEach(async ({ loginPage }) => {
   //Navigate to Orange_HRM Login Screen
   await test.step("Navigate to Orange_HRM Login Screen", async () => {
     await loginPage.navigateToLoginScreen();
@@ -34,7 +34,7 @@ test("Orange_HRM User Creation Flow Test", async ({ dashboardPage }) => {
   });
 });
 
-test.afterEach("Logout Flow", async ({ dashboardPage }) => {
+test.afterEach(async ({ dashboardPage }) => {
   //Verify User Menu is Visible
   await test.step("Verify User Menu is Visible", async () => {
     await dashboardPage.isUserMenuVisible();

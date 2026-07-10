@@ -44,6 +44,7 @@ export class LoginPage extends BasePage {
   }
   async login() {
     await super.fill(this.loginUserNameInput, constants.adminUserName);
+    await super.fill(this.loginUserPasswordInput, env.password!);
     await super.click(this.loginButton);
     Logger.success("Entered User Credentials and clicked Login Button ");
   }
