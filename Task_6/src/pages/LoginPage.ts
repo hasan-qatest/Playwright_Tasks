@@ -25,6 +25,9 @@ export class LoginPage extends BasePage {
   }
 
   async navigateToLoginScreen() {
+    if (!env.baseUrl) {
+      throw new Error("Base URL is not declared");
+    }
     await super.navigate(env.baseUrl);
     Logger.success("Navigated to Orange_HRM Login Screen");
   }
@@ -41,9 +44,7 @@ export class LoginPage extends BasePage {
   }
   async login() {
     await super.fill(this.loginUserNameInput, constants.adminUserName);
-    await super.fill(this.loginUserPasswordInput, this.password!);
     await super.click(this.loginButton);
-    await this.page.waitForURL(/dashboard/);
     Logger.success("Entered User Credentials and clicked Login Button ");
   }
   async verifyUserLogin() {

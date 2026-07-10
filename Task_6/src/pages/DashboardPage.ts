@@ -36,7 +36,7 @@ export class DashboardPage extends BasePage {
     console.log("A");
     console.log(this.page.url());
     console.log("B");
-    await this.page.pause();
+    //await this.page.pause();
     await this.pimMenu.click();
     //await super.click(this.dashboardMenu);
     //await expect(this.dashboardHeader).toBeVisible();
@@ -56,7 +56,7 @@ export class DashboardPage extends BasePage {
     Logger.success("User Menu Clicked");
   }
 
-  async isLogLogoutLinIsVisible() {
+  async isLogoutLinkIsVisible() {
     if (!(await super.isVisible(this.logoutLink))) {
       throw new Error("Logout Link Not Visible");
     }

@@ -1,60 +1,57 @@
 import { test } from "../src/fixtures/TestFixture";
 
-test.beforeEach("Login Flow", async ({ loginPage, dashboardPage }) => {
-  test.step("Navigate to Orange_HRM Login Screen", async () => {
-    //Navigate to Orange_HRM Login Screen
+test.beforeEach("Login Flow", async ({ loginPage }) => {
+  //Navigate to Orange_HRM Login Screen
+  await test.step("Navigate to Orange_HRM Login Screen", async () => {
     await loginPage.navigateToLoginScreen();
   });
 
-  test.step("Login Into the Orange_HRM application as a Admin", async () => {
-    //Login Into the Orange_HRM application as a Admin
+  //Login Into the Orange_HRM application as a Admin
+  await test.step("Login Into the Orange_HRM application as a Admin", async () => {
     await loginPage.isLoginPageVisible();
   });
 
-  test.step("Check Password", async () => {
-    //Check Password
+  //Check Password
+  await test.step("Check Password", async () => {
     await loginPage.checkPasswordIsValid();
   });
 
-  test.step("Login As a Admin", async () => {
-    //Login As a Admin
+  //Login As a Admin
+  await test.step("Login As a Admin", async () => {
     await loginPage.login();
   });
 
-  test.step("Verify User Login", async () => {
-    //Verify User Login
+  //Verify User Login
+  await test.step("Verify User Login", async () => {
     await loginPage.verifyUserLogin();
   });
 });
 
-test("Orange_HRM User Creation Flow Test", async ({
-  loginPage,
-  dashboardPage,
-}) => {
-  test.step("Verify Dashboard Page Visible", async () => {
-    //Verify Dashboard Page Visible
+test("Orange_HRM User Creation Flow Test", async ({ dashboardPage }) => {
+  //Verify Dashboard Page Visible
+  await test.step("Verify Dashboard Page Visible", async () => {
     await dashboardPage.isDashboardHeaderVisible();
   });
 });
 
 test.afterEach("Logout Flow", async ({ dashboardPage }) => {
-  test.step("Verify User Menu is Visible", async () => {
-    //Verify User Menu is Visible
+  //Verify User Menu is Visible
+  await test.step("Verify User Menu is Visible", async () => {
     await dashboardPage.isUserMenuVisible();
   });
 
-  test.step("Click User Menu", async () => {
-    //Click User Menu
+  //Click User Menu
+  await test.step("Click User Menu", async () => {
     await dashboardPage.clickUserMenu();
   });
 
-  test.step("Logout Link is Visible", async () => {
-    //Logout Link is Visible
-    await dashboardPage.isLogLogoutLinIsVisible();
+  //Logout Link is Visible
+  await test.step("Logout Link is Visible", async () => {
+    await dashboardPage.isLogoutLinkIsVisible();
   });
 
-  test.step("Click Logout Link", async () => {
-    //Click Logout Link
+  //Click Logout Link
+  await test.step("Click Logout Link", async () => {
     await dashboardPage.clickLogoutLink();
   });
 });
