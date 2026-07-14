@@ -1,7 +1,7 @@
 import { test } from "../src/fixtures/TestFixture";
-import { PimPage } from '../src/pages/PimPage';
+import { faker } from "@faker-js/faker";
 
-test.beforeEach(async ({ loginPage }) => {
+test.beforeEach(async ({ loginPage, dashboardPage }) => {
   //Navigate to Orange_HRM Login Screen
   await test.step("Navigate to Orange_HRM Login Screen", async () => {
     await loginPage.navigateToLoginScreen();
@@ -26,14 +26,17 @@ test.beforeEach(async ({ loginPage }) => {
   await test.step("Verify User Login", async () => {
     await loginPage.verifyUserLogin();
   });
-});
 
-test("Orange_HRM User Creation Flow Test", async ({ dashboardPage, pimPage }) => {
   //Verify Dashboard Page Visible
   await test.step("Verify Dashboard Page Visible", async () => {
     await dashboardPage.isDashboardHeaderVisible();
   });
+});
 
+test("Orange_HRM Login and Add Employee Flow", async ({
+  dashboardPage,
+  pimPage,
+}) => {
   await test.step("Verify PIM Menu Visible", async () => {
     await dashboardPage.isPimMenuVisible();
   });
@@ -46,18 +49,46 @@ test("Orange_HRM User Creation Flow Test", async ({ dashboardPage, pimPage }) =>
     await dashboardPage.isPimHeaderVisible();
   });
 
-  await pimPage.isEmployeeListTabVisible();
+  await test.step("Verify Employee List Tab is Visible", async () => {
+    await pimPage.isEmployeeListTabVisible();
+  });
 
-  await pimPage.clickEmployeeListTab();
+  await test.step("Verify Employee List Tab Click", async () => {
+    await pimPage.clickEmployeeListTab();
+  });
 
-  await pimPage.isEmployeeListHeaderVisible();
+  await test.step("Verify Employee List Header is Visible", async () => {
+    await pimPage.isEmployeeListHeaderVisible();
+  });
 
-  await pimPage.isAddEmployeeButtonVisible();
+  await test.step("Verify Add Employee Tab is Visible", async () => {
+    await pimPage.isAddEmployeeTabVisible();
+  });
+  await test.step("Verify Add Employee Tab Click", async () => {
+    await pimPage.clickAddEmployeeTab();
+  });
 
-  await pimPage.clickAddEmployeeButton();
+  await test.step("Verify Add Employee Header is Visible", async () => {
+    await pimPage.isAddEmployeeHeaderVisible();
+  });
 
-  await pimPage.isAddEmployeeHeaderVisible();
+  await test.step("Add New Employee Details", async () => {
+    const employeeDetails = {
+      firstName: faker.person.firstName(),
+      middleName: faker.person.middleName(),
+      lastName: faker.person.lastName(),
+      employeeId: faker.number.int({ min: 100000, max: 999999 }).toString(),
+    };
+    await pimPage.fillNewEmployeeDetails(employeeDetails);
+  });
 
+  await test.step("click Save Button", async () => {
+    await pimPage.clickSaveButton();
+  });
+
+  await test.step("Verify Personal Details for new Emp visible", async () => {
+    await pimPage.isPersonalDetailsHeaderVisible();
+  });
 });
 
 test.afterEach(async ({ dashboardPage }) => {

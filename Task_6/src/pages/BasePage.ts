@@ -19,13 +19,20 @@ export class BasePage {
     await locator.fill(value);
   }
 
+  async waitForVisible(locator: Locator): Promise<void> {
+    await locator.waitFor({
+      state: "visible",
+    });
+  }
+
   async isVisible(locator: Locator): Promise<boolean> {
-    try {
-      await locator.waitFor({ state: "visible", timeout: 5000 });
-      return true;
-    } catch {
-      return false;
-    }
+    return await locator.isVisible();
+    // try {
+    //   await locator.waitFor({ state: "visible", timeout: 6000 });
+    //   return true;
+    // } catch {
+    //   return false;
+    // }
   }
   async validatePageTitle(expectedTitle: string): Promise<void> {
     await expect(this.page).toHaveTitle(expectedTitle);

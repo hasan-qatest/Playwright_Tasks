@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import "./src/utils/env";
+import { tr } from "@faker-js/faker";
 
 /**
  * Read environment variables from file.
@@ -13,6 +14,7 @@ import "./src/utils/env";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  timeout: 50000, // Maximum time for each test
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -25,15 +27,20 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  // expect: {
+  //   timeout: 10000, // Maximum time for expect() assertions
+  // },
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
-    
+
     headless: true,
     screenshot: "on",
     video: "on",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    // actionTimeout: 15000, // Maximum time for click(), fill(), etc.
+    // navigationTimeout: 30000, // Maximum time for page.goto(), page.waitForURL(), etc
   },
 
   /* Configure projects for major browsers */
