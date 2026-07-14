@@ -14,7 +14,7 @@ import { tr } from "@faker-js/faker";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: 50000, // Maximum time for each test
+  timeout: 60000, // Maximum time for each test
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,

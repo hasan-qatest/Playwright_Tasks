@@ -15,6 +15,10 @@ export class PimPage extends BasePage {
   readonly uploadInput: Locator;
   readonly saveButton: Locator;
   readonly personalDetailsHeader: Locator;
+  readonly searchEmployeeByNameInput: Locator;
+  readonly searchButton: Locator;
+  expectedName: string | undefined;
+  employeeRow!: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -39,6 +43,8 @@ export class PimPage extends BasePage {
     this.personalDetailsHeader = page.getByRole("heading", {
       name: "Personal Details",
     });
+    this.searchEmployeeByNameInput = page.getByPlaceholder("Type for hints...");
+    this.searchButton = page.getByRole("button", { name: " Search " });
   }
 
   async isEmployeeListTabVisible() {
@@ -108,9 +114,69 @@ export class PimPage extends BasePage {
   }
 
   async isPersonalDetailsHeaderVisible() {
+    await super.waitForVisible(this.personalDetailsHeader);
     if (!(await super.isVisible(this.personalDetailsHeader))) {
       throw new Error("Personal Details Header Not Visible");
     }
     Logger.success("Personal Details Header Visible");
+  }
+
+  async SearchEmployee(newEmployee: {
+    firstName: string;
+    middleName: string;
+    employeeId: string;
+  }) {
+    if (!(await super.isVisible(this.searchEmployeeByNameInput.first()))) {
+      throw new Error("Search Box by Name is Not Visible");
+    }
+    this.expectedName = `${newEmployee.firstName} ${newEmployee.middleName}`;
+    await super.fill(this.searchEmployeeByNameInput.first(), this.expectedName);
+    await super.click(this.searchButton);
+    Logger.success("Entered Name in the Search Box");
+  }
+
+  async verifyEmployeeCreated(newEmployee: {
+    firstName: string;
+    middleName: string;
+    employeeId: string;
+  }) {
+    this.employeeRow = this.page
+      .locator(".oxd-table-row")
+      .filter({ hasText: newEmployee.employeeId });
+
+    await expect(this.employeeRow).toBeVisible();
+
+    const actualEmployeeId = await this.employeeRow
+      .locator(".oxd-table-cell")
+      .nth(1)
+      .innerText();
+
+    const actualEmployeeName = await this.employeeRow
+      .locator(".oxd-table-cell")
+      .nth(2)
+      .innerText();
+
+    const expectedEmployeeName = `${newEmployee.firstName} ${newEmployee.middleName}`;
+    console.log(`Expected Name:: ${expectedEmployeeName}`);
+
+    expect(actualEmployeeId).toBe(newEmployee.employeeId);
+    expect(actualEmployeeName).toBe(expectedEmployeeName);
+
+    Logger.success("Employee details verified successfully");
+  }
+
+  async updateNewEmployee(newEmployee: { employeeId: string }) {
+    const employeeRow = this.page
+      .locator(".oxd-table-row")
+      .filter({ hasText: newEmployee.employeeId });
+
+    const editButton = employeeRow.locator("button:has(.bi-pencil-fill)");
+
+    await expect(editButton).toBeVisible();
+    await editButton.click();
+
+    Logger.success(
+      `Clicked Edit button for Employee ID: ${newEmployee.employeeId}`,
+    );
   }
 }
