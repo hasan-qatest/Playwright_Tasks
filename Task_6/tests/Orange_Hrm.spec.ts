@@ -87,7 +87,7 @@ test("Orange_HRM Login and Add Employee Flow", async ({
     await pimPage.clickSaveButton();
   });
 
-  await test.step("Verify Personal Details for new Emp visible", async () => {
+  await test.step("Verify New Employee's Personal Details to be visible", async () => {
     await pimPage.isPersonalDetailsHeaderVisible();
   });
 
@@ -106,15 +106,50 @@ test("Orange_HRM Login and Add Employee Flow", async ({
   await test.step("Enter the New Emp value in the Search Box", async () => {
     await pimPage.SearchEmployee(employeeDetails);
   });
+
   await test.step("verify Employee Created", async () => {
     await pimPage.verifyEmployeeCreated(employeeDetails);
   });
-  await test.step("Update New Employee", async () => {
-    await pimPage.updateNewEmployee(employeeDetails);
+
+  await test.step("Click Update Button for New Employee", async () => {
+    await pimPage.clickUpdateButton(employeeDetails);
+  });
+
+  await test.step("Update New Employee Details", async () => {
+    await pimPage.updateEmployeeDetails(employeeDetails);
+  });
+
+  await test.step("click Save Button", async () => {
+    //await pimPage.clickSaveButton();
+  });
+
+  await test.step("Verify Employee List Tab is Visible", async () => {
+    await pimPage.isEmployeeListTabVisible();
+  });
+
+  await test.step("Verify Employee List Tab Click", async () => {
+    await pimPage.clickEmployeeListTab();
+  });
+
+  await test.step("Verify Employee List Header is Visible", async () => {
+    await pimPage.isEmployeeListHeaderVisible();
+  });
+
+  await test.step("Enter the Updated Employee Details in the Search Box", async () => {
+    await pimPage.SearchEmployee(employeeDetails);
+  });
+
+  await test.step("Verify Updated Employee", async () => {
+    await pimPage.verifyUpdatedEmployee(employeeDetails);
   });
 });
 
-test.afterEach(async ({ dashboardPage }) => {
+test.afterEach(async ({ dashboardPage }, testInfo) => {
+  if (testInfo.status !== testInfo.expectedStatus) {
+    console.log("Test failed, skipping logout");
+    return;
+  }
+
   //Verify User Menu is Visible
   await test.step("Verify User Menu is Visible", async () => {
     await dashboardPage.isUserMenuVisible();

@@ -7,9 +7,9 @@ export class DashboardPage extends BasePage {
   readonly dashboardHeader: Locator;
   readonly userDropdownButton: Locator;
   readonly logoutLink: Locator;
-  //readonly dashboardMenu: Locator;
   readonly pimMenu: Locator;
   readonly pimHeader: Locator;
+  readonly loader: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,9 +17,9 @@ export class DashboardPage extends BasePage {
     this.dashboardHeader = page.getByRole("heading", { name: "Dashboard" });
     this.pimHeader = page.getByRole("heading", { name: "PIM" });
     this.pimMenu = page.getByRole("link", { name: "PIM" });
-    //this.dashboardMenu = page.getByRole("link", { name: "Dashboard" });
     this.userDropdownButton = page.locator(".oxd-userdropdown-tab");
     this.logoutLink = page.getByRole("menuitem", { name: "Logout" });
+    this.loader = page.locator(".oxd-loading-spinner");
   }
 
   // Dashboard Header

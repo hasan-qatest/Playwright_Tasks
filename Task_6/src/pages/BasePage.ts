@@ -27,14 +27,16 @@ export class BasePage {
 
   async isVisible(locator: Locator): Promise<boolean> {
     return await locator.isVisible();
-    // try {
-    //   await locator.waitFor({ state: "visible", timeout: 6000 });
-    //   return true;
-    // } catch {
-    //   return false;
-    // }
   }
+  
   async validatePageTitle(expectedTitle: string): Promise<void> {
     await expect(this.page).toHaveTitle(expectedTitle);
+  }
+
+  async highlight(locator: Locator): Promise<void> {
+    await locator.evaluate((el) => {
+      (el as HTMLElement).style.border = "3px solid red";
+      (el as HTMLElement).style.backgroundColor = "yellow";
+    });
   }
 }
