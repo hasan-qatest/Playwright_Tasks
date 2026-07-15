@@ -120,7 +120,7 @@ test("Orange_HRM Login and Add Employee Flow", async ({
   });
 
   await test.step("click Save Button", async () => {
-    //await pimPage.clickSaveButton();
+    await pimPage.clickSaveButton();
   });
 
   await test.step("Verify Employee List Tab is Visible", async () => {
@@ -141,6 +141,14 @@ test("Orange_HRM Login and Add Employee Flow", async ({
 
   await test.step("Verify Updated Employee", async () => {
     await pimPage.verifyUpdatedEmployee(employeeDetails);
+  });
+
+  await test.step("Delete Employee", async () => {
+    await pimPage.deleteEmployee(employeeDetails);
+  });
+
+  await test.step("Verify Employee Deletion ", async () => {
+    await pimPage.verifyDeletedEmployee(employeeDetails);
   });
 });
 

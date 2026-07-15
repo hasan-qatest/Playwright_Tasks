@@ -16,12 +16,15 @@ export class PimPage extends BasePage {
   readonly saveButton: Locator;
   readonly personalDetailsHeader: Locator;
   readonly searchEmployeeByNameInput: Locator;
+  readonly searchEmployeeByIdInput: Locator;
   readonly searchButton: Locator;
+  readonly dropdownButton: Locator;
+  readonly loader: Locator;
+  readonly deleteConfirmationButton: Locator;
+  readonly toastMessageElement: Locator;
   expectedName: string | undefined;
   updateLastName: string | undefined;
   employeeRow!: Locator;
-  readonly dropdownButton: Locator;
-  readonly loader: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -47,9 +50,16 @@ export class PimPage extends BasePage {
       name: "Personal Details",
     });
     this.searchEmployeeByNameInput = page.getByPlaceholder("Type for hints...");
+    this.searchEmployeeByIdInput = page.locator(
+      "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input",
+    );
     this.searchButton = page.getByRole("button", { name: " Search " });
     this.dropdownButton = page.locator("button.oxd-icon-button");
     this.loader = page.locator(".oxd-loading-spinner");
+    this.deleteConfirmationButton = page.getByRole("button", {
+      name: " Yes, Delete ",
+    });
+    this.toastMessageElement = page.locator(".oxd-text--toast-message");
   }
 
   async isEmployeeListTabVisible() {
@@ -119,10 +129,11 @@ export class PimPage extends BasePage {
   }
 
   async clickSaveButton() {
-    await super.click(this.saveButton);
-    await expect(this.page.locator(".oxd-text--toast-message")).toContainText(
-      "Successfully",
-    );
+    await super.click(this.saveButton.first());
+    // await expect(this.page.locator(".oxd-text--toast-message")).toContainText(
+    //   "Successfully",
+    // );
+    await super.toastMessage(this.toastMessageElement, "Successfully");
     Logger.success("Save Button Click");
   }
 
@@ -201,7 +212,7 @@ export class PimPage extends BasePage {
     await this.lastNameInput.clear();
     await super.fill(this.lastNameInput, this.updateLastName);
     await this.page.waitForTimeout(1200);
-    await super.click(this.saveButton.first());
+    // await super.click(this.saveButton.first());
     Logger.success(`Updated Last Name`);
   }
 
@@ -225,5 +236,27 @@ export class PimPage extends BasePage {
     expect(actualEmployeeLastName).toBe(this.updateLastName);
 
     Logger.success("Updated Employee details verified successfully");
+  }
+  async deleteEmployee(newEmployee: { employeeId: string }) {
+    const employeeRow = this.page
+      .locator(".oxd-table-row")
+      .filter({ hasText: newEmployee.employeeId });
+
+    const deleteButton = employeeRow.locator("button:has(.bi-trash)");
+
+    await super.isVisible(deleteButton);
+    await super.click(deleteButton);
+    await super.click(this.deleteConfirmationButton);
+    await super.toastMessage(this.toastMessageElement, "Successfully");
+    Logger.success(
+      `Deleted Employee ID: ${newEmployee.employeeId}`,
+    );
+  }
+
+  async verifyDeletedEmployee(newEmployee: { employeeId: string }) {
+    await super.fill(this.searchEmployeeByIdInput, newEmployee.employeeId);
+    await super.click(this.searchButton);
+    await super.toastMessage(this.toastMessageElement, "No Records Found");
+    Logger.success(`Employee Delete Successfully`);
   }
 }

@@ -39,4 +39,7 @@ export class BasePage {
       (el as HTMLElement).style.backgroundColor = "yellow";
     });
   }
+  async toastMessage(locator: Locator, value: string) {
+    await expect(locator).toContainText(value);
+  }
 }
