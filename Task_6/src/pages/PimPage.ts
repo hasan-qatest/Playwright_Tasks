@@ -138,7 +138,10 @@ export class PimPage extends BasePage {
     await super.click(this.saveButton.first());
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);
-    await super.verifyToastMessage(this.toastMessageElement, constants.create_updateEmployeeToastMessage);
+    await super.verifyToastMessage(
+      this.toastMessageElement,
+      constants.create_updateEmployeeToastMessage,
+    );
     await super.waitForHidden(this.toastMessageElement);
     Logger.success("Clicked Save Button");
   }
@@ -265,9 +268,12 @@ export class PimPage extends BasePage {
 
     await super.click(deleteButton);
     await super.click(this.deleteConfirmationButton);
-    await super.verifyToastMessage(this.toastMessageElement, constants.create_updateEmployeeToastMessage);
-    await super.waitForHidden(this.toastMessageElement);
+    await super.verifyToastMessage(
+      this.toastMessageElement,
+      constants.create_updateEmployeeToastMessage,
+    );
     await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.toastMessageElement);
     Logger.success(
       `Employee ID: ${newEmployee.employeeId} Deleted successfully`,
     );
