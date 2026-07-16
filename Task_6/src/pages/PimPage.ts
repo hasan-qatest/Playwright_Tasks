@@ -66,13 +66,13 @@ export class PimPage extends BasePage {
     await this.page.waitForLoadState("load");
     await super.waitForVisible(this.employeeListTab);
     if (!(await super.isVisible(this.employeeListTab))) {
-      throw new Error("Employee List Tab Not Visible");
+      throw new Error("Employee List Tab is Not Visible");
     }
-    Logger.success("Employee List Tab Visible");
+    Logger.success("Employee List Tab is Visible");
   }
   async clickEmployeeListTab() {
     await super.click(this.employeeListTab.first());
-    Logger.success("Employee List Tab is Clicked");
+    Logger.success("Clicked Employee List Tab");
   }
 
   async isEmployeeListHeaderVisible() {
@@ -80,44 +80,40 @@ export class PimPage extends BasePage {
     await this.loader.waitFor({ state: "hidden" });
     await super.waitForVisible(this.employeeListHeader);
     if (!(await super.isVisible(this.employeeListHeader))) {
-      throw new Error("Employee List Header Not Visible");
+      throw new Error("Employee List Header is Not Visible");
     }
-    Logger.success("Employee List Header Visible");
+    Logger.success("Employee List Header is Visible");
   }
 
   async isAddEmployeeTabVisible() {
     await this.page.waitForLoadState("load");
     if (!(await super.isVisible(this.addEmployeeTab))) {
-      throw new Error("Add Employee Tab Not Visible");
+      throw new Error("Add Employee Tab is Not Visible");
     }
-    Logger.success("Add Employee Tab Visible");
+    Logger.success("Add Employee Tab is Visible");
   }
 
   async clickAddEmployeeTab() {
     await super.click(this.addEmployeeTab.first());
-    Logger.success("Add Employee Tab Clicked");
+    Logger.success("Clicked Add Employee Tab");
   }
 
   async isAddEmployeeHeaderVisible() {
     await this.page.waitForLoadState("load");
     await super.waitForVisible(this.addEmployeeHeader);
     if (!(await super.isVisible(this.addEmployeeHeader))) {
-      throw new Error("Add Employee Header Not Visible");
+      throw new Error("Add Employee Header is Not Visible");
     }
-    Logger.success("Add Employee Header Visible");
+    Logger.success("Add Employee Header is Visible");
   }
 
-  async fillNewEmployeeDetails(newEmployee: {
+  async enterEmployeeDetails(newEmployee: {
     firstName: string;
     middleName: string;
     lastName: string;
     employeeId: string;
   }) {
     await this.loader.waitFor({ state: "hidden" });
-    console.log(`First Name ${newEmployee.firstName}`);
-    console.log(`Middle Name ${newEmployee.middleName}`);
-    console.log(`Last Name ${newEmployee.lastName}`);
-    console.log(`Employee ID ${newEmployee.employeeId}`);
     await super.fill(this.firstNameInput, newEmployee.firstName);
     await super.fill(this.middleNameInput, newEmployee.middleName);
     await super.fill(this.lastNameInput, newEmployee.lastName);
@@ -125,16 +121,21 @@ export class PimPage extends BasePage {
     await this.uploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
-    Logger.success("New Employee Details Entered");
+    Logger.success(
+      `New Employee Details Entered Successfully:
+  First Name : ${newEmployee.firstName}
+  Middle Name: ${newEmployee.middleName}
+  Last Name  : ${newEmployee.lastName}
+  Employee ID: ${newEmployee.employeeId}`,
+    );
   }
 
   async clickSaveButton() {
     await super.click(this.saveButton.first());
-    // await expect(this.page.locator(".oxd-text--toast-message")).toContainText(
-    //   "Successfully",
-    // );
+    await this.loader.waitFor({ state: "hidden" });
+    await super.waitForVisible(this.toastMessageElement);
     await super.toastMessage(this.toastMessageElement, "Successfully");
-    Logger.success("Save Button Click");
+    Logger.success("Clicked Save Button");
   }
 
   async isPersonalDetailsHeaderVisible() {
@@ -142,9 +143,30 @@ export class PimPage extends BasePage {
     await this.loader.waitFor({ state: "hidden" });
     await super.waitForVisible(this.personalDetailsHeader);
     if (!(await super.isVisible(this.personalDetailsHeader))) {
-      throw new Error("Personal Details Header Not Visible");
+      throw new Error("Employee Personal Details Header is Not Visible");
     }
-    Logger.success("Personal Details Header Visible");
+    Logger.success("Employee Personal Details Header is Visible");
+  }
+
+  async verifyEmployeeDetails(newEmployee: {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    employeeId: string;
+  }) {
+    await this.page.waitForLoadState("load");
+    await this.loader.first().waitFor({ state: "hidden" });
+    expect(await this.firstNameInput.inputValue()).toBe(newEmployee.firstName);
+    expect(await this.middleNameInput.inputValue()).toBe(
+      newEmployee.middleName,
+    );
+    expect(await this.lastNameInput.inputValue()).toBe(newEmployee.lastName);
+    expect(await this.employeeIdInput.inputValue()).toBe(
+      newEmployee.employeeId,
+    );
+    Logger.success(
+      "Verified Employee First Name, Middle Name, Last Name and Employee Id",
+    );
   }
 
   async SearchEmployee(newEmployee: {
@@ -153,55 +175,50 @@ export class PimPage extends BasePage {
     employeeId: string;
   }) {
     if (!(await super.isVisible(this.searchEmployeeByNameInput.first()))) {
-      throw new Error("Search Box by Name is Not Visible");
+      throw new Error("Search by Name field is Not Visible");
     }
     this.expectedName = `${newEmployee.firstName} ${newEmployee.middleName}`;
     await super.fill(this.searchEmployeeByNameInput.first(), this.expectedName);
     await super.click(this.searchButton);
-    Logger.success("Entered Name in the Search Box");
+    Logger.success(
+      "Entered the first and middle name in the search box and clicked the Search button",
+    );
   }
 
-  async verifyEmployeeCreated(newEmployee: {
+  async verifySearchEmployee(newEmployee: {
     firstName: string;
     middleName: string;
     employeeId: string;
   }) {
     await this.loader.waitFor({ state: "hidden" });
-    this.employeeRow = this.page
-      .locator(".oxd-table-row")
-      .filter({ hasText: newEmployee.employeeId });
 
+    this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
     await super.isVisible(this.employeeRow);
 
-    const actualEmployeeId = await this.employeeRow
-      .locator(".oxd-table-cell")
-      .nth(1)
-      .innerText();
+    const actualEmployeeId = await super.getEmployeeId(this.employeeRow);
 
-    const actualEmployeeName = await this.employeeRow
-      .locator(".oxd-table-cell")
-      .nth(2)
-      .innerText();
+    const actualEmployeeName = await super.getEmployeeName(this.employeeRow);
 
     const expectedEmployeeName = `${newEmployee.firstName} ${newEmployee.middleName}`;
 
     expect(actualEmployeeId).toBe(newEmployee.employeeId);
     expect(actualEmployeeName).toBe(expectedEmployeeName);
 
-    Logger.success("Employee details verified successfully");
+    Logger.success(
+      "Verified Employee's Name and Employee's ID in the Search Result",
+    );
   }
 
   async clickUpdateButton(newEmployee: { employeeId: string }) {
-    const employeeRow = this.page
-      .locator(".oxd-table-row")
-      .filter({ hasText: newEmployee.employeeId });
+    this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
+    await super.isVisible(this.employeeRow);
 
-    const editButton = employeeRow.locator("button:has(.bi-pencil-fill)");
+    const editButton = await super.getEditButton(this.employeeRow);
 
     await super.isVisible(editButton);
     await super.click(editButton);
     Logger.success(
-      `Clicked Edit button for Employee ID: ${newEmployee.employeeId}`,
+      `Clicked Update button for Employee ID: ${newEmployee.employeeId}`,
     );
   }
 
@@ -212,8 +229,7 @@ export class PimPage extends BasePage {
     await this.lastNameInput.clear();
     await super.fill(this.lastNameInput, this.updateLastName);
     await this.page.waitForTimeout(1200);
-    // await super.click(this.saveButton.first());
-    Logger.success(`Updated Last Name`);
+    Logger.success(`Updated Employee Details`);
   }
 
   async verifyUpdatedEmployee(newEmployee: {
@@ -222,41 +238,35 @@ export class PimPage extends BasePage {
     lastName: string;
     employeeId: string;
   }) {
-    this.employeeRow = this.page
-      .locator(".oxd-table-row")
-      .filter({ hasText: newEmployee.employeeId });
-
+    this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
     await super.isVisible(this.employeeRow);
-
-    const actualEmployeeLastName = await this.employeeRow
-      .locator(".oxd-table-cell")
-      .nth(3)
-      .innerText();
-
+    const actualEmployeeLastName = await super.getEmployeeLastName(
+      this.employeeRow,
+    );
     expect(actualEmployeeLastName).toBe(this.updateLastName);
-
     Logger.success("Updated Employee details verified successfully");
   }
+
   async deleteEmployee(newEmployee: { employeeId: string }) {
-    const employeeRow = this.page
-      .locator(".oxd-table-row")
-      .filter({ hasText: newEmployee.employeeId });
+    this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
+    await super.isVisible(this.employeeRow);
 
-    const deleteButton = employeeRow.locator("button:has(.bi-trash)");
-
+    const deleteButton = await super.getDeleteButton(this.employeeRow);
     await super.isVisible(deleteButton);
+
     await super.click(deleteButton);
     await super.click(this.deleteConfirmationButton);
     await super.toastMessage(this.toastMessageElement, "Successfully");
     Logger.success(
-      `Deleted Employee ID: ${newEmployee.employeeId}`,
+      `Employee ID: ${newEmployee.employeeId} Deleted successfully`,
     );
   }
 
   async verifyDeletedEmployee(newEmployee: { employeeId: string }) {
     await super.fill(this.searchEmployeeByIdInput, newEmployee.employeeId);
     await super.click(this.searchButton);
+    await this.page.waitForTimeout(3000);
     await super.toastMessage(this.toastMessageElement, "No Records Found");
-    Logger.success(`Employee Delete Successfully`);
+    Logger.success(`Employee Deleted Successfully`);
   }
 }

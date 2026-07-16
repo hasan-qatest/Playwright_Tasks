@@ -1,1 +1,3 @@
-export const constants = {};
+export const constants = {
+    orangeHRMPageTitle : "OrangeHRM",
+};

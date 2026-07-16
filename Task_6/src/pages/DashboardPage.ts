@@ -26,53 +26,53 @@ export class DashboardPage extends BasePage {
   async isDashboardHeaderVisible() {
     await super.waitForVisible(this.dashboardHeader);
     if (!(await super.isVisible(this.dashboardHeader.first()))) {
-      throw new Error("Dashboard Header Not Visible");
+      throw new Error("Dashboard Header is Not Visible");
     }
-    Logger.success("Dashboard Header Visible");
+    Logger.success("Dashboard Header is Visible");
   }
 
   // PIM Menu
   async isPimMenuVisible() {
     await super.waitForVisible(this.pimMenu);
     if (!(await super.isVisible(this.pimMenu.first()))) {
-      throw new Error("PIM Menu Not Visible");
+      throw new Error("PIM Menu is Not Visible");
     }
     Logger.success("PIM Menu is Visible");
   }
   async clickPimMenu() {
     await super.click(this.pimMenu.first());
-    Logger.success("PIM Menu is Clicked");
+    Logger.success("Clicked PIM Menu");
   }
 
   async isPimHeaderVisible() {
     await super.waitForVisible(this.pimHeader);
     if (!(await super.isVisible(this.pimHeader.first()))) {
-      throw new Error("PIM Header Not Visible");
+      throw new Error("PIM Header is Not Visible");
     }
-    Logger.success("PIM Header Visible");
+    Logger.success("PIM Header is Visible");
   }
 
   //Logout Flow
   async isUserMenuVisible() {
     await super.waitForVisible(this.userDropdownButton);
     if (!(await super.isVisible(this.userDropdownButton))) {
-      throw new Error("User menu Not Visible");
+      throw new Error("User menu is Not Visible");
     }
     Logger.success("User Menu is Visible");
   }
   async clickUserMenu() {
     await super.click(this.userDropdownButton);
-    Logger.success("User Menu Clicked");
+    Logger.success("Clicked User Menu");
   }
   async isLogoutLinkIsVisible() {
     await super.waitForVisible(this.logoutLink);
     if (!(await super.isVisible(this.logoutLink))) {
-      throw new Error("Logout Link Not Visible");
+      throw new Error("Logout Link is Not Visible");
     }
     Logger.success("Logout Link is Visible");
   }
   async clickLogoutLink() {
     await super.click(this.logoutLink);
-    Logger.success("User Clicked Logout Link");
+    Logger.success("Clicked Logout Link");
   }
 }
