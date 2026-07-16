@@ -25,6 +25,17 @@ export class BasePage {
     });
   }
 
+  async waitForLoadState(
+    state: "load" | "domcontentloaded" | "networkidle" = "load",
+  ): Promise<void> {
+    await this.page.waitForLoadState(state);
+  }
+  async waitForHidden(locator: Locator): Promise<void> {
+    await locator.first().waitFor({
+      state: "hidden",
+    });
+  }
+
   async isVisible(locator: Locator): Promise<boolean> {
     return await locator.isVisible();
   }
@@ -45,7 +56,9 @@ export class BasePage {
   }
 
   async getEmployeeRow(employeeId: string): Promise<Locator> {
-    return await this.page.locator(".oxd-table-row").filter({ hasText: employeeId });
+    return await this.page
+      .locator(".oxd-table-row")
+      .filter({ hasText: employeeId });
   }
 
   async getEmployeeId(row: Locator): Promise<string> {

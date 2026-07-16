@@ -94,10 +94,6 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
     await pimPage.verifyEmployeeDetails(employeeDetails);
   });
 
-  await test.step("Verify Employee List Tab is Visible", async () => {
-    await pimPage.isEmployeeListTabVisible();
-  });
-
   await test.step("Click Employee List Tab", async () => {
     await pimPage.clickEmployeeListTab();
   });
@@ -118,16 +114,16 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
     await pimPage.clickUpdateButton(employeeDetails);
   });
 
+  await test.step("Verify Employee's First Name, Middle Name, Last Name and Employee Id", async () => {
+    await pimPage.verifyEmployeeDetails(employeeDetails);
+  });
+
   await test.step("Update Employee Details", async () => {
     await pimPage.updateEmployeeDetails(employeeDetails);
   });
 
   await test.step("Click Save Button", async () => {
     await pimPage.clickSaveButton();
-  });
-
-  await test.step("Verify Employee List Tab is Visible", async () => {
-    await pimPage.isEmployeeListTabVisible();
   });
 
   await test.step("Click Employee List Tab", async () => {

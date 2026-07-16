@@ -25,7 +25,7 @@ export class DashboardPage extends BasePage {
   // Dashboard Header
   async isDashboardHeaderVisible() {
     await super.waitForVisible(this.dashboardHeader);
-    if (!(await super.isVisible(this.dashboardHeader.first()))) {
+    if (!(await super.isVisible(this.dashboardHeader))) {
       throw new Error("Dashboard Header is Not Visible");
     }
     Logger.success("Dashboard Header is Visible");
@@ -34,7 +34,7 @@ export class DashboardPage extends BasePage {
   // PIM Menu
   async isPimMenuVisible() {
     await super.waitForVisible(this.pimMenu);
-    if (!(await super.isVisible(this.pimMenu.first()))) {
+    if (!(await super.isVisible(this.pimMenu))) {
       throw new Error("PIM Menu is Not Visible");
     }
     Logger.success("PIM Menu is Visible");
@@ -46,7 +46,7 @@ export class DashboardPage extends BasePage {
 
   async isPimHeaderVisible() {
     await super.waitForVisible(this.pimHeader);
-    if (!(await super.isVisible(this.pimHeader.first()))) {
+    if (!(await super.isVisible(this.pimHeader))) {
       throw new Error("PIM Header is Not Visible");
     }
     Logger.success("PIM Header is Visible");
@@ -54,7 +54,6 @@ export class DashboardPage extends BasePage {
 
   //Logout Flow
   async isUserMenuVisible() {
-    await super.waitForVisible(this.userDropdownButton);
     if (!(await super.isVisible(this.userDropdownButton))) {
       throw new Error("User menu is Not Visible");
     }
