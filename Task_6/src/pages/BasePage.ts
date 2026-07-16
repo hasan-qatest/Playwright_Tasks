@@ -20,24 +20,20 @@ export class BasePage {
   }
 
   async waitForVisible(locator: Locator): Promise<void> {
-    await locator.waitFor({
-      state: "visible",
-    });
+    return locator.waitFor({ state: "visible" });
   }
 
   async waitForLoadState(
     state: "load" | "domcontentloaded" | "networkidle" = "load",
   ): Promise<void> {
-    await this.page.waitForLoadState(state);
+    return this.page.waitForLoadState(state);
   }
   async waitForHidden(locator: Locator): Promise<void> {
-    await locator.first().waitFor({
-      state: "hidden",
-    });
+    return locator.first().waitFor({ state: "hidden" });
   }
 
   async isVisible(locator: Locator): Promise<boolean> {
-    return await locator.isVisible();
+    return locator.isVisible();
   }
 
   async validatePageTitle(expectedTitle: string): Promise<void> {
@@ -51,32 +47,30 @@ export class BasePage {
     });
   }
 
-  async toastMessage(locator: Locator, value: string) {
+  async verifyToastMessage(locator: Locator, value: string) {
     await expect(locator).toContainText(value);
   }
 
   async getEmployeeRow(employeeId: string): Promise<Locator> {
-    return await this.page
-      .locator(".oxd-table-row")
-      .filter({ hasText: employeeId });
+    return this.page.locator(".oxd-table-row").filter({ hasText: employeeId });
   }
 
   async getEmployeeId(row: Locator): Promise<string> {
-    return await row.locator(".oxd-table-cell").nth(1).innerText();
+    return row.locator(".oxd-table-cell").nth(1).innerText();
   }
 
   async getEmployeeName(row: Locator): Promise<string> {
-    return await row.locator(".oxd-table-cell").nth(2).innerText();
+    return row.locator(".oxd-table-cell").nth(2).innerText();
   }
   async getEmployeeLastName(row: Locator): Promise<string> {
-    return await row.locator(".oxd-table-cell").nth(3).innerText();
+    return row.locator(".oxd-table-cell").nth(3).innerText();
   }
 
   async getEditButton(row: Locator): Promise<Locator> {
-    return await row.locator("button:has(.bi-pencil-fill)");
+    return row.locator("button:has(.bi-pencil-fill)");
   }
 
   async getDeleteButton(row: Locator): Promise<Locator> {
-    return await row.locator("button:has(.bi-trash)");
+    return row.locator("button:has(.bi-trash)");
   }
 }

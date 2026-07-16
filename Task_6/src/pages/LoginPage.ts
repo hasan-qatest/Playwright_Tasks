@@ -32,12 +32,15 @@ export class LoginPage extends BasePage {
     Logger.success("Navigated to Orange_HRM Login Screen");
   }
   async isLoginPageVisible() {
-    const title = await this.page.title();
-    if (title !== constants.orangeHRMPageTitle) {
-      throw new Error("Orange_HRM Login Screen is not declared");
+    await super.waitForVisible(this.loginButton);
+    if (
+      !(await super.isVisible(this.loginButton)) ||
+      !(await super.isVisible(this.loginUserNameInput))
+    ) {
+      throw new Error("Orange_HRM Login Page is not visible");
     }
-    Logger.success("Verified Orange_HRM Login Screen is Visible");
   }
+
   async checkPasswordIsValid() {
     if (!this.password) {
       throw new Error(

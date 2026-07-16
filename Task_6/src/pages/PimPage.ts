@@ -50,9 +50,13 @@ export class PimPage extends BasePage {
       name: "Personal Details",
     });
     this.searchEmployeeByNameInput = page.getByPlaceholder("Type for hints...");
-    this.searchEmployeeByIdInput = page.locator(
-      "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input",
-    );
+    // this.searchEmployeeByIdInput = page.locator(
+    //   "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input",
+    // );
+    this.searchEmployeeByIdInput = this.searchEmployeeByIdInput = page
+      .locator(".oxd-input-group")
+      .filter({ hasText: "Employee Id" })
+      .locator("input");
     this.searchButton = page.getByRole("button", { name: " Search " });
     this.dropdownButton = page.locator("button.oxd-icon-button");
     this.spinner = page.locator(".oxd-loading-spinner");
@@ -133,7 +137,7 @@ export class PimPage extends BasePage {
     await super.click(this.saveButton.first());
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);
-    await super.toastMessage(this.toastMessageElement, "Successfully");
+    await super.verifyToastMessage(this.toastMessageElement, "Successfully");
     await super.waitForHidden(this.toastMessageElement);
     Logger.success("Clicked Save Button");
   }
@@ -165,7 +169,7 @@ export class PimPage extends BasePage {
     );
   }
 
-  async SearchEmployee(newEmployee: {
+  async searchEmployee(newEmployee: {
     firstName: string;
     middleName: string;
     employeeId: string;
@@ -252,7 +256,7 @@ export class PimPage extends BasePage {
 
     await super.click(deleteButton);
     await super.click(this.deleteConfirmationButton);
-    await super.toastMessage(this.toastMessageElement, "Successfully");
+    await super.verifyToastMessage(this.toastMessageElement, "Successfully");
     await super.waitForHidden(this.toastMessageElement);
     await super.waitForHidden(this.spinner);
     Logger.success(
@@ -265,7 +269,7 @@ export class PimPage extends BasePage {
     await super.click(this.searchButton);
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);
-    await super.toastMessage(this.toastMessageElement, "No Records Found");
+    await super.verifyToastMessage(this.toastMessageElement, "No Records Found");
     await super.waitForHidden(this.toastMessageElement);
     Logger.success(`Employee Deleted Successfully`);
   }

@@ -1,5 +1,6 @@
 import { test } from "../src/fixtures/TestFixture";
 import { faker } from "@faker-js/faker";
+import { Logger } from "../src/utils/logger";
 
 test.beforeEach(async ({ loginPage, dashboardPage }) => {
   //Navigate to Orange_HRM Login Screen
@@ -33,7 +34,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   pimPage,
 }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
-    console.log("Login Test failed, skipping logout");
+    Logger.warn("Login Test failed, skipping logout");
     return;
   }
   const employeeDetails = {
@@ -103,7 +104,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Enter the first and middle name in the search box and click the Search button", async () => {
-    await pimPage.SearchEmployee(employeeDetails);
+    await pimPage.searchEmployee(employeeDetails);
   });
 
   await test.step("Verify Employee's Name and Employee's ID in the Search Result", async () => {
@@ -135,7 +136,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Enter the first and middle name in the search box and click the Search button", async () => {
-    await pimPage.SearchEmployee(employeeDetails);
+    await pimPage.searchEmployee(employeeDetails);
   });
 
   await test.step("Verify Updated Employee Details", async () => {
@@ -153,7 +154,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
 
 test.afterEach(async ({ loginPage, dashboardPage }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
-    console.log("Orange_HRM Add/ Delete Employee Test failed, skipping logout");
+    Logger.warn("Orange_HRM Add/ Delete Employee Test failed, skipping logout");
     return;
   }
 

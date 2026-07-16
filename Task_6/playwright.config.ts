@@ -1,6 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 import "./src/utils/env";
-import { tr } from "@faker-js/faker";
 
 /**
  * Read environment variables from file.
