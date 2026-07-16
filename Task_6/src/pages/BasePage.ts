@@ -55,15 +55,8 @@ export class BasePage {
     return this.page.locator(".oxd-table-row").filter({ hasText: employeeId });
   }
 
-  async getEmployeeId(row: Locator): Promise<string> {
-    return row.locator(".oxd-table-cell").nth(1).innerText();
-  }
-
-  async getEmployeeName(row: Locator): Promise<string> {
-    return row.locator(".oxd-table-cell").nth(2).innerText();
-  }
-  async getEmployeeLastName(row: Locator): Promise<string> {
-    return row.locator(".oxd-table-cell").nth(3).innerText();
+  async getCellText(row: Locator, columnIndex: number): Promise<string> {
+    return row.locator(".oxd-table-cell").nth(columnIndex).innerText();
   }
 
   async getEditButton(row: Locator): Promise<Locator> {

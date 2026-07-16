@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
+import { constants, EmployeeColumns } from "../utils/constants";
 
 export class PimPage extends BasePage {
   readonly page: Page;
@@ -137,7 +138,7 @@ export class PimPage extends BasePage {
     await super.click(this.saveButton.first());
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);
-    await super.verifyToastMessage(this.toastMessageElement, "Successfully");
+    await super.verifyToastMessage(this.toastMessageElement, constants.create_updateEmployeeToastMessage);
     await super.waitForHidden(this.toastMessageElement);
     Logger.success("Clicked Save Button");
   }
@@ -194,9 +195,15 @@ export class PimPage extends BasePage {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
     await super.isVisible(this.employeeRow);
 
-    const actualEmployeeId = await super.getEmployeeId(this.employeeRow);
+    const actualEmployeeId = await super.getCellText(
+      this.employeeRow,
+      EmployeeColumns.EMPLOYEE_ID,
+    );
 
-    const actualEmployeeName = await super.getEmployeeName(this.employeeRow);
+    const actualEmployeeName = await super.getCellText(
+      this.employeeRow,
+      EmployeeColumns.NAME,
+    );
 
     const expectedEmployeeName = `${newEmployee.firstName} ${newEmployee.middleName}`;
 
@@ -240,8 +247,10 @@ export class PimPage extends BasePage {
   }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
     await super.waitForVisible(this.employeeRow);
-    const actualEmployeeLastName = await super.getEmployeeLastName(
+
+    const actualEmployeeLastName = await super.getCellText(
       this.employeeRow,
+      EmployeeColumns.LAST_NAME,
     );
     expect(actualEmployeeLastName).toBe(this.updateLastName);
     Logger.success("Updated Employee details verified successfully");
@@ -256,7 +265,7 @@ export class PimPage extends BasePage {
 
     await super.click(deleteButton);
     await super.click(this.deleteConfirmationButton);
-    await super.verifyToastMessage(this.toastMessageElement, "Successfully");
+    await super.verifyToastMessage(this.toastMessageElement, constants.create_updateEmployeeToastMessage);
     await super.waitForHidden(this.toastMessageElement);
     await super.waitForHidden(this.spinner);
     Logger.success(
@@ -269,7 +278,10 @@ export class PimPage extends BasePage {
     await super.click(this.searchButton);
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);
-    await super.verifyToastMessage(this.toastMessageElement, "No Records Found");
+    await super.verifyToastMessage(
+      this.toastMessageElement,
+      constants.deleteEmployeeToastMessage,
+    );
     await super.waitForHidden(this.toastMessageElement);
     Logger.success(`Employee Deleted Successfully`);
   }

@@ -2,7 +2,6 @@ import { Locator, Page } from "@playwright/test";
 import { env } from "../utils/env";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
 
 export class LoginPage extends BasePage {
   readonly page: Page;
@@ -39,6 +38,7 @@ export class LoginPage extends BasePage {
     ) {
       throw new Error("Orange_HRM Login Page is not visible");
     }
+    Logger.success("Orange_HRM Login Screen is Visible");
   }
 
   async checkPasswordIsValid() {
