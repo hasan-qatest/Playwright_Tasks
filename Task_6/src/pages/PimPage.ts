@@ -188,7 +188,7 @@ export class PimPage extends BasePage {
     employeeId: string;
   }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
-    await super.isVisible(this.employeeRow);
+    await expect(this.employeeRow).toBeVisible();
 
     const actualEmployeeId = await super.getCellText(
       this.employeeRow,
@@ -212,11 +212,11 @@ export class PimPage extends BasePage {
 
   async clickUpdateButton(newEmployee: { employeeId: string }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
-    await super.isVisible(this.employeeRow);
+    await expect(this.employeeRow).toBeVisible();
 
     const editButton = await super.getEditButton(this.employeeRow);
 
-    await super.isVisible(editButton);
+    await expect(editButton).toBeVisible();
     await super.click(editButton);
     await super.waitForLoadState();
     await super.waitForHidden(this.spinner);
@@ -241,7 +241,7 @@ export class PimPage extends BasePage {
     employeeId: string;
   }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
-    await super.waitForVisible(this.employeeRow);
+    await expect(this.employeeRow).toBeVisible();
 
     const actualEmployeeLastName = await super.getCellText(
       this.employeeRow,
@@ -253,10 +253,10 @@ export class PimPage extends BasePage {
 
   async deleteEmployee(newEmployee: { employeeId: string }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
-    await super.isVisible(this.employeeRow);
+    await expect(this.employeeRow).toBeVisible();
 
     const deleteButton = await super.getDeleteButton(this.employeeRow);
-    await super.isVisible(deleteButton);
+    await expect(deleteButton).toBeVisible();
 
     await super.click(deleteButton);
     await super.click(this.deleteConfirmationButton);
