@@ -3,6 +3,11 @@ import { faker } from "@faker-js/faker";
 import { Logger } from "../src/utils/logger";
 
 test.beforeEach(async ({ loginPage, dashboardPage }) => {
+  //Check Password is Set Properly
+  await test.step("Check Password is Set Properly", async () => {
+    await loginPage.checkPasswordIsValid();
+  });
+
   //Navigate to Orange_HRM Login Screen
   await test.step("Navigate to Orange_HRM Login Screen", async () => {
     await loginPage.navigateToLoginScreen();
@@ -11,11 +16,6 @@ test.beforeEach(async ({ loginPage, dashboardPage }) => {
   //Orange_HRM Login Page is Visible
   await test.step("Verify Orange_HRM Login Page is Visible", async () => {
     await loginPage.isLoginPageVisible();
-  });
-
-  //Check Password is Set Properly
-  await test.step("Check Password is Set Properly", async () => {
-    await loginPage.checkPasswordIsValid();
   });
 
   //Login Into Orange_HRM
