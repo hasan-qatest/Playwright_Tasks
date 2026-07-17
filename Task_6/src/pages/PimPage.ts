@@ -17,7 +17,6 @@ export class PimPage extends BasePage {
   readonly saveButton: Locator;
   readonly personalDetailsHeader: Locator;
   readonly searchEmployeeByNameInput: Locator;
-  readonly searchEmployeeByIdInput: Locator;
   readonly searchButton: Locator;
   readonly dropdownButton: Locator;
   readonly spinner: Locator;
@@ -51,13 +50,6 @@ export class PimPage extends BasePage {
       name: "Personal Details",
     });
     this.searchEmployeeByNameInput = page.getByPlaceholder("Type for hints...");
-    // this.searchEmployeeByIdInput = page.locator(
-    //   "//label[text()='Employee Id']/ancestor::div[contains(@class,'oxd-input-group')]//input",
-    // );
-    this.searchEmployeeByIdInput = this.searchEmployeeByIdInput = page
-      .locator(".oxd-input-group")
-      .filter({ hasText: "Employee Id" })
-      .locator("input");
     this.searchButton = page.getByRole("button", { name: " Search " });
     this.dropdownButton = page.locator("button.oxd-icon-button");
     this.spinner = page.locator(".oxd-loading-spinner");
@@ -140,7 +132,7 @@ export class PimPage extends BasePage {
     await super.waitForVisible(this.toastMessageElement);
     await super.verifyToastMessage(
       this.toastMessageElement,
-      constants.create_updateEmployeeToastMessage,
+      constants.createUpdateEmployeeToastMessage,
     );
     await super.waitForHidden(this.toastMessageElement);
     Logger.success("Clicked Save Button");
@@ -270,7 +262,7 @@ export class PimPage extends BasePage {
     await super.click(this.deleteConfirmationButton);
     await super.verifyToastMessage(
       this.toastMessageElement,
-      constants.create_updateEmployeeToastMessage,
+      constants.createUpdateEmployeeToastMessage,
     );
     await super.waitForHidden(this.spinner);
     await super.waitForHidden(this.toastMessageElement);
@@ -280,7 +272,7 @@ export class PimPage extends BasePage {
   }
 
   async verifyDeletedEmployee(newEmployee: { employeeId: string }) {
-    await super.fill(this.searchEmployeeByIdInput, newEmployee.employeeId);
+    await super.fill(this.employeeIdInput, newEmployee.employeeId);
     await super.click(this.searchButton);
     await super.waitForHidden(this.spinner);
     await super.waitForVisible(this.toastMessageElement);

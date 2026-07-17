@@ -2,11 +2,6 @@ export const constants = {
   homePageURL: "https://www.saucedemo.com/",
   standardUserName: "standard_user",
   password: "secret_sauce",
-  // productsByName: [
-  //   "Sauce Labs Backpack",
-  //   "Sauce Labs Bike Light",
-  //   "Sauce Labs Bolt T-Shirt",
-  // ],
 } as const;
 
 export const products = [

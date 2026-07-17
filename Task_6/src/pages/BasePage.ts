@@ -55,6 +55,7 @@ export class BasePage {
     return this.page.locator(".oxd-table-row").filter({ hasText: employeeId });
   }
 
+  // .oxd-table-cell order: [checkbox, id, name, lastName, ...] — keep EmployeeColumns in sync
   async getCellText(row: Locator, columnIndex: number): Promise<string> {
     return row.locator(".oxd-table-cell").nth(columnIndex).innerText();
   }

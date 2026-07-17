@@ -1,6 +1,6 @@
 export const constants = {
   deleteEmployeeToastMessage: "No Records Found",
-  create_updateEmployeeToastMessage: "Successfully",
+  createUpdateEmployeeToastMessage: "Successfully",
 };
 export const EmployeeColumns = {
   EMPLOYEE_ID: 1,
