@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import { env } from "../utils/env";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
@@ -31,6 +31,7 @@ export class LoginPage extends BasePage {
     Logger.success("Navigated to Orange_HRM Login Screen");
   }
   async isLoginPageVisible() {
+    await expect(this.loginButton).toBeVisible;
     await super.waitForVisible(this.loginButton);
     if (
       !(await super.isVisible(this.loginButton)) ||
@@ -44,7 +45,7 @@ export class LoginPage extends BasePage {
   async checkPasswordIsValid() {
     if (!this.password) {
       throw new Error(
-        "Password is required. Run the test with PASSWORD=<your_password>.",
+        "Password is required. Run the test with PASSWORD=<your_password>",
       );
     }
     Logger.success("Password Set Successfully");
@@ -54,7 +55,7 @@ export class LoginPage extends BasePage {
     await super.fill(this.loginUserPasswordInput, this.password!);
     await super.click(this.loginButton);
     if (await super.isVisible(this.invalidCredentialsMessage)) {
-      throw new Error("Invalid credentials. Stopping test execution.");
+      throw new Error("Invalid credentials. Stopping test execution");
     }
     Logger.success("User logged in successfully");
   }

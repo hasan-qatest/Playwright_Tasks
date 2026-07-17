@@ -67,4 +67,8 @@ export class BasePage {
   async getDeleteButton(row: Locator): Promise<Locator> {
     return row.locator("button:has(.bi-trash)");
   }
+
+  async clearInputField(locator: Locator) {
+    await locator.first().clear();
+  }
 }

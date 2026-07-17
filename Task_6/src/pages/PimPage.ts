@@ -67,6 +67,7 @@ export class PimPage extends BasePage {
     }
     Logger.success("Employee List Tab is Visible");
   }
+
   async clickEmployeeListTab() {
     await super.click(this.employeeListTab.first());
     Logger.success("Clicked Employee List Tab");
@@ -177,6 +178,7 @@ export class PimPage extends BasePage {
     await super.fill(this.searchEmployeeByNameInput.first(), this.expectedName);
     await super.click(this.searchButton);
     await super.waitForHidden(this.spinner);
+    await super.clearInputField(this.searchEmployeeByNameInput);
     Logger.success(
       "Entered the first and middle name in the search box and clicked the Search button",
     );
@@ -215,8 +217,8 @@ export class PimPage extends BasePage {
     await expect(this.employeeRow).toBeVisible();
 
     const editButton = await super.getEditButton(this.employeeRow);
-
     await expect(editButton).toBeVisible();
+
     await super.click(editButton);
     await super.waitForLoadState();
     await super.waitForHidden(this.spinner);
@@ -228,8 +230,8 @@ export class PimPage extends BasePage {
   async updateEmployeeDetails(newEmployee: { lastName: string }) {
     await super.waitForHidden(this.spinner);
     this.updateLastName = `${newEmployee.lastName} Test`;
-    await this.lastNameInput.click();
-    await this.lastNameInput.clear();
+    await super.click(this.lastNameInput);
+    await super.clearInputField(this.lastNameInput);
     await super.fill(this.lastNameInput, this.updateLastName);
     Logger.success(`Updated Employee Details`);
   }
