@@ -5,20 +5,18 @@ import { Logger } from "../utils/logger";
 
 export class LoginPage extends BasePage {
   readonly page: Page;
-  readonly loginUserNameInput: Locator;
-  readonly loginUserPasswordInput: Locator;
+  readonly loginUsernameInput: Locator;
+  readonly loginPasswordInput: Locator;
   readonly loginButton: Locator;
-  readonly password: string | undefined;
+  readonly runTimePassword: string | undefined;
   readonly invalidCredentialsMessage: Locator;
 
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.password = process.env.PASSWORD;
-    this.loginUserNameInput = page.getByRole("textbox", { name: "username" });
-    this.loginUserPasswordInput = page.getByRole("textbox", {
-      name: "password",
-    });
+    this.runTimePassword = process.env.PASSWORD;
+    this.loginUsernameInput = page.getByRole("textbox", { name: "username" });
+    this.loginPasswordInput = page.getByRole("textbox", { name: "password" });
     this.loginButton = page.getByRole("button", { name: "Login" });
     this.invalidCredentialsMessage = page.getByText("Invalid credentials");
   }
@@ -30,20 +28,20 @@ export class LoginPage extends BasePage {
     await super.navigate(env.baseUrl);
     Logger.success("Navigated to Orange_HRM Login Screen");
   }
-  async isLoginPageVisible() {
+  async verifyLoginPageVisible() {
     await expect(this.loginButton).toBeVisible;
     await super.waitForVisible(this.loginButton);
     if (
       !(await super.isVisible(this.loginButton)) ||
-      !(await super.isVisible(this.loginUserNameInput))
+      !(await super.isVisible(this.loginUsernameInput))
     ) {
       throw new Error("Orange_HRM Login Page is not visible");
     }
     Logger.success("Orange_HRM Login Screen is Visible");
   }
 
-  async checkPasswordIsValid() {
-    if (!this.password) {
+  async validateRuntimePassword() {
+    if (!this.runTimePassword) {
       throw new Error(
         "Password is required. Run the test with PASSWORD=<your_password>",
       );
@@ -51,8 +49,8 @@ export class LoginPage extends BasePage {
     Logger.success("Password Set Successfully");
   }
   async login() {
-    await super.fill(this.loginUserNameInput, env.user);
-    await super.fill(this.loginUserPasswordInput, this.password!);
+    await super.fill(this.loginUsernameInput, env.user);
+    await super.fill(this.loginPasswordInput, this.runTimePassword!);
     await super.click(this.loginButton);
     if (await super.isVisible(this.invalidCredentialsMessage)) {
       throw new Error("Invalid credentials. Stopping test execution");

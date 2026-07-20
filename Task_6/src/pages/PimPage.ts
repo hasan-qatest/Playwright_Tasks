@@ -13,13 +13,12 @@ export class PimPage extends BasePage {
   readonly middleNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly employeeIdInput: Locator;
-  readonly uploadInput: Locator;
-  readonly saveButton: Locator;
+  readonly profileImageUploadInput: Locator;
+  readonly employeeSaveButton: Locator;
   readonly personalDetailsHeader: Locator;
-  readonly searchEmployeeByNameInput: Locator;
-  readonly searchButton: Locator;
-  readonly dropdownButton: Locator;
-  readonly spinner: Locator;
+  readonly employeeSearchInput: Locator;
+  readonly employeeSearchButton: Locator;
+  readonly loadingSpinner: Locator;
   readonly deleteConfirmationButton: Locator;
   readonly toastMessageElement: Locator;
   expectedName: string | undefined;
@@ -44,22 +43,21 @@ export class PimPage extends BasePage {
       .locator(".oxd-input-group")
       .filter({ hasText: "Employee Id" })
       .locator("input");
-    this.uploadInput = page.locator("input[type='file']");
-    this.saveButton = page.getByRole("button", { name: " Save " });
+    this.profileImageUploadInput = page.locator("input[type='file']");
+    this.employeeSaveButton = page.getByRole("button", { name: " Save " });
     this.personalDetailsHeader = page.getByRole("heading", {
       name: "Personal Details",
     });
-    this.searchEmployeeByNameInput = page.getByPlaceholder("Type for hints...");
-    this.searchButton = page.getByRole("button", { name: " Search " });
-    this.dropdownButton = page.locator("button.oxd-icon-button");
-    this.spinner = page.locator(".oxd-loading-spinner");
+    this.employeeSearchInput = page.getByPlaceholder("Type for hints...");
+    this.employeeSearchButton = page.getByRole("button", { name: " Search " });
+    this.loadingSpinner = page.locator(".oxd-loading-spinner");
     this.deleteConfirmationButton = page.getByRole("button", {
       name: " Yes, Delete ",
     });
     this.toastMessageElement = page.locator(".oxd-text--toast-message");
   }
 
-  async isEmployeeListTabVisible() {
+  async verifyEmployeeListTabVisible() {
     await super.waitForLoadState();
     await super.waitForVisible(this.employeeListTab);
     if (!(await super.isVisible(this.employeeListTab))) {
@@ -73,7 +71,7 @@ export class PimPage extends BasePage {
     Logger.success("Clicked Employee List Tab");
   }
 
-  async isEmployeeListHeaderVisible() {
+  async verifyEmployeeListHeaderVisible() {
     await super.waitForLoadState();
     await super.waitForVisible(this.employeeListHeader);
     if (!(await super.isVisible(this.employeeListHeader))) {
@@ -82,7 +80,7 @@ export class PimPage extends BasePage {
     Logger.success("Employee List Header is Visible");
   }
 
-  async isAddEmployeeTabVisible() {
+  async verifyAddEmployeeTabVisible() {
     await super.waitForLoadState();
     if (!(await super.isVisible(this.addEmployeeTab))) {
       throw new Error("Add Employee Tab is Not Visible");
@@ -92,11 +90,11 @@ export class PimPage extends BasePage {
 
   async clickAddEmployeeTab() {
     await super.click(this.addEmployeeTab.first());
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     Logger.success("Clicked Add Employee Tab");
   }
 
-  async isAddEmployeeHeaderVisible() {
+  async verifyAddEmployeeHeaderVisible() {
     await super.waitForVisible(this.addEmployeeHeader);
     if (!(await super.isVisible(this.addEmployeeHeader))) {
       throw new Error("Add Employee Header is Not Visible");
@@ -110,12 +108,12 @@ export class PimPage extends BasePage {
     lastName: string;
     employeeId: string;
   }) {
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     await super.fill(this.firstNameInput, newEmployee.firstName);
     await super.fill(this.middleNameInput, newEmployee.middleName);
     await super.fill(this.lastNameInput, newEmployee.lastName);
     await super.fill(this.employeeIdInput, newEmployee.employeeId);
-    await this.uploadInput.setInputFiles(
+    await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
     Logger.success(
@@ -127,9 +125,9 @@ export class PimPage extends BasePage {
     );
   }
 
-  async clickSaveButton() {
-    await super.click(this.saveButton.first());
-    await super.waitForHidden(this.spinner);
+  async saveEmployee() {
+    await super.click(this.employeeSaveButton.first());
+    await super.waitForHidden(this.loadingSpinner);
     await super.waitForVisible(this.toastMessageElement);
     await super.verifyToastMessage(
       this.toastMessageElement,
@@ -139,9 +137,9 @@ export class PimPage extends BasePage {
     Logger.success("Clicked Save Button");
   }
 
-  async isPersonalDetailsHeaderVisible() {
+  async verifyPersonalDetailsHeaderVisible() {
     await super.waitForLoadState();
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     await super.waitForVisible(this.personalDetailsHeader);
     if (!(await super.isVisible(this.personalDetailsHeader))) {
       throw new Error("Employee Personal Details Header is Not Visible");
@@ -149,14 +147,14 @@ export class PimPage extends BasePage {
     Logger.success("Employee Personal Details Header is Visible");
   }
 
-  async verifyEmployeeDetails(newEmployee: {
+  async verifyEmployeeInformation(newEmployee: {
     firstName: string;
     middleName: string;
     lastName: string;
     employeeId: string;
   }) {
     await super.waitForLoadState();
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
     await expect(this.lastNameInput).toHaveValue(newEmployee.lastName);
@@ -171,20 +169,20 @@ export class PimPage extends BasePage {
     middleName: string;
     employeeId: string;
   }) {
-    if (!(await super.isVisible(this.searchEmployeeByNameInput.first()))) {
+    if (!(await super.isVisible(this.employeeSearchInput.first()))) {
       throw new Error("Search by Name field is Not Visible");
     }
     this.expectedName = `${newEmployee.firstName} ${newEmployee.middleName}`;
-    await super.fill(this.searchEmployeeByNameInput.first(), this.expectedName);
-    await super.click(this.searchButton);
-    await super.waitForHidden(this.spinner);
-    await super.clearInputField(this.searchEmployeeByNameInput);
+    await super.fill(this.employeeSearchInput.first(), this.expectedName);
+    await super.click(this.employeeSearchButton);
+    await super.waitForHidden(this.loadingSpinner);
+    await super.clearInputField(this.employeeSearchInput);
     Logger.success(
       "Entered the first and middle name in the search box and clicked the Search button",
     );
   }
 
-  async verifySearchEmployee(newEmployee: {
+  async verifyEmployeeSearchResult(newEmployee: {
     firstName: string;
     middleName: string;
     employeeId: string;
@@ -212,7 +210,7 @@ export class PimPage extends BasePage {
     );
   }
 
-  async clickUpdateButton(newEmployee: { employeeId: string }) {
+  async updateEmployee(newEmployee: { employeeId: string }) {
     this.employeeRow = await super.getEmployeeRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
@@ -221,14 +219,14 @@ export class PimPage extends BasePage {
 
     await super.click(editButton);
     await super.waitForLoadState();
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     Logger.success(
       `Clicked Update button for Employee ID: ${newEmployee.employeeId}`,
     );
   }
 
   async updateEmployeeDetails(newEmployee: { lastName: string }) {
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     this.updateLastName = `${newEmployee.lastName} Test`;
     await super.click(this.lastNameInput);
     await super.clearInputField(this.lastNameInput);
@@ -236,7 +234,7 @@ export class PimPage extends BasePage {
     Logger.success(`Updated Employee Details`);
   }
 
-  async verifyUpdatedEmployee(newEmployee: {
+  async verifyEmployeeUpdated(newEmployee: {
     firstName: string;
     middleName: string;
     lastName: string;
@@ -266,17 +264,17 @@ export class PimPage extends BasePage {
       this.toastMessageElement,
       constants.createUpdateEmployeeToastMessage,
     );
-    await super.waitForHidden(this.spinner);
+    await super.waitForHidden(this.loadingSpinner);
     await super.waitForHidden(this.toastMessageElement);
     Logger.success(
       `Employee ID: ${newEmployee.employeeId} Deleted successfully`,
     );
   }
 
-  async verifyDeletedEmployee(newEmployee: { employeeId: string }) {
+  async verifyEmployeeDeleted(newEmployee: { employeeId: string }) {
     await super.fill(this.employeeIdInput, newEmployee.employeeId);
-    await super.click(this.searchButton);
-    await super.waitForHidden(this.spinner);
+    await super.click(this.employeeSearchButton);
+    await super.waitForHidden(this.loadingSpinner);
     await super.waitForVisible(this.toastMessageElement);
     await super.verifyToastMessage(
       this.toastMessageElement,

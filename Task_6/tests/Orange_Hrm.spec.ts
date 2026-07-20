@@ -5,7 +5,7 @@ import { Logger } from "../src/utils/logger";
 test.beforeEach(async ({ loginPage, dashboardPage }) => {
   //Check Password is Set Properly
   await test.step("Check Password is Set Properly", async () => {
-    await loginPage.checkPasswordIsValid();
+    await loginPage.validateRuntimePassword();
   });
 
   //Navigate to Orange_HRM Login Screen
@@ -15,7 +15,7 @@ test.beforeEach(async ({ loginPage, dashboardPage }) => {
 
   //Orange_HRM Login Page is Visible
   await test.step("Verify Orange_HRM Login Page is Visible", async () => {
-    await loginPage.isLoginPageVisible();
+    await loginPage.verifyLoginPageVisible();
   });
 
   //Login Into Orange_HRM
@@ -25,16 +25,18 @@ test.beforeEach(async ({ loginPage, dashboardPage }) => {
 
   //Verify Orange_HRM Dashboard Page is Visible
   await test.step("Verify Orange_HRM Dashboard Page is Visible", async () => {
-    await dashboardPage.isDashboardHeaderVisible();
+    await dashboardPage.verifyDashboardHeaderVisible();
   });
 });
 
-test("Orange_HRM Add, Update and Delete Employee Flow", async ({
+test("Orange-HRM Add, Update and Delete Employee Flow", async ({
   dashboardPage,
   pimPage,
 }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
-    Logger.warn("Login Test failed, skipping logout");
+    Logger.warn(
+      "Login Test failed, skipping test 'Orange-HRM Add, Update and Delete Employee Flow' and 'logout'",
+    );
     return;
   }
   const employeeDetails = {
@@ -45,7 +47,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   };
 
   await test.step("Verify PIM Menu is Visible", async () => {
-    await dashboardPage.isPimMenuVisible();
+    await dashboardPage.verifyPimMenuVisible();
   });
 
   await test.step("Click PIM Menu", async () => {
@@ -53,11 +55,11 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify PIM Header is Visible", async () => {
-    await dashboardPage.isPimHeaderVisible();
+    await dashboardPage.verifyPimHeaderVisible();
   });
 
   await test.step("Verify Employee List Tab is Visible", async () => {
-    await pimPage.isEmployeeListTabVisible();
+    await pimPage.verifyEmployeeListTabVisible();
   });
 
   await test.step("Click Employee List Tab", async () => {
@@ -65,18 +67,18 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Employee List Header is Visible", async () => {
-    await pimPage.isEmployeeListHeaderVisible();
+    await pimPage.verifyEmployeeListHeaderVisible();
   });
 
   await test.step("Verify Add Employee Tab is Visible", async () => {
-    await pimPage.isAddEmployeeTabVisible();
+    await pimPage.verifyAddEmployeeTabVisible();
   });
   await test.step("Click Add Employee Tab", async () => {
     await pimPage.clickAddEmployeeTab();
   });
 
   await test.step("Verify Add Employee Header is Visible", async () => {
-    await pimPage.isAddEmployeeHeaderVisible();
+    await pimPage.verifyAddEmployeeHeaderVisible();
   });
 
   await test.step("Enter Employee Details", async () => {
@@ -84,15 +86,15 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("click Save Button", async () => {
-    await pimPage.clickSaveButton();
+    await pimPage.saveEmployee();
   });
 
   await test.step("Verify Employee's Personal Details header is visible", async () => {
-    await pimPage.isPersonalDetailsHeaderVisible();
+    await pimPage.verifyPersonalDetailsHeaderVisible();
   });
 
   await test.step("Verify Employee's First Name, Middle Name, Last Name and Employee Id", async () => {
-    await pimPage.verifyEmployeeDetails(employeeDetails);
+    await pimPage.verifyEmployeeInformation(employeeDetails);
   });
 
   await test.step("Click Employee List Tab", async () => {
@@ -100,7 +102,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Employee List Header is Visible", async () => {
-    await pimPage.isEmployeeListHeaderVisible();
+    await pimPage.verifyEmployeeListHeaderVisible();
   });
 
   await test.step("Enter the first and middle name in the search box and click the Search button", async () => {
@@ -108,15 +110,15 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Employee's Name and Employee's ID in the Search Result", async () => {
-    await pimPage.verifySearchEmployee(employeeDetails);
+    await pimPage.verifyEmployeeSearchResult(employeeDetails);
   });
 
   await test.step("Click the Update Button", async () => {
-    await pimPage.clickUpdateButton(employeeDetails);
+    await pimPage.updateEmployee(employeeDetails);
   });
 
   await test.step("Verify Employee's First Name, Middle Name, Last Name and Employee Id", async () => {
-    await pimPage.verifyEmployeeDetails(employeeDetails);
+    await pimPage.verifyEmployeeInformation(employeeDetails);
   });
 
   await test.step("Update Employee Details", async () => {
@@ -124,7 +126,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Click Save Button", async () => {
-    await pimPage.clickSaveButton();
+    await pimPage.saveEmployee();
   });
 
   await test.step("Click Employee List Tab", async () => {
@@ -132,7 +134,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Employee List Header is Visible", async () => {
-    await pimPage.isEmployeeListHeaderVisible();
+    await pimPage.verifyEmployeeListHeaderVisible();
   });
 
   await test.step("Enter the first and middle name in the search box and click the Search button", async () => {
@@ -140,7 +142,7 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Updated Employee Details", async () => {
-    await pimPage.verifyUpdatedEmployee(employeeDetails);
+    await pimPage.verifyEmployeeUpdated(employeeDetails);
   });
 
   await test.step("Click the Delete icon and confirm the deletion", async () => {
@@ -148,19 +150,21 @@ test("Orange_HRM Add, Update and Delete Employee Flow", async ({
   });
 
   await test.step("Verify Employee Deletion", async () => {
-    await pimPage.verifyDeletedEmployee(employeeDetails);
+    await pimPage.verifyEmployeeDeleted(employeeDetails);
   });
 });
 
 test.afterEach(async ({ loginPage, dashboardPage }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
-    Logger.warn("Orange_HRM Add/ Delete Employee Test failed, skipping logout");
+    Logger.warn(
+      "Orange-HRM Add, Update and Delete Employee Flow Test failed, skipping logout",
+    );
     return;
   }
 
   //Verify User Menu is Visible
   await test.step("Verify User Menu is Visible", async () => {
-    await dashboardPage.isUserMenuVisible();
+    await dashboardPage.verifyUserMenuVisible();
   });
 
   //Click User Menu
@@ -170,7 +174,7 @@ test.afterEach(async ({ loginPage, dashboardPage }, testInfo) => {
 
   //Logout Link is Visible
   await test.step("Logout Link is Visible", async () => {
-    await dashboardPage.isLogoutLinkIsVisible();
+    await dashboardPage.verifyLogoutLinkIsVisible();
   });
 
   //Click Logout Link
@@ -180,6 +184,6 @@ test.afterEach(async ({ loginPage, dashboardPage }, testInfo) => {
 
   //Orange_HRM Login Page is Visible
   await test.step("Verify Orange_HRM Login Page is Visible", async () => {
-    await loginPage.isLoginPageVisible();
+    await loginPage.verifyLoginPageVisible();
   });
 });

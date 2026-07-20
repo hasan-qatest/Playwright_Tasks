@@ -9,7 +9,6 @@ export class DashboardPage extends BasePage {
   readonly logoutLink: Locator;
   readonly pimMenu: Locator;
   readonly pimHeader: Locator;
-  readonly loader: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -19,11 +18,10 @@ export class DashboardPage extends BasePage {
     this.pimMenu = page.getByRole("link", { name: "PIM" });
     this.userDropdownButton = page.locator(".oxd-userdropdown-tab");
     this.logoutLink = page.getByRole("menuitem", { name: "Logout" });
-    this.loader = page.locator(".oxd-loading-spinner");
   }
 
   // Dashboard Header
-  async isDashboardHeaderVisible() {
+  async verifyDashboardHeaderVisible() {
     await super.waitForVisible(this.dashboardHeader);
     if (!(await super.isVisible(this.dashboardHeader))) {
       throw new Error("Dashboard Header is Not Visible");
@@ -32,7 +30,7 @@ export class DashboardPage extends BasePage {
   }
 
   // PIM Menu
-  async isPimMenuVisible() {
+  async verifyPimMenuVisible() {
     await super.waitForVisible(this.pimMenu);
     if (!(await super.isVisible(this.pimMenu))) {
       throw new Error("PIM Menu is Not Visible");
@@ -44,7 +42,7 @@ export class DashboardPage extends BasePage {
     Logger.success("Clicked PIM Menu");
   }
 
-  async isPimHeaderVisible() {
+  async verifyPimHeaderVisible() {
     await super.waitForVisible(this.pimHeader);
     if (!(await super.isVisible(this.pimHeader))) {
       throw new Error("PIM Header is Not Visible");
@@ -53,7 +51,7 @@ export class DashboardPage extends BasePage {
   }
 
   //Logout Flow
-  async isUserMenuVisible() {
+  async verifyUserMenuVisible() {
     if (!(await super.isVisible(this.userDropdownButton))) {
       throw new Error("User menu is Not Visible");
     }
@@ -63,7 +61,7 @@ export class DashboardPage extends BasePage {
     await super.click(this.userDropdownButton);
     Logger.success("Clicked User Menu");
   }
-  async isLogoutLinkIsVisible() {
+  async verifyLogoutLinkIsVisible() {
     await super.waitForVisible(this.logoutLink);
     if (!(await super.isVisible(this.logoutLink))) {
       throw new Error("Logout Link is Not Visible");
