@@ -52,8 +52,8 @@ export class BasePage {
     await expect(locator).toContainText(value);
   }
 
-  async getEmployeeRow(employeeId: string): Promise<Locator> {
-    return this.page.locator(".oxd-table-row").filter({ hasText: employeeId });
+  async getSearchResultRow(searchText: string): Promise<Locator> {
+    return this.page.locator(".oxd-table-row").filter({ hasText: searchText });
   }
 
   // .oxd-table-cell order: [checkbox, id, name, lastName, ...] — keep EmployeeColumns in sync

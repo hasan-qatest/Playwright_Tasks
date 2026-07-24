@@ -1,6 +1,7 @@
-import { Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
+import { constants } from "../utils/constants";
 
 export class DashboardPage extends BasePage {
   readonly page: Page;
@@ -9,6 +10,7 @@ export class DashboardPage extends BasePage {
   readonly logoutLink: Locator;
   readonly pimMenu: Locator;
   readonly pimHeader: Locator;
+  readonly loggedInUserName: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -18,6 +20,7 @@ export class DashboardPage extends BasePage {
     this.pimMenu = page.getByRole("link", { name: "PIM" });
     this.userDropdownButton = page.locator(".oxd-userdropdown-tab");
     this.logoutLink = page.getByRole("menuitem", { name: "Logout" });
+    this.loggedInUserName = page.locator(".oxd-userdropdown-name");
   }
 
   // Dashboard Header
@@ -66,5 +69,12 @@ export class DashboardPage extends BasePage {
 
     await this.click(this.logoutLink);
     Logger.success("User Logout Successfully");
+  }
+
+  async verifyLoggedInUser() {
+    await expect(this.loggedInUserName).toHaveText(constants.employeeName);
+    Logger.success(
+      `Logged-in user verified successfully: ${constants.employeeName}`,
+    );
   }
 }

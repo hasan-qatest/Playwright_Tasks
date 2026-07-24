@@ -1,7 +1,11 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { constants, userDetails, employeeDetails } from "../utils/constants";
+import {
+  constants,
+  userDetails,
+  UserSearchResultColumns,
+} from "../utils/constants";
 
 export class AdminPage extends BasePage {
   readonly page: Page;
@@ -21,9 +25,11 @@ export class AdminPage extends BasePage {
   readonly passwordInput: Locator;
   readonly confirmPasswordInput: Locator;
   readonly userSaveButton: Locator;
+  readonly userSearchButton: Locator;
   readonly loadingSpinner: Locator;
   readonly validationErrorMessage: Locator;
   readonly toastMessageElement: Locator;
+  userRow!: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -45,8 +51,8 @@ export class AdminPage extends BasePage {
         has: page.locator("label", { hasText: "User Role" }),
       })
       .locator(".oxd-select-text");
-    this.userRoleDropdownValue = page.getByText(userDetails.userRole, {
-      exact: true,
+    this.userRoleDropdownValue = page.locator(".oxd-select-option", {
+      hasText: userDetails.userRole,
     });
     this.employeeNameInput = page
       .locator(".oxd-input-group", {
@@ -57,14 +63,13 @@ export class AdminPage extends BasePage {
     this.validationErrorMessage = page.locator(
       ".oxd-input-field-error-message",
     );
-
     this.statusDropdown = page
       .locator(".oxd-input-group", {
         has: page.locator("label", { hasText: "Status" }),
       })
       .locator(".oxd-select-text");
-    this.statusDropdownValue = page.getByText(userDetails.status, {
-      exact: true,
+    this.statusDropdownValue = page.locator(".oxd-select-option", {
+      hasText: userDetails.status,
     });
     this.usernameInput = page
       .locator(".oxd-input-group", {
@@ -83,6 +88,7 @@ export class AdminPage extends BasePage {
       })
       .locator("input");
     this.userSaveButton = page.getByRole("button", { name: " Save " });
+    this.userSearchButton = page.getByRole("button", { name: " Search " });
     this.toastMessageElement = page.locator(".oxd-text--toast-message");
   }
 
@@ -155,12 +161,15 @@ export class AdminPage extends BasePage {
     await this.fill(this.usernameInput, constants.username);
     await this.fill(this.passwordInput, constants.password);
     await this.fill(this.confirmPasswordInput, constants.password);
+    Logger.success(
+      "Entered User Role, Employee Name, Status, Password, and Confirm Password details",
+    );
   }
 
   async validateUserDetailsWarnings() {
     await this.validateNoInputFieldError(this.validationErrorMessage);
     Logger.success(
-      "Verified no validation warnings displayed for user details",
+      "Verified no validation warnings displayed for Add user details page",
     );
   }
 
@@ -173,22 +182,66 @@ export class AdminPage extends BasePage {
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForHidden(this.loadingSpinner);
-    //await this.waitForLoadState();
     Logger.success("User created successfully");
   }
 
-  async searchUser(
-    employeeDetails: {
-      readonly firstName: string;
-      readonly middleName: string;
-      readonly lastName: string;
-      readonly employeeId: string;
-    },
-    userDetails: {
-      readonly userRole: string;
-      readonly status: string;
-    },
-  ) {
-    Logger.success("--- Search User ---");
+  async searchUser() {
+    await this.fill(this.usernameInput, constants.username);
+    await this.selectDropdownValue(
+      this.userRoleDropdown,
+      this.userRoleDropdownValue,
+    );
+    await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
+
+    await this.fill(this.employeeNameInput, constants.username);
+    await this.page.getByRole("option", { name: constants.username }).click();
+
+    await this.selectDropdownValue(
+      this.statusDropdown,
+      this.statusDropdownValue,
+    );
+    await this.verifyDropdownValue(this.statusDropdown, userDetails.status);
+
+    await this.validateNoInputFieldError(this.validationErrorMessage);
+    await this.click(this.userSearchButton);
+    await this.waitForHidden(this.loadingSpinner);
+    Logger.success("Created user selected and searched successfully");
   }
+
+  async verifySearchResult() {
+    this.userRow = await this.getSearchResultRow(constants.username);
+    await expect(this.userRow).toBeVisible();
+
+    const actualUserName = await this.getCellText(
+      this.userRow,
+      UserSearchResultColumns.Username,
+    );
+    expect(actualUserName).toBe(constants.username);
+
+    const actualUserRole = await this.getCellText(
+      this.userRow,
+      UserSearchResultColumns.UserRole,
+    );
+    expect(actualUserRole).toBe(userDetails.userRole);
+
+    const actualEmployeeName = await this.getCellText(
+      this.userRow,
+      UserSearchResultColumns.EmployeeName,
+    );
+    expect(actualEmployeeName).toBe(constants.employeeName);
+
+    const actualStatus = await this.getCellText(
+      this.userRow,
+      UserSearchResultColumns.Status,
+    );
+    expect(actualStatus).toBe(userDetails.status);
+
+    Logger.success(
+      "Verified User's Username, User Role, EmployeeName and Status in the Search Result",
+    );
+  }
+
+  async deleteUser() {}
+
+  async verifyUserDeleted() {}
 }

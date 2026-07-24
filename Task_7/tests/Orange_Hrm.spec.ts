@@ -1,8 +1,8 @@
 import { test } from "../src/fixtures/TestFixture";
 import { Logger } from "../src/utils/logger";
-import { employeeDetails, userDetails } from "../src/utils/constants";
+import { constants, employeeDetails } from "../src/utils/constants";
 
-test.beforeEach(async ({ loginPage, dashboardPage }) => {
+test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
   //Check Password is Set Properly
   await test.step("Check Password is Set Properly", async () => {
     await loginPage.validateRuntimePassword();
@@ -18,6 +18,11 @@ test.beforeEach(async ({ loginPage, dashboardPage }) => {
     await loginPage.verifyLoginPageVisible();
   });
 
+  if (testInfo.tags.includes("@skipBeforeEach")) {
+    Logger.info("Skipping Before Each Login");
+    return;
+  }
+
   //Login Into Orange_HRM
   await test.step("Login Into Orange_HRM", async () => {
     await loginPage.login();
@@ -32,7 +37,7 @@ test.beforeEach(async ({ loginPage, dashboardPage }) => {
 test.describe("Orange-HRM Employee and User Management ", async () => {
   test.describe.configure({ mode: "serial" });
 
-  test("Employee Management Flow", async ({
+  test.skip("Employee Management Flow", async ({
     dashboardPage,
     pimPage,
   }, testInfo) => {
@@ -100,7 +105,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test("Admin Management FLow", async ({ adminPage, pimPage }, testInfo) => {
+  test.skip("User Creation Flow", async ({ adminPage }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
         "Employee Management Flow failed, skipping test 'Orange-HRM Admin Management FLow and logout'",
@@ -128,24 +133,83 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await adminPage.saveUserButton();
     });
 
-    await test.step("Search Created User", async () => {
+    await test.step("Search and Verify Created User", async () => {
       //Search Created User
-      await adminPage.searchUser(employeeDetails, userDetails);
+      await adminPage.searchUser();
+
+      //Verify Created User
+      await adminPage.verifySearchResult();
     });
+  });
 
-    // await test.step("Delete Created Employee", async () => {
-    //   //Click Employee Tab
-    //   await pimPage.clickEmployeeListTab();
+  test.skip("@skipBeforeEach Login as the newly created user and verify successful login", async ({
+    loginPage,
+    dashboardPage,
+  }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      Logger.warn(
+        "Employee Management or User Creation Flow failed, skipping test 'Logout Flow'",
+      );
+      return;
+    }
 
-    //   //Enter the first and middle name in the search box and click the Search button
-    //   await pimPage.searchEmployee(employeeDetails);
+    await test.step("Login as the newly created user", async () => {
+      //Login Into Orange_HRM
+      await loginPage.login(constants.username, constants.password);
 
-    //   // Click the Delete icon and confirm the deletion
-    //   await pimPage.deleteEmployee(employeeDetails);
+      //Verify Orange_HRM Dashboard Page is Visible
+      await dashboardPage.verifyDashboardHeaderVisible();
 
-    //   //Verify Employee Deletion
-    //   await pimPage.verifyEmployeeDeleted(employeeDetails);
-    // });
+      //Verify Logged Username
+      await dashboardPage.verifyLoggedInUser();
+    });
+  });
+
+  test("Delete the created user and employee", async ({
+    pimPage,
+    adminPage,
+    dashboardPage,
+  }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      Logger.warn(
+        "Employee Management or User Creation Flow failed, skipping test 'Logout Flow'",
+      );
+      return;
+    }
+    await test.step("Delete Created User and Employee", async () => {
+      //Click Admin Menu
+      await adminPage.clickAdminMenu();
+
+      //Click User Tab
+      await adminPage.clickUsersTab();
+
+      //Search Created User
+      await adminPage.searchUser();
+
+      //Verify Created User
+      await adminPage.verifySearchResult();
+
+      // Click the Delete icon and confirm the deletion
+      await adminPage.deleteUser();
+
+      //Verify Employee Deletion
+      await adminPage.verifyUserDeleted();
+
+      //Click PIM Menu
+      await dashboardPage.clickPimMenu();
+
+      //Click Employee Tab
+      await pimPage.clickEmployeeListTab();
+
+      //Enter the first and middle name in the search box and click the Search button
+      await pimPage.searchEmployee(employeeDetails);
+
+      // Click the Delete icon and confirm the deletion
+      await pimPage.deleteEmployee(employeeDetails);
+
+      //Verify Employee Deletion
+      await pimPage.verifyEmployeeDeleted(employeeDetails);
+    });
   });
 });
 

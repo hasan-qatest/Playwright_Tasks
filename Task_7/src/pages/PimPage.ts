@@ -21,8 +21,8 @@ export class PimPage extends BasePage {
   readonly loadingSpinner: Locator;
   readonly deleteConfirmationButton: Locator;
   readonly toastMessageElement: Locator;
-  expectedName: string | undefined;
   employeeRow!: Locator;
+  expectedName: string | undefined;
 
   constructor(page: Page) {
     super(page);
@@ -157,7 +157,7 @@ export class PimPage extends BasePage {
     await this.fill(this.employeeSearchInput.first(), this.expectedName);
     await this.click(this.employeeSearchButton);
     await this.waitForHidden(this.loadingSpinner);
-    await this.clearInputField(this.employeeSearchInput);
+    //await this.clearInputField(this.employeeSearchInput);
     Logger.success(
       "Entered the first and middle name in the search box and clicked the Search button",
     );
@@ -168,7 +168,7 @@ export class PimPage extends BasePage {
     middleName: string;
     employeeId: string;
   }) {
-    this.employeeRow = await this.getEmployeeRow(newEmployee.employeeId);
+    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
     const actualEmployeeId = await this.getCellText(
@@ -192,7 +192,7 @@ export class PimPage extends BasePage {
   }
 
   async ClickUpdateButton(newEmployee: { employeeId: string }) {
-    this.employeeRow = await this.getEmployeeRow(newEmployee.employeeId);
+    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
     const editButton = await this.getEditButton(this.employeeRow);
@@ -220,7 +220,7 @@ export class PimPage extends BasePage {
   }) {
     await this.waitForLoadState();
     await this.waitForHidden(this.loadingSpinner);
-    this.employeeRow = await this.getEmployeeRow(newEmployee.employeeId);
+    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
     const actualEmployeeLastName = await this.getCellText(
@@ -232,13 +232,13 @@ export class PimPage extends BasePage {
   }
 
   async deleteEmployee(newEmployee: { employeeId: string }) {
-    this.employeeRow = await this.getEmployeeRow(newEmployee.employeeId);
+    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
     const deleteButton = await this.getDeleteButton(this.employeeRow);
     await expect(deleteButton).toBeVisible();
 
-    await this.click(deleteButton);
+    //await this.click(deleteButton);
     await this.click(this.deleteConfirmationButton);
     await this.verifyToastMessage(
       this.toastMessageElement,

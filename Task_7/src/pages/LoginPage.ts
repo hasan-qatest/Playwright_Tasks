@@ -48,9 +48,12 @@ export class LoginPage extends BasePage {
     }
     Logger.success("Password Set Successfully");
   }
-  async login() {
-    await this.fill(this.loginUsernameInput, env.user);
-    await this.fill(this.loginPasswordInput, this.runTimePassword!);
+  async login(
+    username: string = env.user,
+    password: string = this.runTimePassword!,
+  ) {
+    await this.fill(this.loginUsernameInput, username);
+    await this.fill(this.loginPasswordInput, password);
     await this.click(this.loginButton);
     if (await this.isVisible(this.invalidCredentialsMessage)) {
       throw new Error("Invalid credentials. Stopping test execution");
