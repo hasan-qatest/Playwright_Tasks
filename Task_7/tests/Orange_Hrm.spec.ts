@@ -37,7 +37,7 @@ test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
 test.describe("Orange-HRM Employee and User Management ", async () => {
   test.describe.configure({ mode: "serial" });
 
-  test.skip("Employee Management Flow", async ({
+  test("Employee Management Flow", async ({
     dashboardPage,
     pimPage,
   }, testInfo) => {
@@ -105,7 +105,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test.skip("User Creation Flow", async ({ adminPage }, testInfo) => {
+  test("User Creation Flow", async ({ adminPage }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
         "Employee Management Flow failed, skipping test 'Orange-HRM Admin Management FLow and logout'",
@@ -142,7 +142,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test.skip("@skipBeforeEach Login as the newly created user and verify successful login", async ({
+  test("@skipBeforeEach Login as the newly created user and verify successful login", async ({
     loginPage,
     dashboardPage,
   }, testInfo) => {

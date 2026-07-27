@@ -238,7 +238,7 @@ export class PimPage extends BasePage {
     const deleteButton = await this.getDeleteButton(this.employeeRow);
     await expect(deleteButton).toBeVisible();
 
-    //await this.click(deleteButton);
+    await this.click(deleteButton);
     await this.click(this.deleteConfirmationButton);
     await this.verifyToastMessage(
       this.toastMessageElement,
