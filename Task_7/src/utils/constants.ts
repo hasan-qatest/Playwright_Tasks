@@ -8,14 +8,10 @@ export const employeeDetails = {
   middleName: faker.person.middleName(),
   lastName: faker.person.lastName(),
   employeeId: faker.number.int({ min: 100000, max: 999999 }).toString(),
-  // firstName: "Van",
-  // middleName: "Owen",
-  // lastName: "Reynolds",
-  // employeeId: "645902",
 } as const;
 
 export const constants = {
-  deleteEmployeeToastMessage: "No Records Found",
+  deleteRecordToastMessage: "No Records Found",
   createUpdateToastMessage: "Successfully",
   employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
   updateLastName: `${employeeDetails.lastName} Test`,
@@ -23,6 +19,10 @@ export const constants = {
   password: `${employeeDetails.firstName}${employeeDetails.employeeId}`,
   userCreationValidationErrorMessage: "Validation error message is displayed",
   defaultDropdownValue: "-- Select --",
+  driverLicenseNumber: "ABCD1234",
+  nationalityDropdownValue:"Indian",
+  maritalStatusDropdownValue: "Married",
+  bloodTypeDropdownValue:"AB+",
 };
 export const EmployeeSearchResultColumns = {
   EMPLOYEE_ID: 1,

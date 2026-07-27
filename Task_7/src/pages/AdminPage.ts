@@ -29,6 +29,7 @@ export class AdminPage extends BasePage {
   readonly loadingSpinner: Locator;
   readonly validationErrorMessage: Locator;
   readonly toastMessageElement: Locator;
+  readonly deleteConfirmationButton: Locator;
   userRow!: Locator;
 
   constructor(page: Page) {
@@ -59,7 +60,6 @@ export class AdminPage extends BasePage {
         has: page.locator("label", { hasText: "Employee Name" }),
       })
       .locator("input");
-
     this.validationErrorMessage = page.locator(
       ".oxd-input-field-error-message",
     );
@@ -90,6 +90,9 @@ export class AdminPage extends BasePage {
     this.userSaveButton = page.getByRole("button", { name: " Save " });
     this.userSearchButton = page.getByRole("button", { name: " Search " });
     this.toastMessageElement = page.locator(".oxd-text--toast-message");
+    this.deleteConfirmationButton = page.getByRole("button", {
+      name: " Yes, Delete ",
+    });
   }
 
   async clickAdminMenu() {
@@ -137,7 +140,7 @@ export class AdminPage extends BasePage {
     Logger.success("Add User Button is Clicked");
     await this.waitForLoadState();
     if (!(await this.isVisible(this.addUserHeader))) {
-      Logger.success("Add User Page Header is Not Visible");
+      throw new Error("Add User Page Header is Not Visible");
     }
     Logger.success("Redirected to Add User Page");
   }
@@ -167,7 +170,10 @@ export class AdminPage extends BasePage {
   }
 
   async validateUserDetailsWarnings() {
-    await this.validateNoInputFieldError(this.validationErrorMessage);
+    await this.validateNoInputFieldError(
+      this.validationErrorMessage,
+      constants.userCreationValidationErrorMessage,
+    );
     Logger.success(
       "Verified no validation warnings displayed for Add user details page",
     );
@@ -202,7 +208,10 @@ export class AdminPage extends BasePage {
     );
     await this.verifyDropdownValue(this.statusDropdown, userDetails.status);
 
-    await this.validateNoInputFieldError(this.validationErrorMessage);
+    await this.validateNoInputFieldError(
+      this.validationErrorMessage,
+      constants.userCreationValidationErrorMessage,
+    );
     await this.click(this.userSearchButton);
     await this.waitForHidden(this.loadingSpinner);
     Logger.success("Created user selected and searched successfully");
@@ -241,7 +250,34 @@ export class AdminPage extends BasePage {
     );
   }
 
-  async deleteUser() {}
+  async deleteUser() {
+    this.userRow = await this.getSearchResultRow(constants.username);
+    await expect(this.userRow).toBeVisible();
 
-  async verifyUserDeleted() {}
+    const deleteButton = await this.getDeleteButton(this.userRow);
+    await expect(deleteButton).toBeVisible();
+
+    await this.click(deleteButton);
+    await this.click(this.deleteConfirmationButton);
+    await this.verifyToastMessage(
+      this.toastMessageElement,
+      constants.createUpdateToastMessage,
+    );
+    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForHidden(this.toastMessageElement);
+    Logger.success(`Deleted User Name: ${constants.username}`);
+  }
+
+  async verifyUserDeleted() {
+    await this.fill(this.usernameInput, constants.username);
+    await this.click(this.userSearchButton);
+    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForVisible(this.toastMessageElement);
+    await this.verifyToastMessage(
+      this.toastMessageElement,
+      constants.deleteRecordToastMessage,
+    );
+    await this.waitForHidden(this.toastMessageElement);
+    Logger.success(`User Deleted Successfully`);
+  }
 }

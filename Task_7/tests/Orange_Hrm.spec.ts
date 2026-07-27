@@ -100,6 +100,9 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       //Enter the first and middle name in the search box and click the Search button
       await pimPage.searchEmployee(employeeDetails);
 
+      //Click the Update Button
+      await pimPage.ClickUpdateButton(employeeDetails);
+
       //Verify Updated Employee Details
       await pimPage.verifyEmployeeUpdated(employeeDetails);
     });

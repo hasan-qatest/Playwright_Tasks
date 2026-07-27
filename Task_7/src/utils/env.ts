@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 
 const environment = process.env.ENV;
-
 const validEnvironments = ["dev", "qa"] as const;
 
 if (!environment) {
@@ -24,7 +23,16 @@ if (result.error) {
   throw new Error(`Unable to load .env.${environment}`);
 }
 
-export const env = {
-  baseUrl: process.env.BASE_URL!,
-  user: process.env.USER!,
-};
+const BASE_URL = process.env.BASE_URL;
+const USER = process.env.USER;
+
+if (!BASE_URL || !USER) {
+  const missing = [!BASE_URL && "BASE_URL", !USER && "USER"]
+    .filter(Boolean)
+    .join(", ");
+  throw new Error(
+    `Missing mandatory configuration in .env.${environment}: ${missing}`,
+  );
+}
+
+export const env = { BASE_URL, USER };

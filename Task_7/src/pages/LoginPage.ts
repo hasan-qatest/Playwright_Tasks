@@ -22,10 +22,10 @@ export class LoginPage extends BasePage {
   }
 
   async navigateToLoginScreen() {
-    if (!env.baseUrl) {
+    if (!env.BASE_URL) {
       throw new Error("Base URL is not declared");
     }
-    await this.navigate(env.baseUrl);
+    await this.navigate(env.BASE_URL);
     Logger.success("Navigated to Orange_HRM Login Screen");
   }
   async verifyLoginPageVisible() {
@@ -49,7 +49,7 @@ export class LoginPage extends BasePage {
     Logger.success("Password Set Successfully");
   }
   async login(
-    username: string = env.user,
+    username: string = env.USER,
     password: string = this.runTimePassword!,
   ) {
     await this.fill(this.loginUsernameInput, username);

@@ -21,6 +21,13 @@ export class PimPage extends BasePage {
   readonly loadingSpinner: Locator;
   readonly deleteConfirmationButton: Locator;
   readonly toastMessageElement: Locator;
+  readonly driverLicenseInput: Locator;
+  readonly nationalityDropdown: Locator;
+  readonly nationalityDropdownValue: Locator;
+  readonly maritalStatusDropdown: Locator;
+  readonly maritalStatusDropdownValue: Locator;
+  readonly bloodTypeDropdown: Locator;
+  readonly bloodTypeDropdownValue: Locator;
   employeeRow!: Locator;
   expectedName: string | undefined;
 
@@ -38,6 +45,12 @@ export class PimPage extends BasePage {
     this.firstNameInput = page.getByRole("textbox", { name: "First Name" });
     this.middleNameInput = page.getByRole("textbox", { name: "Middle Name" });
     this.lastNameInput = page.getByRole("textbox", { name: "Last Name" });
+    this.driverLicenseInput = page
+      .locator(".oxd-input-group", {
+        has: page.locator("label", { hasText: "Driver's License Number" }),
+      })
+      .locator("input");
+
     this.employeeIdInput = this.page
       .locator(".oxd-input-group")
       .filter({ hasText: "Employee Id" })
@@ -54,6 +67,31 @@ export class PimPage extends BasePage {
       name: " Yes, Delete ",
     });
     this.toastMessageElement = page.locator(".oxd-text--toast-message");
+    this.nationalityDropdown = page
+      .locator(".oxd-input-group", {
+        has: page.locator("label", { hasText: "Nationality" }),
+      })
+      .locator(".oxd-select-text");
+    this.nationalityDropdownValue = page.locator(".oxd-select-option", {
+      hasText: constants.nationalityDropdownValue,
+    });
+    this.maritalStatusDropdown = page
+      .locator(".oxd-input-group", {
+        has: page.locator("label", { hasText: "Marital Status" }),
+      })
+      .locator(".oxd-select-text");
+    this.maritalStatusDropdownValue = page.locator(".oxd-select-option", {
+      hasText: constants.maritalStatusDropdownValue,
+    });
+
+    this.bloodTypeDropdown = page
+      .locator(".oxd-input-group", {
+        has: page.locator("label", { hasText: "Blood Type" }),
+      })
+      .locator(".oxd-select-text");
+    this.bloodTypeDropdownValue = page.locator(".oxd-select-option", {
+      hasText: constants.bloodTypeDropdownValue,
+    });
   }
 
   async clickEmployeeListTab() {
@@ -136,6 +174,7 @@ export class PimPage extends BasePage {
   }) {
     await this.waitForLoadState();
     await this.waitForHidden(this.loadingSpinner);
+    await this.waitForVisible(this.firstNameInput);
     await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
     await expect(this.lastNameInput).toHaveValue(newEmployee.lastName);
@@ -145,16 +184,11 @@ export class PimPage extends BasePage {
     );
   }
 
-  async searchEmployee(newEmployee: {
-    firstName: string;
-    middleName: string;
-    employeeId: string;
-  }) {
+  async searchEmployee(newEmployee: { employeeId: string }) {
     if (!(await this.isVisible(this.employeeSearchInput.first()))) {
       throw new Error("Search by Name field is Not Visible");
     }
-    this.expectedName = `${newEmployee.firstName} ${newEmployee.middleName}`;
-    await this.fill(this.employeeSearchInput.first(), this.expectedName);
+    await this.fill(this.employeeIdInput, newEmployee.employeeId);
     await this.click(this.employeeSearchButton);
     await this.waitForHidden(this.loadingSpinner);
     //await this.clearInputField(this.employeeSearchInput);
@@ -209,7 +243,22 @@ export class PimPage extends BasePage {
     await this.click(this.lastNameInput);
     await this.clearInputField(this.lastNameInput);
     await this.fill(this.lastNameInput, constants.updateLastName);
-    Logger.success(`Employee Details Updated Entered Successfully`);
+    await this.fill(this.driverLicenseInput, constants.driverLicenseNumber);
+    await this.selectDropdownValue(
+      this.nationalityDropdown,
+      this.nationalityDropdownValue,
+    );
+    await this.selectDropdownValue(
+      this.maritalStatusDropdown,
+      this.maritalStatusDropdownValue,
+    );
+    await this.selectDropdownValue(
+      this.bloodTypeDropdown,
+      this.bloodTypeDropdownValue,
+    );
+    Logger.success(
+      "Nickname, Driver's License, Nationality, Marital Status and custom field updated",
+    );
   }
 
   async verifyEmployeeUpdated(newEmployee: {
@@ -228,6 +277,21 @@ export class PimPage extends BasePage {
       EmployeeSearchResultColumns.LAST_NAME,
     );
     expect(actualEmployeeLastName).toBe(constants.updateLastName);
+    await expect(this.driverLicenseInput).toHaveValue(
+      constants.driverLicenseNumber,
+    );
+    await this.verifyDropdownValue(
+      this.nationalityDropdown,
+      constants.nationalityDropdownValue,
+    );
+    await this.verifyDropdownValue(
+      this.maritalStatusDropdown,
+      constants.maritalStatusDropdownValue,
+    );
+    // await this.verifyDropdownValue(
+    //   this.bloodTypeDropdown,
+    //   constants.bloodTypeDropdownValue,
+    // );
     Logger.success("Employee details verified successfully-");
   }
 
@@ -240,11 +304,11 @@ export class PimPage extends BasePage {
 
     await this.click(deleteButton);
     await this.click(this.deleteConfirmationButton);
+    await this.waitForHidden(this.loadingSpinner);
     await this.verifyToastMessage(
       this.toastMessageElement,
       constants.createUpdateToastMessage,
     );
-    await this.waitForHidden(this.loadingSpinner);
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Deleted Employee ID: ${newEmployee.employeeId}`);
   }
@@ -256,7 +320,7 @@ export class PimPage extends BasePage {
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.deleteEmployeeToastMessage,
+      constants.deleteRecordToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Employee Deleted Successfully`);
