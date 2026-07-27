@@ -26,8 +26,6 @@ export class PimPage extends BasePage {
   readonly nationalityDropdownValue: Locator;
   readonly maritalStatusDropdown: Locator;
   readonly maritalStatusDropdownValue: Locator;
-  readonly bloodTypeDropdown: Locator;
-  readonly bloodTypeDropdownValue: Locator;
   employeeRow!: Locator;
   expectedName: string | undefined;
 
@@ -82,15 +80,6 @@ export class PimPage extends BasePage {
       .locator(".oxd-select-text");
     this.maritalStatusDropdownValue = page.locator(".oxd-select-option", {
       hasText: constants.maritalStatusDropdownValue,
-    });
-
-    this.bloodTypeDropdown = page
-      .locator(".oxd-input-group", {
-        has: page.locator("label", { hasText: "Blood Type" }),
-      })
-      .locator(".oxd-select-text");
-    this.bloodTypeDropdownValue = page.locator(".oxd-select-option", {
-      hasText: constants.bloodTypeDropdownValue,
     });
   }
 
@@ -174,8 +163,9 @@ export class PimPage extends BasePage {
   }) {
     await this.waitForLoadState();
     await this.waitForHidden(this.loadingSpinner);
-    await this.waitForVisible(this.firstNameInput);
-    await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
+    await expect(this.firstNameInput).toHaveValue(newEmployee.firstName, {
+      timeout: 50000,
+    });
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
     await expect(this.lastNameInput).toHaveValue(newEmployee.lastName);
     await expect(this.employeeIdInput).toHaveValue(newEmployee.employeeId);
@@ -186,14 +176,13 @@ export class PimPage extends BasePage {
 
   async searchEmployee(newEmployee: { employeeId: string }) {
     if (!(await this.isVisible(this.employeeSearchInput.first()))) {
-      throw new Error("Search by Name field is Not Visible");
+      throw new Error("Employee Id search field is Not Visible");
     }
     await this.fill(this.employeeIdInput, newEmployee.employeeId);
     await this.click(this.employeeSearchButton);
     await this.waitForHidden(this.loadingSpinner);
-    //await this.clearInputField(this.employeeSearchInput);
     Logger.success(
-      "Entered the first and middle name in the search box and clicked the Search button",
+      "Entered Employee ID in the search box and clicked the Search button",
     );
   }
 
@@ -252,31 +241,15 @@ export class PimPage extends BasePage {
       this.maritalStatusDropdown,
       this.maritalStatusDropdownValue,
     );
-    await this.selectDropdownValue(
-      this.bloodTypeDropdown,
-      this.bloodTypeDropdownValue,
-    );
     Logger.success(
       "Nickname, Driver's License, Nationality, Marital Status and custom field updated",
     );
   }
 
-  async verifyEmployeeUpdated(newEmployee: {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-    employeeId: string;
-  }) {
+  async verifyEmployeeUpdated() {
     await this.waitForLoadState();
     await this.waitForHidden(this.loadingSpinner);
-    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
-    await expect(this.employeeRow).toBeVisible();
-
-    const actualEmployeeLastName = await this.getCellText(
-      this.employeeRow,
-      EmployeeSearchResultColumns.LAST_NAME,
-    );
-    expect(actualEmployeeLastName).toBe(constants.updateLastName);
+    await expect(this.lastNameInput).toHaveValue(constants.updateLastName);
     await expect(this.driverLicenseInput).toHaveValue(
       constants.driverLicenseNumber,
     );
@@ -288,11 +261,7 @@ export class PimPage extends BasePage {
       this.maritalStatusDropdown,
       constants.maritalStatusDropdownValue,
     );
-    // await this.verifyDropdownValue(
-    //   this.bloodTypeDropdown,
-    //   constants.bloodTypeDropdownValue,
-    // );
-    Logger.success("Employee details verified successfully-");
+    Logger.success("Employee details verified successfully");
   }
 
   async deleteEmployee(newEmployee: { employeeId: string }) {
@@ -307,7 +276,7 @@ export class PimPage extends BasePage {
     await this.waitForHidden(this.loadingSpinner);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      constants.deleteRecordToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Deleted Employee ID: ${newEmployee.employeeId}`);

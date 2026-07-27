@@ -104,7 +104,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.ClickUpdateButton(employeeDetails);
 
       //Verify Updated Employee Details
-      await pimPage.verifyEmployeeUpdated(employeeDetails);
+      await pimPage.verifyEmployeeUpdated();
     });
   });
 

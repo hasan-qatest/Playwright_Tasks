@@ -138,7 +138,9 @@ export class AdminPage extends BasePage {
     }
     await this.click(this.addUserButton);
     Logger.success("Add User Button is Clicked");
+
     await this.waitForLoadState();
+    await this.waitForVisible(this.addUserHeader);
     if (!(await this.isVisible(this.addUserHeader))) {
       throw new Error("Add User Page Header is Not Visible");
     }
