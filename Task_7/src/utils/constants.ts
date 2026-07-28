@@ -22,7 +22,6 @@ export const constants = {
   driverLicenseNumber: "ABCD1234",
   nationalityDropdownValue:"Indian",
   maritalStatusDropdownValue: "Married",
-  bloodTypeDropdownValue:"AB+",
 };
 export const EmployeeSearchResultColumns = {
   EMPLOYEE_ID: 1,

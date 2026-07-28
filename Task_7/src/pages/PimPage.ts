@@ -40,9 +40,9 @@ export class PimPage extends BasePage {
     this.addEmployeeHeader = page.getByRole("heading", {
       name: "Add Employee",
     });
-    this.firstNameInput = page.getByRole("textbox", { name: "First Name" });
-    this.middleNameInput = page.getByRole("textbox", { name: "Middle Name" });
-    this.lastNameInput = page.getByRole("textbox", { name: "Last Name" });
+    this.firstNameInput = page.getByPlaceholder("First Name");
+    this.middleNameInput = page.getByPlaceholder("Middle Name");
+    this.lastNameInput = page.getByPlaceholder("Last Name");
     this.driverLicenseInput = page
       .locator(".oxd-input-group", {
         has: page.locator("label", { hasText: "Driver's License Number" }),
@@ -145,13 +145,13 @@ export class PimPage extends BasePage {
 
   async saveEmployee() {
     await this.click(this.employeeSaveButton.first());
-    await this.waitForHidden(this.loadingSpinner);
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
       constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
+    await this.waitForHidden(this.loadingSpinner);
     Logger.success("Employee Created/ Saved Successfully");
   }
 
@@ -162,10 +162,10 @@ export class PimPage extends BasePage {
     employeeId: string;
   }) {
     await this.waitForLoadState();
+    await this.page.waitForURL(/viewPersonalDetails/);
     await this.waitForHidden(this.loadingSpinner);
-    await expect(this.firstNameInput).toHaveValue(newEmployee.firstName, {
-      timeout: 50000,
-    });
+    await expect(this.firstNameInput).toBeVisible();
+    await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
     await expect(this.lastNameInput).toHaveValue(newEmployee.lastName);
     await expect(this.employeeIdInput).toHaveValue(newEmployee.employeeId);
@@ -175,7 +175,7 @@ export class PimPage extends BasePage {
   }
 
   async searchEmployee(newEmployee: { employeeId: string }) {
-    if (!(await this.isVisible(this.employeeSearchInput.first()))) {
+    if (!(await this.isVisible(this.employeeIdInput.first()))) {
       throw new Error("Employee Id search field is Not Visible");
     }
     await this.fill(this.employeeIdInput, newEmployee.employeeId);
@@ -241,9 +241,7 @@ export class PimPage extends BasePage {
       this.maritalStatusDropdown,
       this.maritalStatusDropdownValue,
     );
-    Logger.success(
-      "Nickname, Driver's License, Nationality, Marital Status and custom field updated",
-    );
+    Logger.success("Driver's License, Nationality and Marital Status updated");
   }
 
   async verifyEmployeeUpdated() {
