@@ -11,8 +11,7 @@ export const userData = {
   employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
   updateLastName: `${employeeDetails.lastName} Test`,
   username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName} Test`,
-  //password: `${employeeDetails.firstName}${employeeDetails.employeeId}`,
-   get password() {
+  get password() {
     return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
   },
 } as const;
