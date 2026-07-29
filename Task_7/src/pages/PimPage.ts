@@ -180,7 +180,7 @@ export class PimPage extends BasePage {
     await this.click(this.employeeSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(
-      "Entered Employee ID in the search box and clicked the Search button",
+      `Entered Employee ID ${newEmployee.employeeId} in the search box and clicked the Search button`,
     );
   }
 
@@ -189,26 +189,21 @@ export class PimPage extends BasePage {
     middleName: string;
     employeeId: string;
   }) {
-    this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
-    await expect(this.employeeRow).toBeVisible();
-
-    const actualEmployeeId = await this.getCellText(
-      this.employeeRow,
-      EmployeeSearchResultColumns.EMPLOYEE_ID,
-    );
-
-    const actualEmployeeName = await this.getCellText(
-      this.employeeRow,
-      EmployeeSearchResultColumns.NAME,
-    );
-
     const expectedEmployeeName = `${newEmployee.firstName} ${newEmployee.middleName}`;
 
-    expect(actualEmployeeId).toBe(newEmployee.employeeId);
-    expect(actualEmployeeName).toBe(expectedEmployeeName);
+    await this.verifySearchResultRow(newEmployee.employeeId, [
+      {
+        column: EmployeeSearchResultColumns.EMPLOYEE_ID,
+        value: newEmployee.employeeId,
+      },
+      {
+        column: EmployeeSearchResultColumns.NAME,
+        value: expectedEmployeeName,
+      },
+    ]);
 
     Logger.success(
-      "Verified Employee's Name and Employee's ID in the Search Result",
+      `Verified Employee's Name and Employee's ID ${newEmployee.employeeId} in the Search Result`,
     );
   }
 

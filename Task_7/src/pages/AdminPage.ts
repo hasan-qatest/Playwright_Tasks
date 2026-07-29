@@ -219,32 +219,24 @@ export class AdminPage extends BasePage {
   }
 
   async verifySearchResult() {
-    this.userRow = await this.getSearchResultRow(userData.username);
-    await expect(this.userRow).toBeVisible();
-
-    const actualUserName = await this.getCellText(
-      this.userRow,
-      UserSearchResultColumns.Username,
-    );
-    expect(actualUserName).toBe(userData.username);
-
-    const actualUserRole = await this.getCellText(
-      this.userRow,
-      UserSearchResultColumns.UserRole,
-    );
-    expect(actualUserRole).toBe(userDetails.userRole);
-
-    const actualEmployeeName = await this.getCellText(
-      this.userRow,
-      UserSearchResultColumns.EmployeeName,
-    );
-    expect(actualEmployeeName).toBe(userData.employeeName);
-
-    const actualStatus = await this.getCellText(
-      this.userRow,
-      UserSearchResultColumns.Status,
-    );
-    expect(actualStatus).toBe(userDetails.status);
+    await this.verifySearchResultRow(userData.username, [
+      {
+        column: UserSearchResultColumns.Username,
+        value: userData.username,
+      },
+      {
+        column: UserSearchResultColumns.UserRole,
+        value: userDetails.userRole,
+      },
+      {
+        column: UserSearchResultColumns.EmployeeName,
+        value: userData.employeeName,
+      },
+      {
+        column: UserSearchResultColumns.Status,
+        value: userDetails.status,
+      },
+    ]);
 
     Logger.success(
       "Verified User's Username, User Role, EmployeeName and Status in the Search Result",

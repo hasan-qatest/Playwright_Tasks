@@ -52,6 +52,21 @@ export class BasePage {
     await expect(locator).toContainText(value);
   }
 
+  async verifySearchResultRow(
+    searchText: string,
+    expectedValues: { column: number; value: string }[],
+  ): Promise<Locator> {
+    const row = await this.getSearchResultRow(searchText);
+
+    await expect(row).toBeVisible();
+
+    for (const expected of expectedValues) {
+      const actualValue = await this.getCellText(row, expected.column);
+      expect(actualValue.trim()).toBe(expected.value);
+    }
+    return row;
+  }
+
   async getSearchResultRow(searchText: string): Promise<Locator> {
     return this.page.locator(".oxd-table-row").filter({ hasText: searchText });
   }
