@@ -78,8 +78,11 @@ export class BasePage {
     await this.click(dropdownValue);
   }
 
-  async validateNoInputFieldError(invalidLocator: Locator, validationMessage: string) {
-    await expect(invalidLocator,validationMessage).toHaveCount(0);
+  async validateNoInputFieldError(
+    invalidLocator: Locator,
+    validationMessage: string,
+  ) {
+    await expect(invalidLocator, validationMessage).toHaveCount(0);
   }
 
   async verifyDropdownValue(dropdownLocator: Locator, expectedValue: string) {
@@ -87,5 +90,9 @@ export class BasePage {
     await expect(dropdownLocator).not.toContainText(
       constants.defaultDropdownValue,
     );
+  }
+
+  async waitForLoadingSpinnerToDisappear(locator: Locator): Promise<void> {
+    await locator.first().waitFor({ state: "hidden" });
   }
 }

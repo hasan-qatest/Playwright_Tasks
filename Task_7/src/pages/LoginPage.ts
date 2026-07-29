@@ -4,7 +4,6 @@ import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
 
 export class LoginPage extends BasePage {
-  readonly page: Page;
   readonly loginUsernameInput: Locator;
   readonly loginPasswordInput: Locator;
   readonly loginButton: Locator;
@@ -13,7 +12,6 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.runTimePassword = process.env.PASSWORD;
     this.loginUsernameInput = page.getByRole("textbox", { name: "username" });
     this.loginPasswordInput = page.getByRole("textbox", { name: "password" });
@@ -36,7 +34,7 @@ export class LoginPage extends BasePage {
     ) {
       throw new Error("Orange_HRM Login Page is not visible");
     }
-    await expect(this.loginButton).toBeVisible;
+    await expect(this.loginButton).toBeVisible();
     Logger.success("Orange_HRM Login Screen is Visible");
   }
 

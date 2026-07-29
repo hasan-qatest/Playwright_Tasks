@@ -8,7 +8,6 @@ import {
 } from "../utils/constants";
 
 export class AdminPage extends BasePage {
-  readonly page: Page;
   readonly adminMenu: Locator;
   readonly adminHeader: Locator;
   readonly userManagementTab: Locator;
@@ -34,7 +33,6 @@ export class AdminPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.loadingSpinner = page.locator(".oxd-loading-spinner");
     this.adminMenu = page.getByRole("link", { name: "Admin" });
     this.adminHeader = page.getByRole("heading", { name: "Admin" });
@@ -189,7 +187,7 @@ export class AdminPage extends BasePage {
       constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success("User created successfully");
   }
 
@@ -215,7 +213,7 @@ export class AdminPage extends BasePage {
       constants.userCreationValidationErrorMessage,
     );
     await this.click(this.userSearchButton);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success("Created user selected and searched successfully");
   }
 
@@ -265,7 +263,7 @@ export class AdminPage extends BasePage {
       this.toastMessageElement,
       constants.createUpdateToastMessage,
     );
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Deleted User Name: ${constants.username}`);
   }
@@ -273,7 +271,7 @@ export class AdminPage extends BasePage {
   async verifyUserDeleted() {
     await this.fill(this.usernameInput, constants.username);
     await this.click(this.userSearchButton);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,

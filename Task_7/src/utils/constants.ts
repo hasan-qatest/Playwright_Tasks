@@ -1,8 +1,5 @@
 import { faker } from "@faker-js/faker";
 
-export const default_config = {
-  DEFAULT_TIMEOUT: 120000,
-};
 export const employeeDetails = {
   firstName: faker.person.firstName(),
   middleName: faker.person.middleName(),
@@ -11,6 +8,7 @@ export const employeeDetails = {
 } as const;
 
 export const constants = {
+  DEFAULT_TIMEOUT: 120000,
   deleteRecordToastMessage: "No Records Found",
   createUpdateToastMessage: "Successfully",
   employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
@@ -20,7 +18,7 @@ export const constants = {
   userCreationValidationErrorMessage: "Validation error message is displayed",
   defaultDropdownValue: "-- Select --",
   driverLicenseNumber: "ABCD1234",
-  nationalityDropdownValue:"Indian",
+  nationalityDropdownValue: "Indian",
   maritalStatusDropdownValue: "Married",
 };
 export const EmployeeSearchResultColumns = {

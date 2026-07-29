@@ -4,7 +4,6 @@ import { Logger } from "../utils/logger";
 import { constants, EmployeeSearchResultColumns } from "../utils/constants";
 
 export class PimPage extends BasePage {
-  readonly page: Page;
   readonly employeeListTab: Locator;
   readonly employeeListHeader: Locator;
   readonly addEmployeeTab: Locator;
@@ -31,7 +30,6 @@ export class PimPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.employeeListTab = page.getByRole("link", { name: "Employee List" });
     this.employeeListHeader = page.getByRole("heading", {
       name: "Employee Information",
@@ -48,7 +46,6 @@ export class PimPage extends BasePage {
         has: page.locator("label", { hasText: "Driver's License Number" }),
       })
       .locator("input");
-
     this.employeeIdInput = this.page
       .locator(".oxd-input-group")
       .filter({ hasText: "Employee Id" })
@@ -110,7 +107,7 @@ export class PimPage extends BasePage {
     Logger.success("Add Employee Tab is Visible");
 
     await this.click(this.addEmployeeTab.first());
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success("Clicked Add Employee Tab");
 
     await this.waitForVisible(this.addEmployeeHeader);
@@ -126,7 +123,7 @@ export class PimPage extends BasePage {
     lastName: string;
     employeeId: string;
   }) {
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.fill(this.firstNameInput, newEmployee.firstName);
     await this.fill(this.middleNameInput, newEmployee.middleName);
     await this.fill(this.lastNameInput, newEmployee.lastName);
@@ -151,7 +148,7 @@ export class PimPage extends BasePage {
       constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success("Employee Created/ Saved Successfully");
   }
 
@@ -163,7 +160,7 @@ export class PimPage extends BasePage {
   }) {
     await this.waitForLoadState();
     await this.page.waitForURL(/viewPersonalDetails/);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await expect(this.firstNameInput).toBeVisible();
     await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
@@ -180,7 +177,7 @@ export class PimPage extends BasePage {
     }
     await this.fill(this.employeeIdInput, newEmployee.employeeId);
     await this.click(this.employeeSearchButton);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(
       "Entered Employee ID in the search box and clicked the Search button",
     );
@@ -223,12 +220,12 @@ export class PimPage extends BasePage {
 
     await this.click(editButton);
     await this.waitForLoadState();
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(`Get the details of Employee ID: ${newEmployee.employeeId}`);
   }
 
   async updateEmployeeDetails() {
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.click(this.lastNameInput);
     await this.clearInputField(this.lastNameInput);
     await this.fill(this.lastNameInput, constants.updateLastName);
@@ -246,7 +243,7 @@ export class PimPage extends BasePage {
 
   async verifyEmployeeUpdated() {
     await this.waitForLoadState();
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await expect(this.lastNameInput).toHaveValue(constants.updateLastName);
     await expect(this.driverLicenseInput).toHaveValue(
       constants.driverLicenseNumber,
@@ -271,7 +268,7 @@ export class PimPage extends BasePage {
 
     await this.click(deleteButton);
     await this.click(this.deleteConfirmationButton);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.verifyToastMessage(
       this.toastMessageElement,
       constants.deleteRecordToastMessage,
@@ -283,7 +280,7 @@ export class PimPage extends BasePage {
   async verifyEmployeeDeleted(newEmployee: { employeeId: string }) {
     await this.fill(this.employeeIdInput, newEmployee.employeeId);
     await this.click(this.employeeSearchButton);
-    await this.waitForHidden(this.loadingSpinner);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,

@@ -4,7 +4,6 @@ import { Logger } from "../utils/logger";
 import { constants } from "../utils/constants";
 
 export class DashboardPage extends BasePage {
-  readonly page: Page;
   readonly dashboardHeader: Locator;
   readonly userDropdownButton: Locator;
   readonly logoutLink: Locator;
@@ -14,7 +13,6 @@ export class DashboardPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.page = page;
     this.dashboardHeader = page.getByRole("heading", { name: "Dashboard" });
     this.pimHeader = page.getByRole("heading", { name: "PIM" });
     this.pimMenu = page.getByRole("link", { name: "PIM" });
