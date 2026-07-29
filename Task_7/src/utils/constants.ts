@@ -1,20 +1,8 @@
-import { faker } from "@faker-js/faker";
-
-export const employeeDetails = {
-  firstName: faker.person.firstName(),
-  middleName: faker.person.middleName(),
-  lastName: faker.person.lastName(),
-  employeeId: faker.number.int({ min: 100000, max: 999999 }).toString(),
-} as const;
 
 export const constants = {
   DEFAULT_TIMEOUT: 120000,
   deleteRecordToastMessage: "No Records Found",
   createUpdateToastMessage: "Successfully",
-  employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
-  updateLastName: `${employeeDetails.lastName} Test`,
-  username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName} Test`,
-  password: `${employeeDetails.firstName}${employeeDetails.employeeId}`,
   userCreationValidationErrorMessage: "Validation error message is displayed",
   defaultDropdownValue: "-- Select --",
   driverLicenseNumber: "ABCD1234",

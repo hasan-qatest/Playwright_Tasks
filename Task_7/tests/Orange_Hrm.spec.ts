@@ -1,6 +1,6 @@
 import { test } from "../src/fixtures/TestFixture";
 import { Logger } from "../src/utils/logger";
-import { constants, employeeDetails } from "../src/utils/constants";
+import { employeeDetails, userData } from "../src/utils/TestDataGenerator";
 
 test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
   //Check Password is Set Properly
@@ -158,7 +158,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
     await test.step("Login as the newly created user", async () => {
       //Login Into Orange_HRM
-      await loginPage.login(constants.username, constants.password);
+      await loginPage.login(userData.username, userData.userPassword);
 
       //Verify Orange_HRM Dashboard Page is Visible
       await dashboardPage.verifyDashboardHeaderVisible();

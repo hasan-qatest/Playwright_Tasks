@@ -2,6 +2,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
 import { constants, EmployeeSearchResultColumns } from "../utils/constants";
+import { userData } from "../utils/TestDataGenerator";
 
 export class PimPage extends BasePage {
   readonly employeeListTab: Locator;
@@ -48,7 +49,7 @@ export class PimPage extends BasePage {
       .locator("input");
     this.employeeIdInput = this.page
       .locator(".oxd-input-group")
-      .filter({ hasText: "Employee Id" })
+      .filter({ hasText: /^Employee Id$/ })
       .locator("input");
     this.profileImageUploadInput = page.locator("input[type='file']");
     this.employeeSaveButton = page.getByRole("button", { name: " Save " });
@@ -127,7 +128,7 @@ export class PimPage extends BasePage {
     await this.fill(this.firstNameInput, newEmployee.firstName);
     await this.fill(this.middleNameInput, newEmployee.middleName);
     await this.fill(this.lastNameInput, newEmployee.lastName);
-    await this.fill(this.employeeIdInput, newEmployee.employeeId);
+    newEmployee.employeeId = await this.employeeIdInput.inputValue();
     await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
@@ -228,7 +229,7 @@ export class PimPage extends BasePage {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.click(this.lastNameInput);
     await this.clearInputField(this.lastNameInput);
-    await this.fill(this.lastNameInput, constants.updateLastName);
+    await this.fill(this.lastNameInput, userData.updateLastName);
     await this.fill(this.driverLicenseInput, constants.driverLicenseNumber);
     await this.selectDropdownValue(
       this.nationalityDropdown,
@@ -244,7 +245,7 @@ export class PimPage extends BasePage {
   async verifyEmployeeUpdated() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
-    await expect(this.lastNameInput).toHaveValue(constants.updateLastName);
+    await expect(this.lastNameInput).toHaveValue(userData.updateLastName);
     await expect(this.driverLicenseInput).toHaveValue(
       constants.driverLicenseNumber,
     );

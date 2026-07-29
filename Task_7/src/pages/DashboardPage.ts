@@ -1,7 +1,7 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { constants } from "../utils/constants";
+import { userData } from "../utils/TestDataGenerator";
 
 export class DashboardPage extends BasePage {
   readonly dashboardHeader: Locator;
@@ -70,9 +70,9 @@ export class DashboardPage extends BasePage {
   }
 
   async verifyLoggedInUser() {
-    await expect(this.loggedInUserName).toHaveText(constants.employeeName);
+    await expect(this.loggedInUserName).toHaveText(userData.employeeName);
     Logger.success(
-      `Logged-in user verified successfully: ${constants.employeeName}`,
+      `Logged-in user verified successfully: ${userData.employeeName}`,
     );
   }
 }

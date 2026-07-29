@@ -6,6 +6,7 @@ import {
   userDetails,
   UserSearchResultColumns,
 } from "../utils/constants";
+import { userData } from "../utils/TestDataGenerator";
 
 export class AdminPage extends BasePage {
   readonly adminMenu: Locator;
@@ -152,8 +153,8 @@ export class AdminPage extends BasePage {
     );
     await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
 
-    await this.fill(this.employeeNameInput, constants.username);
-    await this.page.getByText(constants.username, { exact: true }).click();
+    await this.fill(this.employeeNameInput, userData.username);
+    await this.page.getByText(userData.username, { exact: true }).click();
 
     await this.selectDropdownValue(
       this.statusDropdown,
@@ -161,9 +162,9 @@ export class AdminPage extends BasePage {
     );
     await this.verifyDropdownValue(this.statusDropdown, userDetails.status);
 
-    await this.fill(this.usernameInput, constants.username);
-    await this.fill(this.passwordInput, constants.password);
-    await this.fill(this.confirmPasswordInput, constants.password);
+    await this.fill(this.usernameInput, userData.username);
+    await this.fill(this.passwordInput, userData.userPassword);
+    await this.fill(this.confirmPasswordInput, userData.userPassword);
     Logger.success(
       "Entered User Role, Employee Name, Status, Password, and Confirm Password details",
     );
@@ -192,15 +193,15 @@ export class AdminPage extends BasePage {
   }
 
   async searchUser() {
-    await this.fill(this.usernameInput, constants.username);
+    await this.fill(this.usernameInput, userData.username);
     await this.selectDropdownValue(
       this.userRoleDropdown,
       this.userRoleDropdownValue,
     );
     await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
 
-    await this.fill(this.employeeNameInput, constants.username);
-    await this.page.getByRole("option", { name: constants.username }).click();
+    await this.fill(this.employeeNameInput, userData.username);
+    await this.page.getByRole("option", { name: userData.username }).click();
 
     await this.selectDropdownValue(
       this.statusDropdown,
@@ -218,14 +219,14 @@ export class AdminPage extends BasePage {
   }
 
   async verifySearchResult() {
-    this.userRow = await this.getSearchResultRow(constants.username);
+    this.userRow = await this.getSearchResultRow(userData.username);
     await expect(this.userRow).toBeVisible();
 
     const actualUserName = await this.getCellText(
       this.userRow,
       UserSearchResultColumns.Username,
     );
-    expect(actualUserName).toBe(constants.username);
+    expect(actualUserName).toBe(userData.username);
 
     const actualUserRole = await this.getCellText(
       this.userRow,
@@ -237,7 +238,7 @@ export class AdminPage extends BasePage {
       this.userRow,
       UserSearchResultColumns.EmployeeName,
     );
-    expect(actualEmployeeName).toBe(constants.employeeName);
+    expect(actualEmployeeName).toBe(userData.employeeName);
 
     const actualStatus = await this.getCellText(
       this.userRow,
@@ -251,7 +252,7 @@ export class AdminPage extends BasePage {
   }
 
   async deleteUser() {
-    this.userRow = await this.getSearchResultRow(constants.username);
+    this.userRow = await this.getSearchResultRow(userData.username);
     await expect(this.userRow).toBeVisible();
 
     const deleteButton = await this.getDeleteButton(this.userRow);
@@ -265,11 +266,11 @@ export class AdminPage extends BasePage {
     );
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForHidden(this.toastMessageElement);
-    Logger.success(`Deleted User Name: ${constants.username}`);
+    Logger.success(`Deleted User Name: ${userData.username}`);
   }
 
   async verifyUserDeleted() {
-    await this.fill(this.usernameInput, constants.username);
+    await this.fill(this.usernameInput, userData.username);
     await this.click(this.userSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.toastMessageElement);
