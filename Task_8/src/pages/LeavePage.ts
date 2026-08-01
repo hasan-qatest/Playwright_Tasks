@@ -2,7 +2,7 @@ import { BasePage } from "./BasePage";
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
 import { constants } from "../utils/constants";
-import { time } from "node:console";
+import { randomLeaveType, userData } from "../utils/TestDataGenerator";
 
 export class LeavePage extends BasePage {
   readonly leaveMenu: Locator;
@@ -11,8 +11,8 @@ export class LeavePage extends BasePage {
   readonly configureTab: Locator;
   readonly leaveTypesTabHeader: Locator;
   readonly leaveTypesSubTab: Locator;
-  readonly entitlementsTab: Locator;
-  readonly addEntitlementsSubTab: Locator;
+  readonly entitlementTab: Locator;
+  readonly addEntitlementSubTab: Locator;
   readonly addLeaveTypeButton: Locator;
   readonly addLeaveTypeHeader: Locator;
   readonly loadingSpinner: Locator;
@@ -20,7 +20,18 @@ export class LeavePage extends BasePage {
   readonly saveLeaveTypeButton: Locator;
   readonly validationErrorMessage: Locator;
   readonly toastMessageElement: Locator;
-  readonly recordsFoundLabel: Locator;
+  readonly recordList: Locator;
+  readonly deleteConfirmationButton: Locator;
+  readonly employeeNameInput: Locator;
+  readonly leaveTypeDropdown: Locator;
+  readonly leaveTypeDropdownValue: Locator;
+  readonly entitlementInput: Locator;
+  readonly entitlementSaveButton: Locator;
+  readonly confirmAddEntitlementButton: Locator;
+  readonly leaveEntitlementsList: Locator;
+  readonly employeeEntitlementSubTab: Locator;
+  readonly searchButton: Locator;
+  leaveEntitlementsRow!: Locator;
   leaveTypeRow!: Locator;
 
   constructor(page: Page) {
@@ -47,11 +58,15 @@ export class LeavePage extends BasePage {
       name: "Add Leave Type",
       exact: true,
     });
-    this.entitlementsTab = page.locator(".oxd-topbar-body-nav-tab-item", {
-      hasText: /^Leave List$/,
+    this.entitlementTab = page.locator(".oxd-topbar-body-nav-tab-item", {
+      hasText: /^Entitlements $/,
     });
-    this.addEntitlementsSubTab = page.getByRole("menuitem", {
+    this.addEntitlementSubTab = page.getByRole("menuitem", {
       name: "Add Entitlements",
+      exact: true,
+    });
+    this.employeeEntitlementSubTab = page.getByRole("menuitem", {
+      name: "Employee Entitlements",
       exact: true,
     });
     this.addLeaveTypeButton = page.locator("button").filter({
@@ -67,7 +82,36 @@ export class LeavePage extends BasePage {
       ".oxd-input-field-error-message",
     );
     this.toastMessageElement = page.locator(".oxd-text--toast-message");
-    this.recordsFoundLabel = page.getByText(/Records Found/);
+    this.leaveEntitlementsList = page.getByText(/Leave Entitlements/);
+    this.recordList = page.getByText(/\(\d+\)\sRecords?\sFound/);
+    // this.confirmDeleteButton = page.locator("button").filter({
+    //   hasText: /^\s* Yes, Delete \s*$/,
+    // });
+    this.deleteConfirmationButton = page.getByRole("button", {
+      name: " Yes, Delete ",
+    });
+    this.employeeNameInput = page
+      .locator(".oxd-input-group", {
+        has: page.locator("label", { hasText: "Employee Name" }),
+      })
+      .locator("input");
+    this.leaveTypeDropdown = page.locator(".oxd-input-group", {
+      has: page.locator("label", { hasText: "Leave Type" }),
+    });
+    this.leaveTypeDropdownValue = page.locator(".oxd-select-option", {
+      hasText: randomLeaveType.leaveTypeName,
+    });
+    this.entitlementInput = this.page
+      .locator(".oxd-input-group")
+      .filter({ hasText: "Entitlement" })
+      .locator("input");
+    this.entitlementSaveButton = page.getByRole("button", { name: " Save " });
+    this.confirmAddEntitlementButton = page.getByRole("button", {
+      name: " Confirm ",
+    });
+    this.searchButton = page.getByRole("button", {
+      name: " Search ",
+    });
   }
   async clickLeaveMenu() {
     await this.waitForLoadState();
@@ -90,7 +134,6 @@ export class LeavePage extends BasePage {
     if (!(await this.isVisible(this.configureTab))) {
       throw new Error("Configure Tab Not Visible");
     }
-    Logger.success("Configure Menu is Visible");
     await this.click(this.configureTab);
     Logger.success("Clicked Configure Tab");
     await this.click(this.leaveTypesSubTab);
@@ -124,18 +167,14 @@ export class LeavePage extends BasePage {
       throw new Error("Save Leave Types Button Not Visible");
     }
     Logger.success("Save Leave Types Button is Visible");
-    await this.fill(this.leaveTypeNameInput, constants.leaveTypeName);
-    await this.click(this.saveLeaveTypeButton);
-    Logger.success("Save Leave Types Button is Clicked");
-
-    await expect(this.validationErrorMessage).toBeVisible({
-      timeout: 10000,
-    });
-
+    await this.fill(this.leaveTypeNameInput, randomLeaveType.leaveTypeName);
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
       constants.recordCreationValidationErrorMessage,
     );
+    await this.click(this.saveLeaveTypeButton);
+    Logger.success("Save Leave Types Button is Clicked");
+    await this.waitForLoadState("networkidle");
     await this.verifyToastMessage(
       this.toastMessageElement,
       constants.createUpdateToastMessage,
@@ -143,19 +182,93 @@ export class LeavePage extends BasePage {
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(
-      `New Leave Type ${constants.leaveTypeName} Saved Successfully`,
+      `New Leave Type '${randomLeaveType.leaveTypeName}' Saved Successfully`,
     );
+  }
+
+  async addLeaveEntitlementsForEmployee() {
+    await this.waitForLoadState("networkidle");
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    await this.waitForVisible(this.entitlementTab);
+    if (!(await this.isVisible(this.entitlementTab))) {
+      throw new Error("Entitlement Tab Not Visible");
+    }
+    await this.click(this.entitlementTab);
+    await this.click(this.addEntitlementSubTab);
+    Logger.success("Clicked Add Entitlement Tab");
+    await this.fill(this.employeeNameInput, userData.username);
+    await this.page.getByText(userData.username, { exact: true }).click();
+    await this.click(this.leaveTypeDropdown);
+    await this.click(this.leaveTypeDropdownValue);
+    await this.fill(this.entitlementInput, constants.entitlementCount);
+    await this.validateNoInputFieldError(
+      this.validationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
+    );
+    await this.click(this.entitlementSaveButton);
+    await this.click(this.confirmAddEntitlementButton);
+    await this.verifyToastMessage(
+      this.toastMessageElement,
+      constants.createUpdateToastMessage,
+    );
+    await this.waitForHidden(this.toastMessageElement);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    Logger.success("Filled Employee name, Leave Type and Entitlement fields");
+  }
+
+  async verifyLeaveEntitlements() {
+    await this.waitForLoadState();
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    await this.waitForVisible(this.entitlementTab);
+    await this.click(this.entitlementTab);
+    await this.click(this.employeeEntitlementSubTab);
+    Logger.success("Clicked Employee Entitlement Tab");
+    await this.fill(this.employeeNameInput, userData.username);
+    await this.page.getByText(userData.username, { exact: true }).click();
+    await this.click(this.searchButton);
+    await this.waitForLoadState("networkidle");
+    Logger.success("Filled Employee Details for Leave Entitlements");
+    await this.waitForVisible(this.recordList);
+    if (!(await this.isVisible(this.recordList))) {
+      throw new Error("Leave Entitlements List Not Visible");
+    }
+    Logger.success("Leave Entitlements List is Visible");
+
+    this.leaveEntitlementsRow = await this.getSearchResultRow(
+      randomLeaveType.leaveTypeName,
+    );
+    await expect(this.leaveEntitlementsRow).toBeVisible();
+    Logger.success(`${randomLeaveType.leaveTypeName} is Visible`);
   }
 
   async deleteLeaveType() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
-    if (!(await this.isVisible(this.recordsFoundLabel))) {
-      throw new Error("Leave Type Records Not Visible");
+    await this.waitForLoadState("networkidle");
+    await this.waitForVisible(this.recordList);
+    if (!(await this.isVisible(this.recordList))) {
+      throw new Error("Leave Type List Not Visible");
     }
-    Logger.success("Leave Types Records is Visible");
-    this.leaveTypeRow = await this.getTableRowByText(constants.leaveTypeName);
-    await this.clickDeleteButtonInRow(this.leaveTypeRow);
-    Logger.success("Leave Type Records is Deleted");
+    this.leaveTypeRow = await this.getSearchResultRow(
+      randomLeaveType.leaveTypeName,
+    );
+    const tempDeleteButton = await this.getDeleteButton(this.leaveTypeRow);
+    await this.click(tempDeleteButton);
+    await this.click(this.deleteConfirmationButton);
+    await this.waitForLoadState("networkidle");
+    Logger.success("Clicked delete Leave Type Record");
+    await this.verifyToastMessage(
+      this.toastMessageElement,
+      constants.createUpdateToastMessage,
+    );
+    await this.waitForHidden(this.toastMessageElement);
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    Logger.success(
+      `Leave Type Records '${randomLeaveType.leaveTypeName}' is Deleted`,
+    );
+  }
+
+  async verifyLeaveTypeDeleted() {
+    console.log("Test verifyLeaveTypeDeleted");
   }
 }

@@ -7,7 +7,7 @@ export const constants = {
   driverLicenseNumber: "ABCD1234",
   nationalityDropdownValue: "Indian",
   maritalStatusDropdownValue: "Married",
-  leaveTypeName: "Casual Leave",
+  entitlementCount: "10",
 };
 export const EmployeeSearchResultColumns = {
   EMPLOYEE_ID: 1,

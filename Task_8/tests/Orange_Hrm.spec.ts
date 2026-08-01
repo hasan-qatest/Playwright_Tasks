@@ -37,7 +37,7 @@ test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
 test.describe("Orange-HRM Employee and User Management ", async () => {
   test.describe.configure({ mode: "serial" });
 
-  test.skip("Employee Management Flow", async ({
+  test("Employee Management Flow", async ({
     dashboardPage,
     pimPage,
   }, testInfo) => {
@@ -108,7 +108,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test.skip("User Creation Flow", async ({ adminPage }, testInfo) => {
+  test("User Creation Flow", async ({ adminPage }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
         "Employee Management Flow failed, skipping test 'Orange-HRM Admin Management FLow and logout'",
@@ -189,16 +189,28 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //Enter Leave Type Details to create New
       await leavePage.enterLeaveTypeDetails();
+    });
 
-      //Delete Created Leave Type
-      await leavePage.deleteLeaveType();
+    await test.step("Add Leave Entitlement for the Employee", async () => {
+      //Add Leave Entitlement for the Employee
+      await leavePage.addLeaveEntitlementsForEmployee();
+
+      //Verify Added Leave Entitlement for the Employee
+      await leavePage.verifyLeaveEntitlements();
+
+      // //Click Leave Type Sub Tab
+      // await leavePage.clickLeaveTypeSubTab();
+
+      // //Delete Created Leave Type
+      // await leavePage.deleteLeaveType();
     });
   });
 
-  test.skip("Delete the created user and employee", async ({
+  test.skip("Delete the created user, employee and Leave Type ", async ({
     pimPage,
     adminPage,
     dashboardPage,
+    leavePage,
   }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
@@ -206,7 +218,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       );
       return;
     }
-    await test.step("Delete Created User and Employee", async () => {
+    await test.step("Delete Created User", async () => {
       //Click Admin Menu
       await adminPage.clickAdminMenu();
 
@@ -224,7 +236,9 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //Verify Employee Deletion
       await adminPage.verifyUserDeleted();
+    });
 
+    await test.step("Delete Created Employee", async () => {
       //Click PIM Menu
       await dashboardPage.clickPimMenu();
 
@@ -239,6 +253,20 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //Verify Employee Deletion
       await pimPage.verifyEmployeeDeleted(employeeDetails);
+    });
+
+    await test.step("Delete Created Leave Type", async () => {
+      // //Click Leave Menu
+      // await leavePage.clickLeaveMenu();
+
+      // //Click Leave Type Sub Tab
+      // await leavePage.clickLeaveTypeSubTab();
+
+      // //Delete Created Leave Type
+      // await leavePage.deleteLeaveType();
+
+      // //Verify Leave Type Deletion
+      // await pimPage.verifyLeaveTypeDeleted();
     });
   });
 });

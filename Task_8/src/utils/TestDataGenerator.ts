@@ -7,6 +7,10 @@ export const employeeDetails = {
   employeeId: "",
 } as const;
 
+export const randomLeaveType = {
+  leaveTypeName: `Casual Leave-${faker.string.alphanumeric(6).toUpperCase()}`,
+};
+
 export const userData = {
   employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
   updateLastName: `${employeeDetails.lastName} Test`,

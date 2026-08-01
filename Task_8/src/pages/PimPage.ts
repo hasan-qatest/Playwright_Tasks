@@ -136,6 +136,10 @@ export class PimPage extends BasePage {
     await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
+    await this.validateNoInputFieldError(
+      this.validationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
+    );
     Logger.success(
       `New Employee Details Entered Successfully
     First Name : ${newEmployee.firstName}

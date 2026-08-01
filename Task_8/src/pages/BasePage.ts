@@ -67,6 +67,9 @@ export class BasePage {
     return row;
   }
 
+  async getTableRowByText(text: string): Promise<Locator> {
+    return this.page.locator(".oxd-table-row").filter({ hasText: text });
+  }
   async getSearchResultRow(searchText: string): Promise<Locator> {
     return this.page.locator(".oxd-table-row").filter({ hasText: searchText });
   }
@@ -111,15 +114,12 @@ export class BasePage {
     await locator.first().waitFor({ state: "hidden" });
   }
 
-  async getTableRowByText(text: string): Promise<Locator> {
-    return this.page.locator(".oxd-table-row").filter({ hasText: text });
-  }
-  async clickDeleteButtonInRow(row: Locator) {
-    await row
-      .locator("button")
-      .filter({
-        has: this.page.locator(".bi-trash"),
-      })
-      .click();
-  }
+  // async clickDeleteButtonInRow(row: Locator) {
+  //   await row
+  //     .locator("button")
+  //     .filter({
+  //       has: this.page.locator(".bi-trash"),
+  //     })
+  //     .click();
+  // }
 }
