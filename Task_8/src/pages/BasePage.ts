@@ -67,11 +67,11 @@ export class BasePage {
     return row;
   }
 
-  async getTableRowByText(text: string): Promise<Locator> {
-    return this.page.locator(".oxd-table-row").filter({ hasText: text });
-  }
   async getSearchResultRow(searchText: string): Promise<Locator> {
-    return this.page.locator(".oxd-table-row").filter({ hasText: searchText });
+    return this.page
+      .locator(".oxd-table-row")
+      .filter({ hasText: searchText })
+      .first();
   }
 
   // .oxd-table-cell order: [checkbox, id, name, lastName, ...] — keep EmployeeColumns in sync
@@ -113,13 +113,4 @@ export class BasePage {
   async waitForLoadingSpinnerToDisappear(locator: Locator): Promise<void> {
     await locator.first().waitFor({ state: "hidden" });
   }
-
-  // async clickDeleteButtonInRow(row: Locator) {
-  //   await row
-  //     .locator("button")
-  //     .filter({
-  //       has: this.page.locator(".bi-trash"),
-  //     })
-  //     .click();
-  // }
 }

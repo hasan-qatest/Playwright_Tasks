@@ -45,7 +45,7 @@ export class PimPage extends BasePage {
     this.lastNameInput = page.getByPlaceholder("Last Name");
     this.driverLicenseInput = page
       .locator(".oxd-input-group", {
-        has: page.locator("label", { hasText: "Driver's License Number" }),
+        has: page.locator("label", { hasText: "Driver License Number" }),
       })
       .locator("input");
     this.employeeIdInput = this.page
@@ -91,7 +91,6 @@ export class PimPage extends BasePage {
     if (!(await this.isVisible(this.employeeListTab))) {
       throw new Error("Employee List Tab is Not Visible");
     }
-    Logger.success("Employee List Tab is Visible");
 
     await this.click(this.employeeListTab.first());
     Logger.success("Clicked Employee List Tab");
@@ -109,7 +108,6 @@ export class PimPage extends BasePage {
     if (!(await this.isVisible(this.addEmployeeTab))) {
       throw new Error("Add Employee Tab is Not Visible");
     }
-    Logger.success("Add Employee Tab is Visible");
 
     await this.click(this.addEmployeeTab.first());
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
@@ -191,9 +189,7 @@ export class PimPage extends BasePage {
     await this.fill(this.employeeIdInput, newEmployee.employeeId);
     await this.click(this.employeeSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
-    Logger.success(
-      `Entered Employee ID ${newEmployee.employeeId} in the search box and clicked the Search button`,
-    );
+    Logger.success(`Searched for Employee ID "${newEmployee.employeeId}"`);
   }
 
   async verifyEmployeeSearchResult(newEmployee: {
@@ -220,6 +216,7 @@ export class PimPage extends BasePage {
   }
 
   async ClickUpdateButton(newEmployee: { employeeId: string }) {
+    await this.waitForLoadState("networkidle");
     this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 

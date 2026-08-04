@@ -35,11 +35,7 @@ export class DashboardPage extends BasePage {
     if (!(await this.isVisible(this.pimMenu))) {
       throw new Error("PIM Menu is Not Visible");
     }
-    Logger.success("PIM Menu is Visible");
-
     await this.click(this.pimMenu.first());
-    Logger.success("Clicked PIM Menu");
-
     await this.waitForVisible(this.pimHeader);
     if (!(await this.isVisible(this.pimHeader))) {
       throw new Error("PIM Header is Not Visible");
@@ -52,8 +48,6 @@ export class DashboardPage extends BasePage {
     if (!(await this.isVisible(this.userDropdownButton))) {
       throw new Error("User menu is Not Visible");
     }
-    Logger.success("User Menu is Visible");
-
     await this.click(this.userDropdownButton);
     Logger.success("Clicked User Menu");
   }
@@ -64,15 +58,17 @@ export class DashboardPage extends BasePage {
       throw new Error("Logout Link is Not Visible");
     }
     Logger.success("Logout Link is Visible");
-
     await this.click(this.logoutLink);
     Logger.success("User Logout Successfully");
   }
 
   async verifyLoggedInUser() {
+    if (!(await this.isVisible(this.loggedInUserName))) {
+      throw new Error("Logged-in User Name Not Visible");
+    }
     await expect(this.loggedInUserName).toHaveText(userData.employeeName);
     Logger.success(
-      `Logged-in user verified successfully: ${userData.employeeName}`,
+      `Logged-in User Verified Successfully: ${userData.employeeName}`,
     );
   }
 }

@@ -100,7 +100,6 @@ export class AdminPage extends BasePage {
     if (!(await this.isVisible(this.adminMenu))) {
       throw new Error("Admin Menu is Not Visible");
     }
-    Logger.success("Admin Menu is Visible");
     await this.click(this.adminMenu);
     Logger.success("Clicked Admin Menu");
     await this.waitForVisible(this.adminHeader);
@@ -166,7 +165,7 @@ export class AdminPage extends BasePage {
     await this.fill(this.passwordInput, userData.userPassword);
     await this.fill(this.confirmPasswordInput, userData.userPassword);
     Logger.success(
-      "Entered User Role, Employee Name, Status, Password, and Confirm Password details",
+      `Entered User Role, Employee Name, Status, Username ${userData.username}, Password, and Confirm Password details`,
     );
   }
 

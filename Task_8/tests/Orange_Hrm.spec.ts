@@ -145,29 +145,6 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test.skip("@skipBeforeEach Login as the newly created user and verify successful login", async ({
-    loginPage,
-    dashboardPage,
-  }, testInfo) => {
-    if (testInfo.status !== testInfo.expectedStatus) {
-      Logger.warn(
-        "Employee Management or User Creation Flow failed, skipping test 'Logout Flow'",
-      );
-      return;
-    }
-
-    await test.step("Login as the newly created user", async () => {
-      //Login Into Orange_HRM
-      await loginPage.login(userData.username, userData.userPassword);
-
-      //Verify Orange_HRM Dashboard Page is Visible
-      await dashboardPage.verifyDashboardHeaderVisible();
-
-      //Verify Logged Username
-      await dashboardPage.verifyLoggedInUser();
-    });
-  });
-
   test("Create Leave Type and Assign Leave to Created user", async ({
     leavePage,
   }, testInfo) => {
@@ -191,7 +168,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.enterLeaveTypeDetails();
     });
 
-    await test.step("Add Leave Entitlement for the Employee", async () => {
+    await test.step("Add Leave Entitlement for the Employee", async ({}) => {
       //Add Leave Entitlement for the Employee
       await leavePage.addLeaveEntitlementsForEmployee();
 
@@ -206,7 +183,58 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
   });
 
-  test.skip("Delete the created user, employee and Leave Type ", async ({
+  test("@skipBeforeEach Login as the newly created user and Apply Leave", async ({
+    loginPage,
+    dashboardPage,
+    leavePage,
+  }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      Logger.warn(
+        "Employee Management or User Creation Flow failed, skipping test 'Logout Flow'",
+      );
+      return;
+    }
+
+    await test.step("Login as the newly created user", async () => {
+      //Login Into Orange_HRM
+      await loginPage.login(userData.username, userData.userPassword);
+
+      //Verify Orange_HRM Dashboard Page is Visible
+      await dashboardPage.verifyDashboardHeaderVisible();
+
+      //Verify Logged Username
+      await dashboardPage.verifyLoggedInUser();
+    });
+
+    await test.step("Apply Leave as a Employee", async () => {
+      //Click Leave Menu
+      await leavePage.clickLeaveMenu();
+
+      //Apply Leave as a Employee
+      await leavePage.applyEmployeeLeave();
+
+      //verify Leave as a Employee
+      await leavePage.verifyEmployeeLeave();
+    });
+  });
+
+  test("Approve employee leave as Admin", async ({ leavePage }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      Logger.warn(
+        "Employee Management, User Creation or User Login Flow failed, skipping test 'Delete Flow and Logout Flow'",
+      );
+      return;
+    }
+    await test.step("Approve employee leave as Admin", async () => {
+      //Click Leave Menu
+      await leavePage.clickLeaveMenu();
+
+      //Approve employee leave as Admins
+      await leavePage.adminApproveEmployeeLeave();
+    });
+  });
+
+  test("Delete the created user, employee and Leave Type", async ({
     pimPage,
     adminPage,
     dashboardPage,
@@ -256,17 +284,14 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     });
 
     await test.step("Delete Created Leave Type", async () => {
-      // //Click Leave Menu
-      // await leavePage.clickLeaveMenu();
-
-      // //Click Leave Type Sub Tab
-      // await leavePage.clickLeaveTypeSubTab();
-
-      // //Delete Created Leave Type
-      // await leavePage.deleteLeaveType();
-
-      // //Verify Leave Type Deletion
-      // await pimPage.verifyLeaveTypeDeleted();
+      //Click Leave Menu
+      await leavePage.clickLeaveMenu();
+      //Click Leave Type Sub Tab
+      await leavePage.clickLeaveTypeSubTab();
+      //Delete Created Leave Type
+      await leavePage.deleteLeaveType();
+      //Verify Leave Type Deletion
+      await leavePage.verifyLeaveTypeDeleted();
     });
   });
 });

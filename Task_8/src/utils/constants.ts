@@ -5,7 +5,7 @@ export const constants = {
   recordCreationValidationErrorMessage: "Validation error message is displayed",
   defaultDropdownValue: "-- Select --",
   driverLicenseNumber: "ABCD1234",
-  nationalityDropdownValue: "Indian",
+  nationalityDropdownValue: "Austrian",
   maritalStatusDropdownValue: "Married",
   entitlementCount: "10",
 };
@@ -26,3 +26,22 @@ export const userDetails = {
   userRole: "ESS",
   status: "Enabled",
 } as const;
+
+export const employeeLeaveList = {
+  date: 1,
+  employeeName: 2,
+  leaveType: 3,
+  leaveBalance: 4,
+  numberOfDays: 5,
+  status: 6,
+  comments: 7,
+  actions: 8,
+};
+
+export const leaveList = {
+  comment: "Casual Leave",
+  partialDays: `Full Days`,
+  duration: `Specify Time`,
+  employeeLeaveAction: `Cancel`,
+  adminLeaveAction: `Approve`,
+};

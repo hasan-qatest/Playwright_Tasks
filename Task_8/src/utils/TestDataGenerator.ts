@@ -7,7 +7,7 @@ export const employeeDetails = {
   employeeId: "",
 } as const;
 
-export const randomLeaveType = {
+export const leaveType = {
   leaveTypeName: `Casual Leave-${faker.string.alphanumeric(6).toUpperCase()}`,
 };
 
@@ -19,3 +19,21 @@ export const userData = {
     return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
   },
 } as const;
+
+export function getTodayDate(): string {
+  const today = new Date();
+  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(today.getDate()).padStart(2, "0")}`;
+}
+
+export function getTomorrowDate(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  return `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(tomorrow.getDate()).padStart(2, "0")}`;
+}
