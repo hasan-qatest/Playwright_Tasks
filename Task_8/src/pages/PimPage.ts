@@ -45,7 +45,7 @@ export class PimPage extends BasePage {
     this.lastNameInput = page.getByPlaceholder("Last Name");
     this.driverLicenseInput = page
       .locator(".oxd-input-group", {
-        has: page.locator("label", { hasText: "Driver License Number" }),
+        has: page.locator("label", { hasText: "Driver's License Number" }),
       })
       .locator("input");
     this.employeeIdInput = this.page

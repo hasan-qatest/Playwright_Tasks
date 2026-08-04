@@ -1,6 +1,7 @@
 import { test } from "../src/fixtures/TestFixture";
 import { Logger } from "../src/utils/logger";
 import { employeeDetails, userData } from "../src/utils/TestDataGenerator";
+import { leaveList } from "../src/utils/constants";
 
 test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
   //Check Password is Set Properly
@@ -174,12 +175,6 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //Verify Added Leave Entitlement for the Employee
       await leavePage.verifyLeaveEntitlements();
-
-      // //Click Leave Type Sub Tab
-      // await leavePage.clickLeaveTypeSubTab();
-
-      // //Delete Created Leave Type
-      // await leavePage.deleteLeaveType();
     });
   });
 
@@ -214,14 +209,14 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.applyEmployeeLeave();
 
       //verify Leave as a Employee
-      await leavePage.verifyEmployeeLeave();
+      await leavePage.verifyEmployeeLeave(leaveList.leaveActionCancel);
     });
   });
 
   test("Approve employee leave as Admin", async ({ leavePage }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
-        "Employee Management, User Creation or User Login Flow failed, skipping test 'Delete Flow and Logout Flow'",
+        "Employee Management, User Creation or User Login Flow failed, skipping test 'Verify, Delete Flow and Logout Flow'",
       );
       return;
     }
@@ -230,7 +225,39 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.clickLeaveMenu();
 
       //Approve employee leave as Admins
-      await leavePage.adminApproveEmployeeLeave();
+      await leavePage.adminApproveEmployeeLeave(leaveList.leaveActionApprove);
+    });
+  });
+
+  test("@skipBeforeEach Login as an employee and verify the leave approval", async ({
+    leavePage,
+    loginPage,
+    dashboardPage,
+  }, testInfo) => {
+    if (testInfo.status !== testInfo.expectedStatus) {
+      Logger.warn(
+        "Employee Management, User Creation or User Login Flow failed, skipping test 'Delete Flow and Logout Flow'",
+      );
+      return;
+    }
+    //Login As Employee
+    test.step("Login As Employee", async () => {
+      //Login Into Orange_HRM
+      await loginPage.login(userData.username, userData.userPassword);
+
+      //Verify Orange_HRM Dashboard Page is Visible
+      await dashboardPage.verifyDashboardHeaderVisible();
+
+      //Verify Logged Username
+      await dashboardPage.verifyLoggedInUser();
+    });
+
+    test.step("Verify the leave approval as a employee", async () => {
+      //Click Leave Menu
+      await leavePage.clickLeaveMenu();
+
+      //verify Leave as a Employee
+      await leavePage.verifyEmployeeLeave(leaveList.leaveActionApprove);
     });
   });
 
@@ -242,7 +269,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
   }, testInfo) => {
     if (testInfo.status !== testInfo.expectedStatus) {
       Logger.warn(
-        "Employee Management or User Creation Flow failed, skipping test 'Logout Flow'",
+        "Employee Management or User Creation or Verify Leave Flow failed, skipping test 'Logout Flow'",
       );
       return;
     }
@@ -286,10 +313,13 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     await test.step("Delete Created Leave Type", async () => {
       //Click Leave Menu
       await leavePage.clickLeaveMenu();
+
       //Click Leave Type Sub Tab
       await leavePage.clickLeaveTypeSubTab();
+
       //Delete Created Leave Type
       await leavePage.deleteLeaveType();
+
       //Verify Leave Type Deletion
       await leavePage.verifyLeaveTypeDeleted();
     });

@@ -356,7 +356,7 @@ export class LeavePage extends BasePage {
     Logger.success("Employee leave applied successfully");
   }
 
-  async verifyEmployeeLeave() {
+  async verifyEmployeeLeave(leaveAction: string) {
     await this.waitForLoadState();
     await this.waitForVisible(this.employeeLeaveTab);
     if (!(await this.isVisible(this.employeeLeaveTab))) {
@@ -381,11 +381,13 @@ export class LeavePage extends BasePage {
       this.employeeLeaveRow,
       employeeLeaveList.actions,
     );
-    await expect(tempActions).toBe(leaveList.employeeLeaveAction);
-    Logger.success(`Employee Leave ${leaveType.leaveTypeName} is Visible`);
+    await expect(tempActions).toBe(leaveAction);
+    Logger.success(
+      `Employee Leave ${leaveType.leaveTypeName} is Visible Action ${leaveAction}`,
+    );
   }
 
-  async adminApproveEmployeeLeave() {
+  async adminApproveEmployeeLeave(leaveAction: string) {
     await this.waitForLoadState();
     await this.fill(this.employeeNameInput, userData.employeeName);
     await this.waitForLoadState("networkidle");
@@ -402,13 +404,16 @@ export class LeavePage extends BasePage {
       employeeLeaveList.leaveType,
     );
     await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
-    
+
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,
       employeeLeaveList.actions,
     );
-    await expect(tempActions).toContain(leaveList.adminLeaveAction);
+    await expect(tempActions).toContain(leaveAction);
     await this.isVisible(this.leaveApproveButton);
-    Logger.success("Employee's Leave Approve Button is Visible");
+    await this.click(this.leaveApproveButton);
+    Logger.success(
+      `Clicked Leave Approve Button Employee "${userData.employeeName}"`,
+    );
   }
 }

@@ -42,6 +42,6 @@ export const leaveList = {
   comment: "Casual Leave",
   partialDays: `Full Days`,
   duration: `Specify Time`,
-  employeeLeaveAction: `Cancel`,
-  adminLeaveAction: `Approve`,
+  leaveActionCancel: `Cancel`,
+  leaveActionApprove: `Approve`,
 };
