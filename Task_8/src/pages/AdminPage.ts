@@ -102,6 +102,7 @@ export class AdminPage extends BasePage {
     }
     await this.click(this.adminMenu);
     Logger.success("Clicked Admin Menu");
+    await this.waitForLoadState();
     await this.waitForVisible(this.adminHeader);
     if (!(await this.isVisible(this.adminHeader))) {
       throw new Error("Admin Header is Not Visible");
