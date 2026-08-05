@@ -171,7 +171,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.addLeaveEntitlementsForEmployee();
 
       //Verify Added Leave Entitlement for the Employee
-      await leavePage.verifyLeaveEntitlements();
+      await leavePage.verifyEmployeeLeaveEntitlement();
     });
   });
 
@@ -222,7 +222,9 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.clickLeaveMenu();
 
       //Approve employee leave as Admins
-      await leavePage.adminApproveEmployeeLeave(LeaveListRowOrder.leaveActionApprove);
+      await leavePage.adminApproveEmployeeLeave(
+        LeaveListRowOrder.leaveActionApprove,
+      );
     });
   });
 
@@ -254,7 +256,9 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.clickLeaveMenu();
 
       //verify Leave as a Employee
-      await leavePage.verifyEmployeeLeave(LeaveListRowOrder.leaveActionAfterApprove);
+      await leavePage.verifyEmployeeLeave(
+        LeaveListRowOrder.leaveActionAfterApprove,
+      );
     });
   });
 

@@ -63,7 +63,7 @@ export class PimPage extends BasePage {
     this.deleteConfirmationButton = page.getByRole("button", {
       name: " Yes, Delete ",
     });
-    this.toastMessageElement = page.locator(".oxd-text--toast-message");
+    this.toastMessageElement = page.locator(".oxd-text--toast-message").first();
     this.nationalityDropdown = page
       .locator(".oxd-input-group", {
         has: page.locator("label", { hasText: "Nationality" }),
@@ -94,9 +94,7 @@ export class PimPage extends BasePage {
 
     await this.click(this.employeeListTab.first());
     Logger.success("Clicked Employee List Tab");
-
     await this.waitForLoadState();
-    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.employeeListHeader);
     if (!(await this.isVisible(this.employeeListHeader))) {
       throw new Error("Employee List Header is Not Visible");
@@ -145,8 +143,6 @@ export class PimPage extends BasePage {
   }
 
   async saveEmployee() {
-    const count = await this.validationErrorMessage.count();
-    console.log(`validationErrorMessage SAVE: ${count}`);
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
       Constants.recordCreationValidationErrorMessage,
@@ -171,7 +167,7 @@ export class PimPage extends BasePage {
     await this.waitForLoadState();
     await this.page.waitForURL(/viewPersonalDetails/);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
-    await expect(this.firstNameInput).toBeVisible();
+    await this.waitForVisible(this.firstNameInput);
     await expect(this.firstNameInput).toHaveValue(newEmployee.firstName);
     await expect(this.middleNameInput).toHaveValue(newEmployee.middleName);
     await expect(this.lastNameInput).toHaveValue(newEmployee.lastName);

@@ -254,7 +254,7 @@ export class LeavePage extends BasePage {
     Logger.success("Filled Employee name, Leave Type and Entitlement fields");
   }
 
-  async verifyLeaveEntitlements() {
+  async verifyEmployeeLeaveEntitlement() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.entitlementTab);

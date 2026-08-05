@@ -197,10 +197,8 @@ export class AdminPage extends BasePage {
     await this.verifyDropdownValue(this.userRoleDropdown, UserDetails.userRole);
 
     await this.fill(this.employeeNameInput, UserData.employeeName);
-    await this.page
-      .getByRole("option", { name: UserData.employeeName })
-      .click();
-
+    await this.page.getByText(UserData.employeeName, { exact: true }).click();
+    
     await this.selectDropdownValue(
       this.statusDropdown,
       this.statusDropdownValue,
@@ -261,6 +259,9 @@ export class AdminPage extends BasePage {
   }
 
   async verifyUserDeleted() {
+    if (!(await this.isVisible(this.usernameInput))) {
+      throw new Error("User Name Input not Visible");
+    }
     await this.fill(this.usernameInput, UserData.username);
     await this.click(this.userSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
