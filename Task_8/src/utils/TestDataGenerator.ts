@@ -12,13 +12,15 @@ export const leaveType = {
 };
 
 export const userData = {
-  employeeName: `${employeeDetails.firstName} ${employeeDetails.lastName} Test`,
   updateLastName: `${employeeDetails.lastName} Test`,
-  username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName} Test`,
+  employeeName: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
+  employeeNameInUserSearchResult: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
+  loggerUserName: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
+  username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
   get userPassword() {
     return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
   },
-} as const;
+};
 
 export function getTodayDate(): string {
   const today = new Date();

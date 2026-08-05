@@ -11,7 +11,6 @@ import {
 export class LeavePage extends BasePage {
   readonly leaveMenu: Locator;
   readonly leaveHeader: Locator;
-  readonly leaveListTab: Locator;
   readonly configureTab: Locator;
   readonly leaveTypesTabHeader: Locator;
   readonly leaveTypesSubTab: Locator;
@@ -40,8 +39,6 @@ export class LeavePage extends BasePage {
   readonly fromDateInput: Locator;
   readonly toDateInput: Locator;
   readonly applyButton: Locator;
-  readonly partialDaysDropdown: Locator;
-  readonly partialDaysDropdownValue: Locator;
   readonly durationDropdown: Locator;
   readonly durationValue: Locator;
   readonly commentTextArea: Locator;
@@ -56,9 +53,6 @@ export class LeavePage extends BasePage {
     this.leaveHeader = page.getByRole("heading", {
       name: "Leave",
       exact: true,
-    });
-    this.leaveListTab = page.locator(".oxd-topbar-body-nav-tab-item", {
-      hasText: /^Leave List$/,
     });
     this.configureTab = page.locator(".oxd-topbar-body-nav-tab-item", {
       hasText: /^Configure $/,
@@ -113,13 +107,6 @@ export class LeavePage extends BasePage {
     });
     this.leaveTypeDropdownValue = page.locator(".oxd-select-option", {
       hasText: leaveType.leaveTypeName,
-    });
-
-    this.partialDaysDropdown = page.locator(".oxd-input-group", {
-      has: page.locator("label", { hasText: "Partial Days" }),
-    });
-    this.partialDaysDropdownValue = page.locator(".oxd-select-option", {
-      hasText: leaveList.partialDays,
     });
     this.durationDropdown = page.locator(".oxd-input-group", {
       has: page.locator("label", { hasText: "Duration" }),
@@ -243,8 +230,8 @@ export class LeavePage extends BasePage {
     await this.click(this.entitlementTab);
     await this.click(this.addEntitlementSubTab);
     Logger.success("Clicked Add Entitlement Tab");
-    await this.fill(this.employeeNameInput, userData.username);
-    await this.page.getByText(userData.username, { exact: true }).click();
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page.getByText(userData.employeeName, { exact: true }).click();
     await this.click(this.leaveTypeDropdown);
     await this.click(this.leaveTypeDropdownValue);
     await this.fill(this.entitlementInput, constants.entitlementCount);
@@ -270,8 +257,8 @@ export class LeavePage extends BasePage {
     await this.click(this.entitlementTab);
     await this.click(this.employeeEntitlementSubTab);
     Logger.success("Clicked Employee Entitlement Tab");
-    await this.fill(this.employeeNameInput, userData.username);
-    await this.page.getByText(userData.username, { exact: true }).click();
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page.getByText(userData.employeeName, { exact: true }).click();
     await this.click(this.searchButton);
     await this.waitForLoadState("networkidle");
     Logger.success("Filled Employee Details for Leave Entitlements");
@@ -341,10 +328,10 @@ export class LeavePage extends BasePage {
       this.leaveTypeDropdown,
       this.leaveTypeDropdownValue,
     );
-    const today = getTomorrowDate();
-    await this.fill(this.fromDateInput, today);
+    const tomorrow = getTomorrowDate();
+    await this.fill(this.fromDateInput, tomorrow);
     await this.clearInputField(this.toDateInput);
-    await this.fill(this.toDateInput, today);
+    await this.fill(this.toDateInput, tomorrow);
     await this.fill(this.commentTextArea, leaveList.comment);
     await this.selectDropdownValue(this.durationDropdown, this.durationValue);
     await this.click(this.applyButton);
@@ -372,16 +359,26 @@ export class LeavePage extends BasePage {
       leaveType.leaveTypeName,
     );
     await expect(this.employeeLeaveRow).toBeVisible();
+
+    const tempDate = await this.getCellText(
+      this.employeeLeaveRow,
+      employeeLeaveList.date,
+    );
+    const tomorrow = `${getTomorrowDate()} (09:00 - 17:00)`;
+    await expect(tempDate).toBe(tomorrow);
+
     const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
       employeeLeaveList.leaveType,
     );
     await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
+
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,
       employeeLeaveList.actions,
     );
     await expect(tempActions).toBe(leaveAction);
+
     Logger.success(
       `Employee Leave ${leaveType.leaveTypeName} is Visible Action ${leaveAction}`,
     );
@@ -392,12 +389,19 @@ export class LeavePage extends BasePage {
     await this.fill(this.employeeNameInput, userData.employeeName);
     await this.waitForLoadState("networkidle");
     await this.page
-      .getByText(userData.username, { exact: true })
+      .getByText(userData.employeeName, { exact: true })
       .first()
       .click();
     await this.click(this.searchButton);
-    this.employeeLeaveRow = await this.getSearchResultRow(userData.username);
+    this.employeeLeaveRow = await this.getSearchResultRow(userData.employeeName);
     await expect(this.employeeLeaveRow).toBeVisible();
+
+    const tempDate = await this.getCellText(
+      this.employeeLeaveRow,
+      employeeLeaveList.date,
+    );
+    const tomorrow = `${getTomorrowDate()} (09:00 - 17:00)`;
+    await expect(tempDate).toBe(tomorrow);
 
     const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
@@ -410,8 +414,15 @@ export class LeavePage extends BasePage {
       employeeLeaveList.actions,
     );
     await expect(tempActions).toContain(leaveAction);
-    await this.isVisible(this.leaveApproveButton);
+
+    if (!(await this.isVisible(this.leaveApproveButton))) {
+      throw new Error("Leave Approve Button is Not Visible");
+    }
     await this.click(this.leaveApproveButton);
+    await this.verifyToastMessage(
+      this.toastMessageElement,
+      constants.createUpdateToastMessage,
+    );
     Logger.success(
       `Clicked Leave Approve Button Employee "${userData.employeeName}"`,
     );

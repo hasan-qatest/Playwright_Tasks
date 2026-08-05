@@ -33,7 +33,6 @@ export const employeeLeaveList = {
   leaveType: 3,
   leaveBalance: 4,
   numberOfDays: 5,
-  status: 6,
   comments: 7,
   actions: 8,
 };
@@ -44,4 +43,5 @@ export const leaveList = {
   duration: `Specify Time`,
   leaveActionCancel: `Cancel`,
   leaveActionApprove: `Approve`,
+  leaveActionAfterApprove: "",
 };

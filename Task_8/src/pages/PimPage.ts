@@ -2,7 +2,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
 import { constants, EmployeeSearchResultColumns } from "../utils/constants";
-import { userData } from "../utils/TestDataGenerator";
+import { userData, employeeDetails } from "../utils/TestDataGenerator";
 
 export class PimPage extends BasePage {
   readonly employeeListTab: Locator;
@@ -96,6 +96,7 @@ export class PimPage extends BasePage {
     Logger.success("Clicked Employee List Tab");
 
     await this.waitForLoadState();
+    await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.employeeListHeader);
     if (!(await this.isVisible(this.employeeListHeader))) {
       throw new Error("Employee List Header is Not Visible");
@@ -130,10 +131,11 @@ export class PimPage extends BasePage {
     await this.fill(this.firstNameInput, newEmployee.firstName);
     await this.fill(this.middleNameInput, newEmployee.middleName);
     await this.fill(this.lastNameInput, newEmployee.lastName);
-    newEmployee.employeeId = await this.employeeIdInput.inputValue();
     await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
+    newEmployee.employeeId = await this.employeeIdInput.inputValue();
+    Logger.success(`Employee ID: ${newEmployee.employeeId}`);
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
       constants.recordCreationValidationErrorMessage,
@@ -209,14 +211,13 @@ export class PimPage extends BasePage {
         value: expectedEmployeeName,
       },
     ]);
-
+    await this.waitForLoadState("networkidle");
     Logger.success(
       `Verified Employee's Name and Employee's ID ${newEmployee.employeeId} in the Search Result`,
     );
   }
 
   async ClickUpdateButton(newEmployee: { employeeId: string }) {
-    await this.waitForLoadState("networkidle");
     this.employeeRow = await this.getSearchResultRow(newEmployee.employeeId);
     await expect(this.employeeRow).toBeVisible();
 
@@ -229,10 +230,11 @@ export class PimPage extends BasePage {
     Logger.success(`Get the details of Employee ID: ${newEmployee.employeeId}`);
   }
 
-  async updateEmployeeDetails() {
+  async updateEmployeeDetails(newEmployee: { lastName: string }) {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.click(this.lastNameInput);
     await this.clearInputField(this.lastNameInput);
+    newEmployee.lastName = `${userData.updateLastName}`;
     await this.fill(this.lastNameInput, userData.updateLastName);
     await this.fill(this.driverLicenseInput, constants.driverLicenseNumber);
     await this.selectDropdownValue(
@@ -249,6 +251,7 @@ export class PimPage extends BasePage {
   async verifyEmployeeUpdated() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    await this.waitForVisible(this.lastNameInput);
     await expect(this.lastNameInput).toHaveValue(userData.updateLastName);
     await expect(this.driverLicenseInput).toHaveValue(
       constants.driverLicenseNumber,

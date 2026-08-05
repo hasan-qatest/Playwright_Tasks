@@ -6,7 +6,7 @@ import {
   userDetails,
   UserSearchResultColumns,
 } from "../utils/constants";
-import { userData } from "../utils/TestDataGenerator";
+import { employeeDetails, userData } from "../utils/TestDataGenerator";
 
 export class AdminPage extends BasePage {
   readonly adminMenu: Locator;
@@ -152,9 +152,9 @@ export class AdminPage extends BasePage {
       this.userRoleDropdownValue,
     );
     await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
-
-    await this.fill(this.employeeNameInput, userData.username);
-    await this.page.getByText(userData.username, { exact: true }).click();
+    userData.employeeName = `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`;
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page.getByText(userData.employeeName, { exact: true }).click();
 
     await this.selectDropdownValue(
       this.statusDropdown,
@@ -200,8 +200,10 @@ export class AdminPage extends BasePage {
     );
     await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
 
-    await this.fill(this.employeeNameInput, userData.username);
-    await this.page.getByRole("option", { name: userData.username }).click();
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page
+      .getByRole("option", { name: userData.employeeName })
+      .click();
 
     await this.selectDropdownValue(
       this.statusDropdown,
@@ -219,6 +221,7 @@ export class AdminPage extends BasePage {
   }
 
   async verifySearchResult() {
+    userData.employeeNameInUserSearchResult = `${employeeDetails.firstName} ${employeeDetails.lastName}`;
     await this.verifySearchResultRow(userData.username, [
       {
         column: UserSearchResultColumns.Username,
@@ -230,7 +233,7 @@ export class AdminPage extends BasePage {
       },
       {
         column: UserSearchResultColumns.EmployeeName,
-        value: userData.employeeName,
+        value: userData.employeeNameInUserSearchResult,
       },
       {
         column: UserSearchResultColumns.Status,

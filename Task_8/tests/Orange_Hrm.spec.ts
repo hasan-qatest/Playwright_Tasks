@@ -88,7 +88,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.verifyEmployeeInformation(employeeDetails);
 
       //Update Employee Details
-      await pimPage.updateEmployeeDetails();
+      await pimPage.updateEmployeeDetails(employeeDetails);
 
       //Click Save Button
       await pimPage.saveEmployee();
@@ -241,7 +241,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       return;
     }
     //Login As Employee
-    test.step("Login As Employee", async () => {
+    await test.step("Login As Employee", async () => {
       //Login Into Orange_HRM
       await loginPage.login(userData.username, userData.userPassword);
 
@@ -252,12 +252,12 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await dashboardPage.verifyLoggedInUser();
     });
 
-    test.step("Verify the leave approval as a employee", async () => {
+    await test.step("Verify the approval leave as a employee", async () => {
       //Click Leave Menu
       await leavePage.clickLeaveMenu();
 
       //verify Leave as a Employee
-      await leavePage.verifyEmployeeLeave(leaveList.leaveActionApprove);
+      await leavePage.verifyEmployeeLeave(leaveList.leaveActionAfterApprove);
     });
   });
 
