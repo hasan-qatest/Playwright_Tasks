@@ -1,7 +1,7 @@
 import { Locator, Page, expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { userData, employeeDetails } from "../utils/TestDataGenerator";
+import { UserData, EmployeeDetails } from "../utils/TestDataGenerator";
 
 export class DashboardPage extends BasePage {
   readonly dashboardHeader: Locator;
@@ -66,10 +66,10 @@ export class DashboardPage extends BasePage {
     if (!(await this.isVisible(this.loggedInUserName))) {
       throw new Error("Logged-in User Name Not Visible");
     }
-    userData.loggerUserName = `${employeeDetails.firstName} ${employeeDetails.lastName}`;
-    await expect(this.loggedInUserName).toHaveText(userData.loggerUserName);
+    UserData.loggerUserName = `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`;
+    await expect(this.loggedInUserName).toHaveText(UserData.loggerUserName);
     Logger.success(
-      `Logged-in User Verified Successfully: ${userData.loggerUserName}`,
+      `Logged-in User Verified Successfully: ${UserData.loggerUserName}`,
     );
   }
 }

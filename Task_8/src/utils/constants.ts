@@ -1,11 +1,11 @@
-export const constants = {
+export const Constants = {
   DEFAULT_TIMEOUT: 120000,
   deleteRecordToastMessage: "No Records Found",
   createUpdateToastMessage: "Successfully",
   recordCreationValidationErrorMessage: "Validation error message is displayed",
   defaultDropdownValue: "-- Select --",
   driverLicenseNumber: "ABCD1234",
-  nationalityDropdownValue: "Austrian",
+  nationalityDropdownValue: "Indian",
   maritalStatusDropdownValue: "Married",
   entitlementCount: "10",
 };
@@ -22,12 +22,12 @@ export const UserSearchResultColumns = {
   Status: 4,
 } as const;
 
-export const userDetails = {
+export const UserDetails = {
   userRole: "ESS",
   status: "Enabled",
 } as const;
 
-export const employeeLeaveList = {
+export const EmployeeLeaveListRowOrder = {
   date: 1,
   employeeName: 2,
   leaveType: 3,
@@ -37,7 +37,7 @@ export const employeeLeaveList = {
   actions: 8,
 };
 
-export const leaveList = {
+export const LeaveListRowOrder = {
   comment: "Casual Leave",
   partialDays: `Full Days`,
   duration: `Specify Time`,

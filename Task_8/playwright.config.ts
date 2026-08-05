@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import "./src/utils/env";
-import { constants } from "./src/utils/constants";
+import { Constants } from "./src/utils/constants";
 
 /**
  * Read environment variables from file.
@@ -14,7 +14,7 @@ import { constants } from "./src/utils/constants";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: constants.DEFAULT_TIMEOUT, // Maximum time for each test
+  timeout: Constants.DEFAULT_TIMEOUT, // Maximum time for each test
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,

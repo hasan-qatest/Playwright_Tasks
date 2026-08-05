@@ -1,24 +1,24 @@
 import { faker } from "@faker-js/faker";
 
-export const employeeDetails = {
+export const EmployeeDetails = {
   firstName: faker.person.firstName(),
   middleName: faker.person.middleName(),
   lastName: faker.person.lastName(),
   employeeId: "",
 } as const;
 
-export const leaveType = {
+export const LeaveType = {
   leaveTypeName: `Casual Leave-${faker.string.alphanumeric(6).toUpperCase()}`,
 };
 
-export const userData = {
-  updateLastName: `${employeeDetails.lastName} Test`,
-  employeeName: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
-  employeeNameInUserSearchResult: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
-  loggerUserName: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
-  username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
+export const UserData = {
+  updateLastName: `${EmployeeDetails.lastName} Test`,
+  employeeName: `${EmployeeDetails.firstName} ${EmployeeDetails.middleName} ${EmployeeDetails.lastName}`,
+  employeeNameInUserSearchResult: `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`,
+  loggerUserName: `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`,
+  username: `${EmployeeDetails.firstName} ${EmployeeDetails.middleName} ${EmployeeDetails.lastName}`,
   get userPassword() {
-    return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
+    return `${EmployeeDetails.firstName}${EmployeeDetails.employeeId}`;
   },
 };
 

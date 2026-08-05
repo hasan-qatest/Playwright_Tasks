@@ -1,10 +1,14 @@
 import { BasePage } from "./BasePage";
 import { expect, Locator, Page } from "@playwright/test";
 import { Logger } from "../utils/logger";
-import { constants, employeeLeaveList, leaveList } from "../utils/constants";
 import {
-  leaveType,
-  userData,
+  Constants,
+  EmployeeLeaveListRowOrder,
+  LeaveListRowOrder,
+} from "../utils/constants";
+import {
+  LeaveType,
+  UserData,
   getTomorrowDate,
 } from "../utils/TestDataGenerator";
 
@@ -106,13 +110,13 @@ export class LeavePage extends BasePage {
       has: page.locator("label", { hasText: "Leave Type" }),
     });
     this.leaveTypeDropdownValue = page.locator(".oxd-select-option", {
-      hasText: leaveType.leaveTypeName,
+      hasText: LeaveType.leaveTypeName,
     });
     this.durationDropdown = page.locator(".oxd-input-group", {
       has: page.locator("label", { hasText: "Duration" }),
     });
     this.durationValue = page.locator(".oxd-select-option", {
-      hasText: leaveList.duration,
+      hasText: LeaveListRowOrder.duration,
     });
 
     this.entitlementInput = this.page
@@ -201,22 +205,22 @@ export class LeavePage extends BasePage {
     if (!(await this.isVisible(this.leaveTypeNameInput))) {
       throw new Error("Leave Types Nama Field Not Visible");
     }
-    await this.fill(this.leaveTypeNameInput, leaveType.leaveTypeName);
+    await this.fill(this.leaveTypeNameInput, LeaveType.leaveTypeName);
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
-      constants.recordCreationValidationErrorMessage,
+      Constants.recordCreationValidationErrorMessage,
     );
     await this.click(this.saveLeaveTypeButton);
     Logger.success("Save Leave Types Button is Clicked");
     await this.waitForLoadState("networkidle");
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      Constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(
-      `New Leave Type '${leaveType.leaveTypeName}' Saved Successfully`,
+      `New Leave Type '${LeaveType.leaveTypeName}' Saved Successfully`,
     );
   }
 
@@ -230,20 +234,20 @@ export class LeavePage extends BasePage {
     await this.click(this.entitlementTab);
     await this.click(this.addEntitlementSubTab);
     Logger.success("Clicked Add Entitlement Tab");
-    await this.fill(this.employeeNameInput, userData.employeeName);
-    await this.page.getByText(userData.employeeName, { exact: true }).click();
+    await this.fill(this.employeeNameInput, UserData.employeeName);
+    await this.page.getByText(UserData.employeeName, { exact: true }).click();
     await this.click(this.leaveTypeDropdown);
     await this.click(this.leaveTypeDropdownValue);
-    await this.fill(this.entitlementInput, constants.entitlementCount);
+    await this.fill(this.entitlementInput, Constants.entitlementCount);
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
-      constants.recordCreationValidationErrorMessage,
+      Constants.recordCreationValidationErrorMessage,
     );
     await this.click(this.entitlementSaveButton);
     await this.click(this.confirmAddEntitlementButton);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      Constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
@@ -257,8 +261,8 @@ export class LeavePage extends BasePage {
     await this.click(this.entitlementTab);
     await this.click(this.employeeEntitlementSubTab);
     Logger.success("Clicked Employee Entitlement Tab");
-    await this.fill(this.employeeNameInput, userData.employeeName);
-    await this.page.getByText(userData.employeeName, { exact: true }).click();
+    await this.fill(this.employeeNameInput, UserData.employeeName);
+    await this.page.getByText(UserData.employeeName, { exact: true }).click();
     await this.click(this.searchButton);
     await this.waitForLoadState("networkidle");
     Logger.success("Filled Employee Details for Leave Entitlements");
@@ -269,10 +273,10 @@ export class LeavePage extends BasePage {
     Logger.success("Leave Entitlements List is Visible");
 
     this.leaveEntitlementsRow = await this.getSearchResultRow(
-      leaveType.leaveTypeName,
+      LeaveType.leaveTypeName,
     );
     await expect(this.leaveEntitlementsRow).toBeVisible();
-    Logger.success(`${leaveType.leaveTypeName} is Visible`);
+    Logger.success(`${LeaveType.leaveTypeName} is Visible`);
   }
 
   async deleteLeaveType() {
@@ -283,7 +287,7 @@ export class LeavePage extends BasePage {
     if (!(await this.isVisible(this.recordList))) {
       throw new Error("Leave Type List Not Visible");
     }
-    this.leaveTypeRow = await this.getSearchResultRow(leaveType.leaveTypeName);
+    this.leaveTypeRow = await this.getSearchResultRow(LeaveType.leaveTypeName);
     const tempDeleteButton = await this.getDeleteButton(this.leaveTypeRow);
     await this.click(tempDeleteButton);
     await this.click(this.deleteConfirmationButton);
@@ -291,12 +295,12 @@ export class LeavePage extends BasePage {
     Logger.success("Clicked delete Leave Type Record");
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      Constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     Logger.success(
-      `Leave Type Records '${leaveType.leaveTypeName}' is Deleted`,
+      `Leave Type Records '${LeaveType.leaveTypeName}' is Deleted`,
     );
   }
 
@@ -309,10 +313,10 @@ export class LeavePage extends BasePage {
       throw new Error("Leave Type List Not Visible");
     }
     await expect(
-      await this.getSearchResultRow(leaveType.leaveTypeName),
+      await this.getSearchResultRow(LeaveType.leaveTypeName),
     ).toHaveCount(0);
     Logger.success(
-      `Leave Type Records '${leaveType.leaveTypeName}' is Not Visible`,
+      `Leave Type Records '${LeaveType.leaveTypeName}' is Not Visible`,
     );
   }
 
@@ -332,13 +336,13 @@ export class LeavePage extends BasePage {
     await this.fill(this.fromDateInput, tomorrow);
     await this.clearInputField(this.toDateInput);
     await this.fill(this.toDateInput, tomorrow);
-    await this.fill(this.commentTextArea, leaveList.comment);
+    await this.fill(this.commentTextArea, LeaveListRowOrder.comment);
     await this.selectDropdownValue(this.durationDropdown, this.durationValue);
     await this.click(this.applyButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      Constants.createUpdateToastMessage,
     );
     Logger.success("Employee leave applied successfully");
   }
@@ -356,62 +360,64 @@ export class LeavePage extends BasePage {
     }
     Logger.success("My Leave List is Visible");
     this.employeeLeaveRow = await this.getSearchResultRow(
-      leaveType.leaveTypeName,
+      LeaveType.leaveTypeName,
     );
     await expect(this.employeeLeaveRow).toBeVisible();
 
     const tempDate = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.date,
+      EmployeeLeaveListRowOrder.date,
     );
     const tomorrow = `${getTomorrowDate()} (09:00 - 17:00)`;
     await expect(tempDate).toBe(tomorrow);
 
     const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.leaveType,
+      EmployeeLeaveListRowOrder.leaveType,
     );
-    await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
+    await expect(tempLeaveType).toBe(LeaveType.leaveTypeName);
 
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.actions,
+      EmployeeLeaveListRowOrder.actions,
     );
     await expect(tempActions).toBe(leaveAction);
 
     Logger.success(
-      `Employee Leave ${leaveType.leaveTypeName} is Visible Action ${leaveAction}`,
+      `Employee Leave ${LeaveType.leaveTypeName} is Visible Action ${leaveAction}`,
     );
   }
 
   async adminApproveEmployeeLeave(leaveAction: string) {
     await this.waitForLoadState();
-    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.fill(this.employeeNameInput, UserData.employeeName);
     await this.waitForLoadState("networkidle");
     await this.page
-      .getByText(userData.employeeName, { exact: true })
+      .getByText(UserData.employeeName, { exact: true })
       .first()
       .click();
     await this.click(this.searchButton);
-    this.employeeLeaveRow = await this.getSearchResultRow(userData.employeeName);
+    this.employeeLeaveRow = await this.getSearchResultRow(
+      UserData.employeeName,
+    );
     await expect(this.employeeLeaveRow).toBeVisible();
 
     const tempDate = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.date,
+      EmployeeLeaveListRowOrder.date,
     );
     const tomorrow = `${getTomorrowDate()} (09:00 - 17:00)`;
     await expect(tempDate).toBe(tomorrow);
 
     const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.leaveType,
+      EmployeeLeaveListRowOrder.leaveType,
     );
-    await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
+    await expect(tempLeaveType).toBe(LeaveType.leaveTypeName);
 
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,
-      employeeLeaveList.actions,
+      EmployeeLeaveListRowOrder.actions,
     );
     await expect(tempActions).toContain(leaveAction);
 
@@ -421,10 +427,10 @@ export class LeavePage extends BasePage {
     await this.click(this.leaveApproveButton);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      constants.createUpdateToastMessage,
+      Constants.createUpdateToastMessage,
     );
     Logger.success(
-      `Clicked Leave Approve Button Employee "${userData.employeeName}"`,
+      `Clicked Leave Approve Button Employee "${UserData.employeeName}"`,
     );
   }
 }
