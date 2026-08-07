@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from "@playwright/test";
-import { Constants } from "../utils/constants";
+import { constants } from "../utils/constants";
 
 export class BasePage {
   readonly page: Page;
@@ -106,7 +106,7 @@ export class BasePage {
   async verifyDropdownValue(dropdownLocator: Locator, expectedValue: string) {
     await expect(dropdownLocator).toContainText(expectedValue);
     await expect(dropdownLocator).not.toContainText(
-      Constants.defaultDropdownValue,
+      constants.defaultDropdownValue,
     );
   }
 

@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import "./src/utils/env";
-import { Constants } from "./src/utils/constants";
+import { constants } from "./src/utils/constants";
 
 /**
  * Read environment variables from file.
@@ -14,7 +14,7 @@ import { Constants } from "./src/utils/constants";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: Constants.DEFAULT_TIMEOUT, // Maximum time for each test
+  timeout: constants.DEFAULT_TIMEOUT, // Maximum time for each test
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -37,7 +37,7 @@ export default defineConfig({
 
     headless: false,
     screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    video: "on",
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "retain-on-failure",
     // actionTimeout: 15000, // Maximum time for click(), fill(), etc.

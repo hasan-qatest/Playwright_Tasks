@@ -20,11 +20,11 @@ export class LeavePage extends BasePage {
   readonly leaveTypesSubTab: Locator;
   readonly entitlementTab: Locator;
   readonly addEntitlementSubTab: Locator;
-  readonly addleaveTypeButton: Locator;
-  readonly addleaveTypeHeader: Locator;
+  readonly addLeaveTypeButton: Locator;
+  readonly addLeaveTypeHeader: Locator;
   readonly loadingSpinner: Locator;
   readonly leaveTypeNameInput: Locator;
-  readonly saveleaveTypeButton: Locator;
+  readonly saveLeaveTypeButton: Locator;
   readonly validationErrorMessage: Locator;
   readonly toastMessageElement: Locator;
   readonly recordList: Locator;
@@ -68,7 +68,7 @@ export class LeavePage extends BasePage {
     this.leaveTypesTabHeader = page.getByRole("heading", {
       name: /^Leave Types$/,
     });
-    this.addleaveTypeHeader = page.getByRole("heading", {
+    this.addLeaveTypeHeader = page.getByRole("heading", {
       name: "Add Leave Type",
       exact: true,
     });
@@ -83,10 +83,10 @@ export class LeavePage extends BasePage {
       name: "Employee Entitlements",
       exact: true,
     });
-    this.addleaveTypeButton = page.locator("button").filter({
+    this.addLeaveTypeButton = page.locator("button").filter({
       hasText: /^\s*Add\s*$/,
     });
-    this.saveleaveTypeButton = page.getByRole("button", { name: "Save" });
+    this.saveLeaveTypeButton = page.getByRole("button", { name: "Save" });
     this.loadingSpinner = page.locator(".oxd-loading-spinner");
     this.leaveTypeNameInput = page
       .locator(".oxd-input-group")
@@ -164,7 +164,7 @@ export class LeavePage extends BasePage {
     }
     Logger.success("Redirected to Leave Menu");
   }
-  async clickleaveTypeSubTab() {
+  async clickLeaveTypeSubTab() {
     await this.waitForLoadState();
     await this.waitForVisible(this.configureTab);
     if (!(await this.isVisible(this.configureTab))) {
@@ -181,23 +181,23 @@ export class LeavePage extends BasePage {
     }
     Logger.success("Navigate to Leave Types Page");
   }
-  async clickAddleaveTypeButton() {
+  async clickAddLeaveTypeButton() {
     await this.waitForLoadState();
-    await this.waitForVisible(this.addleaveTypeButton);
-    if (!(await this.isVisible(this.addleaveTypeButton))) {
+    await this.waitForVisible(this.addLeaveTypeButton);
+    if (!(await this.isVisible(this.addLeaveTypeButton))) {
       throw new Error("Add Leave Types Button Not Visible");
     }
-    await this.click(this.addleaveTypeButton);
+    await this.click(this.addLeaveTypeButton);
     Logger.success("Clicked Add Leave Types Button");
     await this.waitForLoadState();
-    await this.waitForVisible(this.addleaveTypeHeader);
-    if (!(await this.isVisible(this.addleaveTypeHeader))) {
+    await this.waitForVisible(this.addLeaveTypeHeader);
+    if (!(await this.isVisible(this.addLeaveTypeHeader))) {
       throw new Error("Add Leave Types Header Not Visible");
     }
     Logger.success("Navigate to Add Leave Types Page");
   }
 
-  async enterleaveTypeDetails() {
+  async enterLeaveTypeDetails() {
     await this.waitForLoadState();
     if (!(await this.isVisible(this.leaveTypeNameInput))) {
       throw new Error("Leave Types Nama Field Not Visible");
@@ -207,7 +207,7 @@ export class LeavePage extends BasePage {
       this.validationErrorMessage,
       constants.recordCreationValidationErrorMessage,
     );
-    await this.click(this.saveleaveTypeButton);
+    await this.click(this.saveLeaveTypeButton);
     Logger.success("Save Leave Types Button is Clicked");
     await this.waitForLoadState("networkidle");
     await this.verifyToastMessage(
@@ -277,7 +277,7 @@ export class LeavePage extends BasePage {
     Logger.success(`${leaveType.leaveTypeName} is Visible`);
   }
 
-  async deleteleaveType() {
+  async deleteLeaveType() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForLoadState("networkidle");
@@ -303,7 +303,7 @@ export class LeavePage extends BasePage {
     );
   }
 
-  async verifyleaveTypeDeleted() {
+  async verifyLeaveTypeDeleted() {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForLoadState("networkidle");
@@ -370,11 +370,11 @@ export class LeavePage extends BasePage {
     const tomorrow = `${getTomorrowDate()}`;
     await expect(tempDate).toContain(tomorrow);
 
-    const templeaveType = await this.getCellText(
+    const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
       employeeLeaveListRowOrder.leaveType,
     );
-    await expect(templeaveType).toBe(leaveType.leaveTypeName);
+    await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
 
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,
@@ -411,11 +411,11 @@ export class LeavePage extends BasePage {
     const tomorrow = `${getTomorrowDate()}`;
     await expect(tempDate).toContain(tomorrow);
 
-    const templeaveType = await this.getCellText(
+    const tempLeaveType = await this.getCellText(
       this.employeeLeaveRow,
       employeeLeaveListRowOrder.leaveType,
     );
-    await expect(templeaveType).toBe(leaveType.leaveTypeName);
+    await expect(tempLeaveType).toBe(leaveType.leaveTypeName);
 
     const tempActions = await this.getCellText(
       this.employeeLeaveRow,

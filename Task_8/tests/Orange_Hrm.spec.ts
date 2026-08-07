@@ -1,7 +1,7 @@
 import { test } from "../src/fixtures/TestFixture";
 import { Logger } from "../src/utils/logger";
-import { EmployeeDetails, UserData } from "../src/utils/TestDataGenerator";
-import { LeaveListRowOrder } from "../src/utils/constants";
+import { employeeDetails, userData } from "../src/utils/TestDataGenerator";
+import { leaveListRowOrder } from "../src/utils/constants";
 
 test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
   //Check Password is Set Properly
@@ -60,13 +60,13 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.clickAddEmployeeTab();
 
       //Enter Employee Details
-      await pimPage.enterEmployeeDetails(EmployeeDetails);
+      await pimPage.enterEmployeeDetails(employeeDetails);
 
       //click Save Button
       await pimPage.saveEmployee();
 
       //Verify Employee's First Name, Middle Name, Last Name and Employee Id
-      await pimPage.verifyEmployeeInformation(EmployeeDetails);
+      await pimPage.verifyEmployeeInformation(employeeDetails);
     });
 
     await test.step("Search Created Employee", async () => {
@@ -74,21 +74,21 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.clickEmployeeListTab();
 
       //Enter the first and middle name in the search box and click the Search button
-      await pimPage.searchEmployee(EmployeeDetails);
+      await pimPage.searchEmployee(employeeDetails);
 
       //Verify Employee's Name and Employee's ID in the Search Result
-      await pimPage.verifyEmployeeSearchResult(EmployeeDetails);
+      await pimPage.verifyEmployeeSearchResult(employeeDetails);
     });
 
     await test.step("Update Created Employee from the Search Result", async () => {
       //Click the Update Button
-      await pimPage.ClickUpdateButton(EmployeeDetails);
+      await pimPage.ClickUpdateButton(employeeDetails);
 
       //Verify Employee's First Name, Middle Name, Last Name and Employee Id
-      await pimPage.verifyEmployeeInformation(EmployeeDetails);
+      await pimPage.verifyEmployeeInformation(employeeDetails);
 
       //Update Employee Details
-      await pimPage.updateEmployeeDetails(EmployeeDetails);
+      await pimPage.updateEmployeeDetails(employeeDetails);
 
       //Click Save Button
       await pimPage.saveEmployee();
@@ -99,10 +99,10 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.clickEmployeeListTab();
 
       //Enter the first and middle name in the search box and click the Search button
-      await pimPage.searchEmployee(EmployeeDetails);
+      await pimPage.searchEmployee(employeeDetails);
 
       //Click the Update Button
-      await pimPage.ClickUpdateButton(EmployeeDetails);
+      await pimPage.ClickUpdateButton(employeeDetails);
 
       //Verify Updated Employee Details
       await pimPage.verifyEmployeeUpdated();
@@ -189,7 +189,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
     await test.step("Login as the newly created user", async () => {
       //Login Into Orange_HRM
-      await loginPage.login(UserData.username, UserData.userPassword);
+      await loginPage.login(userData.username, userData.userPassword);
 
       //Verify Orange_HRM Dashboard Page is Visible
       await dashboardPage.verifyDashboardHeaderVisible();
@@ -206,7 +206,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.applyEmployeeLeave();
 
       //verify Leave as a Employee
-      await leavePage.verifyEmployeeLeave(LeaveListRowOrder.leaveActionCancel);
+      await leavePage.verifyEmployeeLeave(leaveListRowOrder.leaveActionCancel);
     });
   });
 
@@ -223,7 +223,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //Approve employee leave as Admins
       await leavePage.adminApproveEmployeeLeave(
-        LeaveListRowOrder.leaveActionApprove,
+        leaveListRowOrder.leaveActionApprove,
       );
     });
   });
@@ -242,7 +242,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
     //Login As Employee
     await test.step("Login As Employee", async () => {
       //Login Into Orange_HRM
-      await loginPage.login(UserData.username, UserData.userPassword);
+      await loginPage.login(userData.username, userData.userPassword);
 
       //Verify Orange_HRM Dashboard Page is Visible
       await dashboardPage.verifyDashboardHeaderVisible();
@@ -257,7 +257,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
 
       //verify Leave as a Employee
       await leavePage.verifyEmployeeLeave(
-        LeaveListRowOrder.leaveActionAfterApprove,
+        leaveListRowOrder.leaveActionCancel,
       );
     });
   });
@@ -302,13 +302,13 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await pimPage.clickEmployeeListTab();
 
       //Enter the first and middle name in the search box and click the Search button
-      await pimPage.searchEmployee(EmployeeDetails);
+      await pimPage.searchEmployee(employeeDetails);
 
       // Click the Delete icon and confirm the deletion
-      await pimPage.deleteEmployee(EmployeeDetails);
+      await pimPage.deleteEmployee(employeeDetails);
 
       //Verify Employee Deletion
-      await pimPage.verifyEmployeeDeleted(EmployeeDetails);
+      await pimPage.verifyEmployeeDeleted(employeeDetails);
     });
 
     await test.step("Delete Created Leave Type", async () => {

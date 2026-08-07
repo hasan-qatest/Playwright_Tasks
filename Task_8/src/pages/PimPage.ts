@@ -1,8 +1,8 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
-import { Constants, EmployeeSearchResultColumns } from "../utils/constants";
-import { UserData } from "../utils/TestDataGenerator";
+import { constants, employeeSearchResultColumns } from "../utils/constants";
+import { userData } from "../utils/TestDataGenerator";
 
 export class PimPage extends BasePage {
   readonly employeeListTab: Locator;
@@ -69,16 +69,19 @@ export class PimPage extends BasePage {
         has: page.locator("label", { hasText: "Nationality" }),
       })
       .locator(".oxd-select-text");
-    this.nationalityDropdownValue = page.locator(".oxd-select-option", {
-      hasText: Constants.nationalityDropdownValue,
-    });
+
+    this.nationalityDropdownValue = page.getByText(
+      constants.nationalityDropdownValue,
+      { exact: true },
+    );
+
     this.maritalStatusDropdown = page
       .locator(".oxd-input-group", {
         has: page.locator("label", { hasText: "Marital Status" }),
       })
       .locator(".oxd-select-text");
     this.maritalStatusDropdownValue = page.locator(".oxd-select-option", {
-      hasText: Constants.maritalStatusDropdownValue,
+      hasText: constants.maritalStatusDropdownValue,
     });
     this.validationErrorMessage = page.locator(
       ".oxd-input-field-error-message",
@@ -126,13 +129,18 @@ export class PimPage extends BasePage {
     employeeId: string;
   }) {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
+    await this.waitForVisible(this.firstNameInput);
+    newEmployee.employeeId = await this.employeeIdInput.inputValue();
     await this.fill(this.firstNameInput, newEmployee.firstName);
     await this.fill(this.middleNameInput, newEmployee.middleName);
     await this.fill(this.lastNameInput, newEmployee.lastName);
     await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
-    newEmployee.employeeId = await this.employeeIdInput.inputValue();
+    await this.validateNoInputFieldError(
+      this.validationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
+    );
     Logger.success(
       `New Employee Details Entered Successfully
     First Name : ${newEmployee.firstName}
@@ -145,13 +153,13 @@ export class PimPage extends BasePage {
   async saveEmployee() {
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
-      Constants.recordCreationValidationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
     );
     await this.click(this.employeeSaveButton.first());
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.createUpdateToastMessage,
+      constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
@@ -196,11 +204,11 @@ export class PimPage extends BasePage {
 
     await this.verifySearchResultRow(newEmployee.employeeId, [
       {
-        column: EmployeeSearchResultColumns.EMPLOYEE_ID,
+        column: employeeSearchResultColumns.EMPLOYEE_ID,
         value: newEmployee.employeeId,
       },
       {
-        column: EmployeeSearchResultColumns.NAME,
+        column: employeeSearchResultColumns.NAME,
         value: expectedEmployeeName,
       },
     ]);
@@ -227,9 +235,9 @@ export class PimPage extends BasePage {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.click(this.lastNameInput);
     await this.clearInputField(this.lastNameInput);
-    newEmployee.lastName = `${UserData.updateLastName}`;
-    await this.fill(this.lastNameInput, UserData.updateLastName);
-    await this.fill(this.driverLicenseInput, Constants.driverLicenseNumber);
+    newEmployee.lastName = `${userData.updateLastName}`;
+    await this.fill(this.lastNameInput, userData.updateLastName);
+    await this.fill(this.driverLicenseInput, constants.driverLicenseNumber);
     await this.selectDropdownValue(
       this.nationalityDropdown,
       this.nationalityDropdownValue,
@@ -245,17 +253,17 @@ export class PimPage extends BasePage {
     await this.waitForLoadState();
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.lastNameInput);
-    await expect(this.lastNameInput).toHaveValue(UserData.updateLastName);
+    await expect(this.lastNameInput).toHaveValue(userData.updateLastName);
     await expect(this.driverLicenseInput).toHaveValue(
-      Constants.driverLicenseNumber,
+      constants.driverLicenseNumber,
     );
     await this.verifyDropdownValue(
       this.nationalityDropdown,
-      Constants.nationalityDropdownValue,
+      constants.nationalityDropdownValue,
     );
     await this.verifyDropdownValue(
       this.maritalStatusDropdown,
-      Constants.maritalStatusDropdownValue,
+      constants.maritalStatusDropdownValue,
     );
     Logger.success("Employee details verified successfully");
   }
@@ -272,7 +280,7 @@ export class PimPage extends BasePage {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.deleteRecordToastMessage,
+      constants.deleteRecordToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Deleted Employee ID: ${newEmployee.employeeId}`);
@@ -285,7 +293,7 @@ export class PimPage extends BasePage {
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.deleteRecordToastMessage,
+      constants.deleteRecordToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`Employee Deleted Successfully`);

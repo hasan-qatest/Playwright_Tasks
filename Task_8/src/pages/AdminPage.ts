@@ -2,11 +2,11 @@ import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { Logger } from "../utils/logger";
 import {
-  Constants,
-  UserDetails,
-  UserSearchResultColumns,
+  constants,
+  userDetails,
+  userSearchResultColumns,
 } from "../utils/constants";
-import { EmployeeDetails, UserData } from "../utils/TestDataGenerator";
+import { employeeDetails, userData } from "../utils/TestDataGenerator";
 
 export class AdminPage extends BasePage {
   readonly adminMenu: Locator;
@@ -52,7 +52,7 @@ export class AdminPage extends BasePage {
       })
       .locator(".oxd-select-text");
     this.userRoleDropdownValue = page.locator(".oxd-select-option", {
-      hasText: UserDetails.userRole,
+      hasText: userDetails.userRole,
     });
     this.employeeNameInput = page
       .locator(".oxd-input-group", {
@@ -68,7 +68,7 @@ export class AdminPage extends BasePage {
       })
       .locator(".oxd-select-text");
     this.statusDropdownValue = page.locator(".oxd-select-option", {
-      hasText: UserDetails.status,
+      hasText: userDetails.status,
     });
     this.usernameInput = page
       .locator(".oxd-input-group", {
@@ -151,28 +151,28 @@ export class AdminPage extends BasePage {
       this.userRoleDropdown,
       this.userRoleDropdownValue,
     );
-    await this.verifyDropdownValue(this.userRoleDropdown, UserDetails.userRole);
-    UserData.employeeName = `${EmployeeDetails.firstName} ${EmployeeDetails.middleName} ${EmployeeDetails.lastName}`;
-    await this.fill(this.employeeNameInput, UserData.employeeName);
-    await this.page.getByText(UserData.employeeName, { exact: true }).click();
+    await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
+    userData.employeeName = `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`;
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page.getByText(userData.employeeName, { exact: true }).click();
 
     await this.selectDropdownValue(
       this.statusDropdown,
       this.statusDropdownValue,
     );
-    await this.verifyDropdownValue(this.statusDropdown, UserDetails.status);
+    await this.verifyDropdownValue(this.statusDropdown, userDetails.status);
 
-    await this.fill(this.usernameInput, UserData.username);
-    await this.fill(this.passwordInput, UserData.userPassword);
-    await this.fill(this.confirmPasswordInput, UserData.userPassword);
+    await this.fill(this.usernameInput, userData.username);
+    await this.fill(this.passwordInput, userData.userPassword);
+    await this.fill(this.confirmPasswordInput, userData.userPassword);
 
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
-      Constants.recordCreationValidationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
     );
 
     Logger.success(
-      `Entered User Role, Employee Name, Status, Username ${UserData.username}, Password, and Confirm Password details`,
+      `Entered User Role, Employee Name, Status, Username ${userData.username}, Password, and Confirm Password details`,
     );
   }
 
@@ -181,7 +181,7 @@ export class AdminPage extends BasePage {
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.createUpdateToastMessage,
+      constants.createUpdateToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
@@ -189,25 +189,25 @@ export class AdminPage extends BasePage {
   }
 
   async searchUser() {
-    await this.fill(this.usernameInput, UserData.username);
+    await this.fill(this.usernameInput, userData.username);
     await this.selectDropdownValue(
       this.userRoleDropdown,
       this.userRoleDropdownValue,
     );
-    await this.verifyDropdownValue(this.userRoleDropdown, UserDetails.userRole);
+    await this.verifyDropdownValue(this.userRoleDropdown, userDetails.userRole);
 
-    await this.fill(this.employeeNameInput, UserData.employeeName);
-    await this.page.getByText(UserData.employeeName, { exact: true }).click();
+    await this.fill(this.employeeNameInput, userData.employeeName);
+    await this.page.getByText(userData.employeeName, { exact: true }).click();
     
     await this.selectDropdownValue(
       this.statusDropdown,
       this.statusDropdownValue,
     );
-    await this.verifyDropdownValue(this.statusDropdown, UserDetails.status);
+    await this.verifyDropdownValue(this.statusDropdown, userDetails.status);
 
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
-      Constants.recordCreationValidationErrorMessage,
+      constants.recordCreationValidationErrorMessage,
     );
     await this.click(this.userSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
@@ -215,23 +215,23 @@ export class AdminPage extends BasePage {
   }
 
   async verifySearchResult() {
-    UserData.employeeNameInUserSearchResult = `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`;
-    await this.verifySearchResultRow(UserData.username, [
+    userData.employeeNameInUserSearchResult = `${employeeDetails.firstName} ${employeeDetails.lastName}`;
+    await this.verifySearchResultRow(userData.username, [
       {
-        column: UserSearchResultColumns.Username,
-        value: UserData.username,
+        column: userSearchResultColumns.USERNAME,
+        value: userData.username,
       },
       {
-        column: UserSearchResultColumns.UserRole,
-        value: UserDetails.userRole,
+        column: userSearchResultColumns.USER_ROLE,
+        value: userDetails.userRole,
       },
       {
-        column: UserSearchResultColumns.EmployeeName,
-        value: UserData.employeeNameInUserSearchResult,
+        column: userSearchResultColumns.EMPLOYEE_NAME,
+        value: userData.employeeNameInUserSearchResult,
       },
       {
-        column: UserSearchResultColumns.Status,
-        value: UserDetails.status,
+        column: userSearchResultColumns.STATUS,
+        value: userDetails.status,
       },
     ]);
 
@@ -241,7 +241,7 @@ export class AdminPage extends BasePage {
   }
 
   async deleteUser() {
-    this.userRow = await this.getSearchResultRow(UserData.username);
+    this.userRow = await this.getSearchResultRow(userData.username);
     await expect(this.userRow).toBeVisible();
 
     const deleteButton = await this.getDeleteButton(this.userRow);
@@ -251,24 +251,24 @@ export class AdminPage extends BasePage {
     await this.click(this.deleteConfirmationButton);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.createUpdateToastMessage,
+      constants.createUpdateToastMessage,
     );
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForHidden(this.toastMessageElement);
-    Logger.success(`Deleted User Name: ${UserData.username}`);
+    Logger.success(`Deleted User Name: ${userData.username}`);
   }
 
   async verifyUserDeleted() {
     if (!(await this.isVisible(this.usernameInput))) {
       throw new Error("User Name Input not Visible");
     }
-    await this.fill(this.usernameInput, UserData.username);
+    await this.fill(this.usernameInput, userData.username);
     await this.click(this.userSearchButton);
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.toastMessageElement);
     await this.verifyToastMessage(
       this.toastMessageElement,
-      Constants.deleteRecordToastMessage,
+      constants.deleteRecordToastMessage,
     );
     await this.waitForHidden(this.toastMessageElement);
     Logger.success(`User Deleted Successfully`);

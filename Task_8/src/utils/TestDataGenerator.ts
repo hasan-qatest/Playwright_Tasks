@@ -20,7 +20,7 @@ export const userData = {
   get userPassword() {
     return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
   },
-} as const;
+};
 
 export function getTodayDate(): string {
   const today = new Date();
@@ -32,10 +32,16 @@ export function getTodayDate(): string {
 }
 
 export function getTomorrowDate(): string {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
 
-  return `${tomorrow.getFullYear()}-${String(
-    tomorrow.getMonth() + 1,
-  ).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
+  // Skip Saturday (6) and Sunday (0)
+  while (date.getDay() === 0 || date.getDay() === 6) {
+    date.setDate(date.getDate() + 1);
+  }
+
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}-${String(date.getDate()).padStart(2, "0")}`;
 }
