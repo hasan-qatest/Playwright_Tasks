@@ -4,18 +4,14 @@ import { employeeDetails, userData } from "../src/utils/TestDataGenerator";
 import { leaveListRowOrder } from "../src/utils/constants";
 
 test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
-  //Check Password is Set Properly
-  await test.step("Check Password is Set Properly", async () => {
+  await test.step("Login FLow", async () => {
+    //Check Password is Set Properly
     await loginPage.validateRuntimePassword();
-  });
 
-  //Navigate to Orange_HRM Login Screen
-  await test.step("Navigate to Orange_HRM Login Screen", async () => {
+    //Navigate to Orange_HRM Login Screen
     await loginPage.navigateToLoginScreen();
-  });
 
-  //Orange_HRM Login Page is Visible
-  await test.step("Verify Orange_HRM Login Page is Visible", async () => {
+    //Orange_HRM Login Page is Visible
     await loginPage.verifyLoginPageVisible();
   });
 
@@ -24,13 +20,11 @@ test.beforeEach(async ({ loginPage, dashboardPage }, testInfo) => {
     return;
   }
 
-  //Login Into Orange_HRM
   await test.step("Login Into Orange_HRM", async () => {
+    //Login Into Orange_HRM
     await loginPage.login();
-  });
 
-  //Verify Orange_HRM Dashboard Page is Visible
-  await test.step("Verify Orange_HRM Dashboard Page is Visible", async () => {
+    //Verify Orange_HRM Dashboard Page is Visible
     await dashboardPage.verifyDashboardHeaderVisible();
   });
 });
@@ -256,9 +250,7 @@ test.describe("Orange-HRM Employee and User Management ", async () => {
       await leavePage.clickLeaveMenu();
 
       //verify Leave as a Employee
-      await leavePage.verifyEmployeeLeave(
-        leaveListRowOrder.leaveActionCancel,
-      );
+      await leavePage.verifyEmployeeLeave(leaveListRowOrder.leaveActionCancel);
     });
   });
 
@@ -334,19 +326,16 @@ test.afterEach(async ({ loginPage, dashboardPage }, testInfo) => {
     );
     return;
   }
-  Logger.info("Logout Flow Started");
-  //Click User Menu
-  await test.step("Click User Menu", async () => {
+  await test.step("Logout User", async () => {
+    Logger.info("Logout Flow Started");
+
+    //Click User Menu
     await dashboardPage.clickUserMenu();
-  });
 
-  //Click Logout Link
-  await test.step("Click Logout Link", async () => {
+    //Click Logout Link
     await dashboardPage.clickLogoutLink();
-  });
 
-  //Orange_HRM Login Page is Visible
-  await test.step("Verify Orange_HRM Login Page is Visible", async () => {
+    //Orange_HRM Login Page is Visible
     await loginPage.verifyLoginPageVisible();
   });
 });

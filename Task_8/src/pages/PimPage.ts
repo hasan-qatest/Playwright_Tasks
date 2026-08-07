@@ -69,12 +69,10 @@ export class PimPage extends BasePage {
         has: page.locator("label", { hasText: "Nationality" }),
       })
       .locator(".oxd-select-text");
-
     this.nationalityDropdownValue = page.getByText(
       constants.nationalityDropdownValue,
       { exact: true },
     );
-
     this.maritalStatusDropdown = page
       .locator(".oxd-input-group", {
         has: page.locator("label", { hasText: "Marital Status" }),
@@ -130,13 +128,14 @@ export class PimPage extends BasePage {
   }) {
     await this.waitForLoadingSpinnerToDisappear(this.loadingSpinner);
     await this.waitForVisible(this.firstNameInput);
-    newEmployee.employeeId = await this.employeeIdInput.inputValue();
+
     await this.fill(this.firstNameInput, newEmployee.firstName);
     await this.fill(this.middleNameInput, newEmployee.middleName);
     await this.fill(this.lastNameInput, newEmployee.lastName);
     await this.profileImageUploadInput.setInputFiles(
       "test-data/man-avatar-profile-picture.png",
     );
+    newEmployee.employeeId = await this.employeeIdInput.inputValue();
     await this.validateNoInputFieldError(
       this.validationErrorMessage,
       constants.recordCreationValidationErrorMessage,
