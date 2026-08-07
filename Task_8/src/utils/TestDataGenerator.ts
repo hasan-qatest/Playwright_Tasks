@@ -1,29 +1,30 @@
 import { faker } from "@faker-js/faker";
 
-export const EmployeeDetails = {
+export const employeeDetails = {
   firstName: faker.person.firstName(),
   middleName: faker.person.middleName(),
   lastName: faker.person.lastName(),
   employeeId: "",
 } as const;
 
-export const LeaveType = {
+export const leaveType = {
   leaveTypeName: `Casual Leave-${faker.string.alphanumeric(6).toUpperCase()}`,
-};
+} as const;
 
-export const UserData = {
-  updateLastName: `${EmployeeDetails.lastName} Test`,
-  employeeName: `${EmployeeDetails.firstName} ${EmployeeDetails.middleName} ${EmployeeDetails.lastName}`,
-  employeeNameInUserSearchResult: `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`,
-  loggerUserName: `${EmployeeDetails.firstName} ${EmployeeDetails.lastName}`,
-  username: `${EmployeeDetails.firstName} ${EmployeeDetails.middleName} ${EmployeeDetails.lastName}`,
+export const userData = {
+  updateLastName: `${employeeDetails.lastName} Test`,
+  employeeName: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
+  employeeNameInUserSearchResult: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
+  loggerUserName: `${employeeDetails.firstName} ${employeeDetails.lastName}`,
+  username: `${employeeDetails.firstName} ${employeeDetails.middleName} ${employeeDetails.lastName}`,
   get userPassword() {
-    return `${EmployeeDetails.firstName}${EmployeeDetails.employeeId}`;
+    return `${employeeDetails.firstName}${employeeDetails.employeeId}`;
   },
-};
+} as const;
 
 export function getTodayDate(): string {
   const today = new Date();
+
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
     2,
     "0",
@@ -34,8 +35,7 @@ export function getTomorrowDate(): string {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  return `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(
-    2,
-    "0",
-  )}-${String(tomorrow.getDate()).padStart(2, "0")}`;
+  return `${tomorrow.getFullYear()}-${String(
+    tomorrow.getMonth() + 1,
+  ).padStart(2, "0")}-${String(tomorrow.getDate()).padStart(2, "0")}`;
 }

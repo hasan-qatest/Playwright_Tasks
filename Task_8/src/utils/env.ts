@@ -36,4 +36,3 @@ if (!BASE_URL || !USER) {
 }
 
 export const env = { BASE_URL, USER };
-//export const env = { baseUrl: BASE_URL, user: USER };
